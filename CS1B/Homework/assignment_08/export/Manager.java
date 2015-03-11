@@ -7,7 +7,6 @@ package assignment_08.export;
  * @author HW
  */
 public class Manager extends Employee {
-	//TODO Set to false when turning in
 	private static final boolean TESTING_INITIALIZE = false,
 								 TESTING_CONSTRUCTOR = false,
 								 TESTING_DEFAULT_CONSTRUCTOR = false;

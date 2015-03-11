@@ -26,6 +26,7 @@ public class Main {
 		Random rand = new Random();
 		for (int i = 0; i<MAX; i++)
 			array[i] = rand.nextInt()%11;
+		
 		for (int i = 0; i<MAX; i++)
 			System.out.print(array[i] + ", ");
 		System.out.println();

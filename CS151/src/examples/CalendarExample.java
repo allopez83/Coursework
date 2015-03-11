@@ -1,4 +1,4 @@
-package hw2;
+package examples;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

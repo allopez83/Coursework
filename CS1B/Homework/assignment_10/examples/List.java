@@ -43,7 +43,6 @@ public class List
 		first.next = newNode;
 		newNode.next = first;
 		*/
-		// TODO finish this
 		
 	}
 	

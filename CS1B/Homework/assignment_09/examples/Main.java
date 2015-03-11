@@ -46,14 +46,3 @@ public class Main {
 		System.out.println("End");
 	}
 }
-
-
-
-
-
-
-
-
-
-
-// TODO (delete later) Extra scrolling space

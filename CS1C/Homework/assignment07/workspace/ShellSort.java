@@ -23,7 +23,7 @@ public class ShellSort
    private static final boolean
          PRINT_TEST_TITLE = true, // Title of tests
          PRINT_EACH_RUN = false, // Time result of each individual sort
-         PRINT_ARRAY = false, //TODO (delete) Entire sorted array
+         PRINT_ARRAY = false, // Entire sorted array
          PRINT_AVERAGE_EXTRAS = false, // Print "Average: "; false for raw data
          // Tests array elements for consistency. I recommend setting only one
          // test as true.
@@ -154,14 +154,14 @@ public class ShellSort
          } else
          {
             n = k/2;
-            // Intent: 2^(k+2) (2^(k+2) – 3 ) + 1
+            // Intent: 2^(k+2) (2^(k+2) ï¿½ 3 ) + 1
             total_1 = 0;
             total_2 = 2;
             for (i = 0; i < n + 1; i++)   // 2^(k+2)
                total_2 *= 2;
-            total_1 = total_2 - 3;     // 2^(k+2) – 3 
-            total_1 *= total_2;     // 2^(k+2) (2^(k+2) – 3 )
-            total_1++;              // 2^(k+2) (2^(k+2) – 3 ) + 1
+            total_1 = total_2 - 3;     // 2^(k+2) ï¿½ 3 
+            total_1 *= total_2;     // 2^(k+2) (2^(k+2) ï¿½ 3 )
+            total_1++;              // 2^(k+2) (2^(k+2) ï¿½ 3 ) + 1
             sortGap_2[k] = (int) total_1;
          }
       }
@@ -175,18 +175,20 @@ public class ShellSort
          sortGap_3[k] = (int) intTotal;
       }
       sortGap_3[0] = 1;
-//      printArray(sortGap_3);
-      
-//    // Oops, creates a Hibbard gap sequence.
-//    for (k = 0; k < GAP_SEQUENCE_SIZE; k++)
-//    {
-//       total = 2;
-//       // 2^(i+1) - 1
-//       for (i = 0; i < k; i++)
-//          total *= 2;
-//       total--;
-//       sortGap_2[k] = (int) total;
-//    }// TODO delete when finished
+      /*
+      printArray(sortGap_3);
+
+      // Oops, creates a Hibbard gap sequence.
+      for (k = 0; k < GAP_SEQUENCE_SIZE; k++)
+      {
+         total = 2;
+         // 2^(i+1) - 1
+         for (i = 0; i < k; i++)
+            total *= 2;
+         total--;
+         sortGap_2[k] = (int) total;
+      }
+      */
 
       // Create arrays
       Integer[] intArray_0 = new Integer[ARRAY_SIZE];
@@ -195,22 +197,22 @@ public class ShellSort
       Integer[] intArray_3 = new Integer[ARRAY_SIZE];
       Integer[] intArray_4 = new Integer[ARRAY_SIZE];
       Integer[] intArray_5 = new Integer[ARRAY_SIZE];
-      Integer[] intArray_6 = new Integer[ARRAY_SIZE];// TODO delete when finished
+      Integer[] intArray_6 = new Integer[ARRAY_SIZE];
       Integer[] intArray_7 = new Integer[ARRAY_SIZE];
       Integer[] intArray_8 = new Integer[ARRAY_SIZE];
       Integer[] intArray_9 = new Integer[ARRAY_SIZE];
       Integer[] intArray_10 = new Integer[ARRAY_SIZE];
 
       // Fill arrays with same random numbers
-//      int random_int;
+      // int random_int;
       for (k = 0; k < ARRAY_SIZE; k++)
       {
-//         random_int = (int) (Math.random() * ARRAY_SIZE);
-//         intArray_0[k] = random_int;
-//         intArray_1[k] = random_int;
-//         intArray_2[k] = random_int;
-//         intArray_3[k] = random_int;
-//         intArray_4[k] = random_int;
+         // random_int = (int) (Math.random() * ARRAY_SIZE);
+         // intArray_0[k] = random_int;
+         // intArray_1[k] = random_int;
+         // intArray_2[k] = random_int;
+         // intArray_3[k] = random_int;
+         // intArray_4[k] = random_int;
          intArray_0[k] = (int) (Math.random() * ARRAY_SIZE);
          intArray_1[k] = (int) (Math.random() * ARRAY_SIZE);
          intArray_2[k] = (int) (Math.random() * ARRAY_SIZE);
@@ -221,7 +223,7 @@ public class ShellSort
          intArray_7[k] = (int) (Math.random() * ARRAY_SIZE);
          intArray_8[k] = (int) (Math.random() * ARRAY_SIZE);
          intArray_9[k] = (int) (Math.random() * ARRAY_SIZE);
-         intArray_10[k] = (int) (Math.random() * ARRAY_SIZE);// TODO delete when finished
+         intArray_10[k] = (int) (Math.random() * ARRAY_SIZE);
       }
 
       // ---------- Sorting --------------------------------------------------
@@ -244,7 +246,7 @@ public class ShellSort
       arrayTest("User gap sequence:", intArray_5, intArray_5, sortGap_3);
       arrayTest("User gap sequence:", intArray_6, intArray_6, sortGap_3);
       arrayTest("User gap sequence:", intArray_7, intArray_7, sortGap_3);
-      arrayTest("User gap sequence:", intArray_8, intArray_8, sortGap_3);// TODO delete when finished
+      arrayTest("User gap sequence:", intArray_8, intArray_8, sortGap_3);
       arrayTest("User gap sequence:", intArray_9, intArray_9, sortGap_3);
       arrayTest("User gap sequence:", intArray_10, intArray_10, sortGap_3);
 
@@ -256,7 +258,7 @@ public class ShellSort
       for (k = 0; k < ARRAY_SIZE; k += interval)
       {
          // If the option to show each element is enabled
-         if (TEST_SHOW_ELEMENTS)// TODO delete when finished
+         if (TEST_SHOW_ELEMENTS)
          {
             System.out.println("\nAt position: " + k +
                   "\nintArray_1: " + intArray_1[k] +
@@ -265,7 +267,7 @@ public class ShellSort
                   "\nintArray_4: " + intArray_4[k]);
          }
          // If the option to simply print "pass" or "error" is enabled
-         if (TEST_PASS_PRINT)// TODO delete when finished
+         if (TEST_PASS_PRINT)
          {
             // All elements at position k are the same
             elements_equal =
@@ -316,7 +318,7 @@ public class ShellSort
     */
    private static void arrayTest(String prompt, Integer[] sort_array,
          Integer[] template_array, int[] gap_sequence)
-   {// TODO delete when finished
+   {
       int k;
       Integer[] arrayClone = new Integer[ARRAY_SIZE];
       
@@ -378,7 +380,6 @@ public class ShellSort
     */
    private static void errTest(String text, boolean intent)
    {
-      // TODO delete when finished
       // Prints text
       if (PRINT_TEST_TITLE) System.out.println(text);
       // Prints pass or fail to tell client if the result is the intended result
@@ -391,7 +392,6 @@ public class ShellSort
     */
    private static <E extends Comparable<? super E>> void printArray(E[] arr)
    {
-      // TODO delete when finished
       int k, size = arr.length;
 
       for (k = 0; k < size; k++)
@@ -405,7 +405,6 @@ public class ShellSort
     */
    private static <E extends Comparable<? super E>> void printArray(int[] arr)
    {
-      // TODO delete when finished
       int k, size = arr.length;
 
       for (k = 0; k < size; k++)

@@ -22470,13 +22470,13 @@
 								"$ref": "AAAAAAFL/XRMz1mQKmE="
 							},
 							"name": "listAll",
-							"documentation": "Use HashMap.values() to get all values, then iterate and print",
 							"visibility": "package",
 							"isStatic": false,
 							"isLeaf": false,
 							"concurrency": "sequential",
 							"isQuery": false,
-							"isAbstract": false
+							"isAbstract": false,
+							"specification": "Use HashMap.values() to get all values, then iterate and print"
 						},
 						{
 							"_type": "UMLOperation",

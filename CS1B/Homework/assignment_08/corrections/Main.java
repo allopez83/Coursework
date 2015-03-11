@@ -1,5 +1,9 @@
 package assignment_08.corrections;
 
+// Fixes the problem but what is going on?
+// TODO fix empty package issue
+import assignment_10.export.*;
+
 /**
  * Tests the new Employee class along with the public methods in its two
  * subclasses: Manager and Worker
@@ -7,7 +11,6 @@ package assignment_08.corrections;
  * @author HW
  */
 public class Main {
-	//TODO Set to false when turning in
 	public static final boolean TESTING = false;
 	
 	public static void main(String args[]){
@@ -61,7 +64,6 @@ public class Main {
 		billTest = new Employee(null, "102", 0.00);
 		System.out.println("Bill equals Employee with equivalent SSN: " + Bill.equals(billTest) + "\n");
 		billTest = null;
-		//TODO finish equals testing
 		
 		System.out.println("Total Employee call counts: " + Employee.getCallCount());
 		

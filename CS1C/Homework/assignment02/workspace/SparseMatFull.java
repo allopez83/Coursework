@@ -135,7 +135,6 @@ public class SparseMatFull<E> implements Cloneable
    {
       for (int k = 0; k < row_size; k++)
          rows.set(k, new FHlinkedList<MatNode>());
-      // TODO test this
    }
 
    /**
@@ -168,7 +167,6 @@ public class SparseMatFull<E> implements Cloneable
                // Print all elements before the node
                for (int i = 0; i < next_entry - 1; i++)
                {
-                  // TODO update for printf later
                   System.out.print(" " + default_val + " ");
                }
                System.out.println(node);
@@ -177,7 +175,6 @@ public class SparseMatFull<E> implements Cloneable
             // Print out the last elements
             for (int k = last_entry; k < start + size - 1; k++)
             {
-               // TODO update for printf later
                System.out.print(" " + default_val + " ");
             }
          }
@@ -188,7 +185,6 @@ public class SparseMatFull<E> implements Cloneable
       // get data
       // check if data is not default
       // print data
-      // TODO
    }
 
    /*
@@ -202,7 +198,7 @@ public class SparseMatFull<E> implements Cloneable
 
    boolean copyValue(int rSrc, int cSrc, int rDst, int cDst)
    {
-      return true; // TODO
+      return true;
    }
 
    /**

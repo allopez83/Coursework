@@ -17,7 +17,6 @@ public class Tester
     * The "do not change" parameters. These can actually be changed, but they're
     * not exactly intended to be changed.
     */
-   // TODO delete timer stuff
    // Stuff for the timer
    private static NumberFormat tidy = NumberFormat.getInstance(Locale.US);
    private static long start_time, end_time;
@@ -32,7 +31,6 @@ public class Tester
       System.out.println(text);
    }
 
-   // TODO delete timer stuff
    /**
     * Timer stuffs
     */

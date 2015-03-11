@@ -97,6 +97,11 @@ public class countJavaPairs
       int line, column;
 
       /**
+       * Default values
+       */
+      public Symbol() {}
+      
+      /**
        * Constructor
        * @param type open or close parentheses
        * @param line which line it's on
@@ -107,11 +112,6 @@ public class countJavaPairs
          this.type = type;
          this.line = line;
          this.column = column;
-      }
-
-      public Symbol()
-      {
-         // TODO Auto-generated constructor stub
       }
 
       public String toString()

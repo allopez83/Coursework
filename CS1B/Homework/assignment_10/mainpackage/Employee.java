@@ -9,7 +9,6 @@ import java.io.Serializable;
  * @author HW
  */
 public class Employee implements Comparable<Employee>, Serializable {
-	//TODO Set to false when turning in
 	private static final boolean TESTING_CONSTRUCTOR = false,
 								 TESTING_DEFAULT_CONSTRUCTOR = false,
 								 TESTING_CALLCOUNT = false,

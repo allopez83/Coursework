@@ -35,12 +35,11 @@ public class EBookClient
    private static void hashTableInteger()
    {
       System.out.println("EBook Test: EBookCompInt");
-      
 
       // Adding books
       hash_table_integer = new HashQPwFind<Integer, EBookCompInt>();
       TOTAL_BOOKS = eBookReader.getNumBooks();
-      
+
       for (int k = 0; k < TOTAL_BOOKS; k++)
       {
          book = eBookReader.getBook(k);
@@ -59,11 +58,9 @@ public class EBookClient
          {
             randomEntry = hash_table_integer.find(randomKey);
             System.out.println(randomEntry);
-            //TODO delete these tests
-//             System.out.println("Book num: " + randomBookNum);
-//             System.out.println("Number to hash-ify: " + randomKey);
-//             System.out.println(hash_table.myhashKey(randomKey));
-
+            // System.out.println("Book num: " + randomBookNum);
+            // System.out.println("Number to hash-ify: " + randomKey);
+            // System.out.println(hash_table.myhashKey(randomKey));
          } catch (Exception e)
          {
             System.out.println("not found");
@@ -94,7 +91,7 @@ public class EBookClient
    private static void hashTableString()
    {
       System.out.println("EBook Test: EBookCompString");
-      
+
       // Adding books
       hash_table_string = new HashQPwFind<String, EBookCompString>();
       TOTAL_BOOKS = eBookReader.getNumBooks();
@@ -116,11 +113,9 @@ public class EBookClient
          {
             randomEntry = hash_table_string.find(randomKey);
             System.out.println(randomEntry);
-            //TODO delete these tests
-//            System.out.println("Book num: " + randomBookNum);
-//            System.out.println("Number to hash-ify: " + randomKey);
-//            System.out.println(hash_table.myhashKey(randomKey + ""));
-
+            // System.out.println("Book num: " + randomBookNum);
+            // System.out.println("Number to hash-ify: " + randomKey);
+            // System.out.println(hash_table.myhashKey(randomKey + ""));
          } catch (Exception e)
          {
             System.out.println("not found");

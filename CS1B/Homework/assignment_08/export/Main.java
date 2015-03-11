@@ -8,7 +8,6 @@ package assignment_08.export;
  * @author HW
  */
 public class Main {
-	//TODO Set to false when turning in
 	public static final boolean TESTING = false;
 	
 	public static void main(String args[]){
@@ -62,7 +61,6 @@ public class Main {
 		billTest = new Employee(null, "102", 0.00);
 		System.out.println("Bill equals Employee with equivalent SSN: " + Bill.equals(billTest) + "\n");
 		billTest = null;
-		//TODO finish equals testing
 		
 		System.out.println("Total Employee call counts: " + Employee.getCallCount());
 		

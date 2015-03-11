@@ -140,13 +140,3 @@ public class Employee implements Comparable<Employee>, Serializable {
 		salary += raisePercent*salary;
 	}
 }
-
-
-
-
-
-
-
-
-
-//TODO delete space when done

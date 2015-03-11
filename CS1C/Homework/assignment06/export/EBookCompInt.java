@@ -33,7 +33,6 @@ public class EBookCompInt implements Comparable<Integer>
     */
    public int compareTo(Integer key)
    {
-      // TODO Auto-generated method stub
       return data.getNEtextNum() - key;
    }
 
