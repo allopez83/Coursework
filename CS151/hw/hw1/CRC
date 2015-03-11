@@ -1,0 +1,64 @@
+Find Classes
+Find responsibilities
+Define collaborators
+Place cards using one another beside each other
+Wlakthrough use cases, name cards and responsibilities
+
+
+ReservationSystem
+    Resp
+        Get user input
+        Interact with Flight to change reservations
+        Write changes using FileIO
+    Collab
+        UserInput
+        Flight
+        FileIO
+
+Flight
+    Resp
+        Tasks add and remove reservations for others
+        All seating data for all service classes, all seats, etc.
+        Contains list of groups and passenger reservations
+        Contains names of flight
+    Collab
+        Two ServiceClasses, one for First and another for Economy
+
+ServiceClass
+    Resp
+        Get/set/remove passenger reservations
+        Print seat given to a passenger
+        Contain 2D array with seating data service class
+        Find largest contiguous row of seats
+        Interact with seat
+        Print manifest and availability
+    Collab
+        Seat
+
+Seat
+    Resp
+        Contains data of seat position (Window, Aisle, or Center) and occupant (Passenger obj)
+        Occupied boolean signalling if occupied by some passenger
+        Clear of passenger
+    Collab
+        Passenger
+
+Passenger
+    Resp
+        Store passanger name
+        Possibly the service class?
+        Group name if applicable
+
+UserInput
+    Resp
+        Get user input
+        Determine if valid
+    Collab
+        ReservationSystem
+
+FileIO
+    Resp
+        Read and write reservations to file
+    Collab
+        ReservationSystem
+        Flight

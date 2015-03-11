@@ -1,0 +1,34 @@
+Find Classes
+Find responsibilities
+Define collaborators
+Place cards using one another beside each other
+Walkthrough use cases, name cards and responsibilities
+
+MyCalendar
+
+Calendar
+    Resp
+        Contain events that user creates
+        Interact with Event for data 
+    Collab
+        Event
+        HashTable
+
+Event
+    Resp
+        Contain details about a specific event
+    Collab
+        
+
+UserInput
+    Resp
+        Get user input
+        Determine if valid
+    Collab
+        ReservationSystem
+
+FileIO
+    Resp
+        Read and write to file
+    Collab
+        MyCalendar

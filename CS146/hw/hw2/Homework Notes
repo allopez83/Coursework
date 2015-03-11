@@ -1,0 +1,31 @@
+Homework 2 Notes
+
+2.1
+- Just a short description
+
+2.2
+- Need big-o estimation
+- Also need explanation
+- trimToSize() is a key part to big-o calculation
+
+2.3
+- Refer to textbook
+- a/b: need to know about stack
+
+2.4
+- b/c: put down big-o, and how you reached your answer, aka explain
+- d: basically just a yes/no
+
+2.5
+(600-203)*(143+21)/(87+17)
+- Not that hard, just follow textbook example
+
+2.6
+- Should be able to read any text file
+- You have the option of input through file as parameter, or text as console input
+
+2.7
+- Assume all symbols are pairs, no need to detect if unbalanced
+
+2.8
+- Null
