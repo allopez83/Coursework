@@ -31,7 +31,7 @@ public class FileIO
    /**
     * @param cal
     */
-   void saveCalendar(Calendar cal)
+   void saveCalendar(MyCalendar cal)
    {
       // TODO implement here
    }

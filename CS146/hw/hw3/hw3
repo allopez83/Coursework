@@ -1,0 +1,116 @@
+3.1
+
+Inserting the following input into hash tables of size 10:
+{4371, 1323, 6173, 4199, 4344, 9679, 1989}
+
+a. Separate Chaining
+
+    0:
+    1: 4371 ->
+    2:
+    3: 1323 -> 6173 ->
+    4: 4344 ->
+    5:
+    6:
+    7:
+    8:
+    9: 4199 -> 9679 -> 1989 ->
+
+b. Linear Probing
+
+    0: 9679
+    1: 4371
+    2: 1989
+    3: 1323
+    4: 6173
+    5: 4344
+    6:
+    7:
+    8:
+    9: 4199
+
+c. Quadratic Probing
+
+    f(i) = i^2
+
+    0: 4371
+    1: 1989
+    2:
+    3: 1323
+    4: 6173
+    5: 4344
+    6:
+    7:
+    8: 9679
+    9: 4199
+
+d. Double Hashing
+
+    H1(x) = x mod 10
+    H2(x) = 7 − (x mod 7)
+
+    0: 1323
+    1: 4371
+    2:
+    3: 1323
+    4:
+    5:
+    6:
+    7:
+    8:
+    9:
+
+
+3.2
+
+Rehashing 3.1 tables to size of next prime, 23, all result in the same table since there's no collisions.
+
+     0:
+     1: 4371
+     2:
+     3:
+     4:
+     5:
+     6:
+     7:
+     8:
+     9: 6173
+    10:
+    11: 1989
+    12: 1323
+    13: 4199
+    14:
+    15:
+    16:
+    17:
+    18:
+    19: 9679
+    20: 4344
+    21:
+    22:
+
+
+3.3
+
+Separate Chaining Hashing
+    Advantage
+        - Collided elements do not occupy another location in the hash table
+        - Another element can always be added
+    Disadvantage
+        - Some hash indexes may become essentially a linked list, defeating the purpose by diminishing performance
+
+Linear Probing
+    Advantage
+        - Solves the disadvantage of separate chaining, maintains 
+        - Available index can always be found if there's room in the table.
+    Disadvantage
+        - Does not prevent blocks of indexes in the table from being occupied, resulting in primary clustering
+        -
+
+Quadratic Probing
+    Advantage
+    Disadvantage
+
+Double Hashing
+    Advantage
+    Disadvantage
