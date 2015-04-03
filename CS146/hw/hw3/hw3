@@ -101,11 +101,10 @@ Separate Chaining Hashing
 
 Linear Probing
     Advantage
-        - Solves the disadvantage of separate chaining, maintains 
+        - Solves the disadvantage of separate chaining, maintains
         - Available index can always be found if there's room in the table.
     Disadvantage
         - Does not prevent blocks of indexes in the table from being occupied, resulting in primary clustering
-        -
 
 Quadratic Probing
     Advantage
