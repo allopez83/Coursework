@@ -102,14 +102,31 @@ Separate Chaining Hashing
 Linear Probing
     Advantage
         - Solves the disadvantage of separate chaining, maintains
-        - Available index can always be found if there's room in the table.
+        - An available index will always be found if there's room in the table.
     Disadvantage
-        - Does not prevent blocks of indexes in the table from being occupied, resulting in primary clustering
+        - Does not prevent blocks of indexes in the table from being occupied, resulting in primary clustering.
 
 Quadratic Probing
     Advantage
+        - Eliminates primary clustering issue with linear probing
     Disadvantage
+        - Causes secondary clustering instead of primary clustering
+        - There is no guarantee that an empty cell can be found if the table is more than half full.
+        - To maintain a half-full table, rehashing is needed, and is time expensive.
 
 Double Hashing
     Advantage
+        - Solves secondary clustering with quadratic probing
     Disadvantage
+        - Requires a second hash function - must be well chosen, adds to runtime
+
+Double Hashing is the fastest, since it minimizes the inefficiency caused by clustering, while not needing the second hash function that double hashing uses.
+
+
+3.4
+
+Missing
+
+3.5
+
+3.6

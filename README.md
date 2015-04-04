@@ -2,7 +2,7 @@
 
 ### Description
 
-Various coursework from all my current and previous institutions. Usually comprised of Java, but other languages exist.
+Various coursework from all current and previous courses at institutions I have attended. Usually comprised of Java, but other languages exist.
 
 The institutions here include Foothill Community College, and San Jose State University.
 
@@ -32,13 +32,12 @@ Eventually, all the following directories will be added, each representing a cou
 - Advanced Data Structures & Algorithms
 - Foothill
 
-**CS2A**
+**CS2A - not available yet**
 - Intro to C++
 - Foothill
 - C++
 
-**CS10**
+**CS10 - not available yet**
 - Computer Architecture & Organization
 - Foothill
 - MIPS
-
