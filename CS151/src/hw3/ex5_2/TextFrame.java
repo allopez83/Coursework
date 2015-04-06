@@ -2,11 +2,9 @@ package hw3.ex5_2;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import java.util.ArrayList;
 
 /**
@@ -82,9 +80,14 @@ public class TextFrame extends JFrame implements ChangeListener
          if (!current.get(i).equals(old.get(i)))
             diff = i;
       System.out.println(diff);
-      System.out.println("changeevent");
-      old = current;
-      this.fieldList[diff].setText(dataModel.data.get(diff) + "");
+      if (diff != -1)
+      {
+         System.out.println("changeevent");
+         old = current;
+         this.fieldList[diff].setText(dataModel.data.get(diff) + "");
+      }
+      else
+         System.out.println("no change");
    }
 
    DataModel dataModel;
