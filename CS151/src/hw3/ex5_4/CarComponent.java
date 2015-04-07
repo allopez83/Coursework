@@ -45,6 +45,6 @@ public class CarComponent extends JComponent
    public void paintComponent(Graphics g)
    {
       Graphics2D g2 = (Graphics2D) g;
-      car.draw(g2);
+      car.draw(g2);;
    }
 }

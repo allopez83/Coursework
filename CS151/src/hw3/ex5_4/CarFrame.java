@@ -23,7 +23,7 @@ public class CarFrame extends JFrame implements ChangeListener
 
       this.add(new JTextField("initial text", 0));
       
-      paintAll(car);
+      paint(car);
 //      this.paintComponents(car);
       
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
