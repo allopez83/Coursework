@@ -9,9 +9,12 @@ public class SliderTester
 {
    public static void main(String[] args)
    {
-      System.out.println("Hello");
-
+      // Slider
       new Slider();
+      
+      new CarFrame();
+      // Car
+      // new CarComponent();
 
    }
 
