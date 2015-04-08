@@ -6,8 +6,12 @@ import java.awt.geom.*;
 /**
  * A car that can be moved around.
  */
-public class CarShape implements MoveableShape
+public class CarShape
 {
+   private int x;
+   private int y;
+   private int width;
+
    /**
     * Constructs a car item.
     * @param x the left of the bounding rectangle
@@ -16,19 +20,16 @@ public class CarShape implements MoveableShape
     */
    public CarShape(int x, int y, int width)
    {
+      System.out.println("CS");
       this.x = x;
       this.y = y;
       this.width = width;
    }
 
-   public void translate(int dx, int dy)
-   {
-      x += dx;
-      y += dy;
-   }
-
    public void draw(Graphics2D g2)
    {
+      System.out.println("CS draw");
+
       Rectangle2D.Double body = new Rectangle2D.Double(x, y + width / 6,
             width - 1, width / 6);
       Ellipse2D.Double frontTire = new Ellipse2D.Double(x + width / 6, y
@@ -55,8 +56,4 @@ public class CarShape implements MoveableShape
       g2.draw(roofTop);
       g2.draw(rearWindshield);
    }
-
-   private int x;
-   private int y;
-   private int width;
 }

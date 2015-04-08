@@ -10,24 +10,26 @@ import javax.swing.event.*;
  */
 public class CarFrame extends JFrame implements ChangeListener
 {
-   CarComponent car = new CarComponent();
+   CarComponent car;
+
    /**
-    * Constructs a BarFrame object
+    * Constructs a CarFrame object
     * @param dataModel the data that is displayed in the barchart
     */
-   public CarFrame()
+   public CarFrame(DataModel model)
    {
+      System.out.println("CF");
+      // Windows stuff
       this.setSize(400, 300);
       setLocation(0, 100);
       this.setLayout(new BorderLayout());
 
-      this.add(new JTextField("initial text", 0));
-      
-      paint(car);
-//      this.paintComponents(car);
-      
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.setVisible(true);
+      // Car stuff
+      car = new CarComponent(model);
+      this.add(car);
+
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setVisible(true);
    }
 
    /**
@@ -36,6 +38,7 @@ public class CarFrame extends JFrame implements ChangeListener
     */
    public void stateChanged(ChangeEvent e)
    {
-      repaint();
+      System.out.println("CF stateChanged");
+      this.repaint();
    }
 }
