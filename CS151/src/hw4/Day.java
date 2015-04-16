@@ -21,6 +21,42 @@ public class Day implements Comparable<Day>
       events.add(new Event(name, start, end));
    }
 
+   public boolean equals(Day d)
+   {
+      if (this.compareTo(d) == 0)
+         return true;
+      else
+         return false;
+   }
+
+   public boolean equals(GregorianCalendar gc)
+   {
+      System.out.println("equals gc");
+      // extract y/m/d and send to other equals()
+      int year = gc.get(Calendar.YEAR);
+      int month = gc.get(Calendar.MONTH);
+      int day = gc.get(Calendar.DATE);
+      return this.equals(year, month, day);
+   }
+
+   /**
+    * Check if the given day is represented by this Day object
+    * @param y year to compare with
+    * @param m month to compare with
+    * @param d day to compare with
+    * @return boolean representing if the day matches the given values
+    */
+   public boolean equals(int y, int m, int d)
+   {
+      // check if y/m/d matches
+      System.out.println("equals ymd");
+      if (this.day.get(Calendar.YEAR) == y)
+         if (this.day.get(Calendar.MONTH) == m)
+            if (this.day.get(Calendar.DATE) == d)
+               return true;
+      return false;
+   }
+
    /**
     * A Day is equivalent to another only when it's on the same day. Time of day
     * is irrelevant
@@ -28,22 +64,13 @@ public class Day implements Comparable<Day>
    public int compareTo(Day d)
    {
       // Check if it's the same day
-      if (this.getDay().get(Calendar.YEAR) == d.getDay().get(Calendar.YEAR))
+      if (this.equals(d.getDay()))
       {
-         if (this.getDay().get(Calendar.MONTH) == d.getDay()
-               .get(Calendar.MONTH))
-         {
-            if (this.getDay().get(Calendar.DATE) == d.getDay().get(
-                  Calendar.DATE))
-            {
-               System.out.println("Same day");
-               return 0; // on the same day
-            }
-         }
+         System.out.println("compareTo - equal");
+         return 0;
       }
-
       // Else, compareTo
-      System.out.println("compareTo");
+      System.out.println("compareTo - revert");
       return this.getDay().compareTo(d.getDay());
    }
 
@@ -52,24 +79,26 @@ public class Day implements Comparable<Day>
       private String name;
       private int start;
       private int end;
-      private boolean ampm; // false for AM true for PM
+      //private boolean ampm; // false for AM true for PM
 
       public Event(String n, int s, int e)
       {
-         setName(n);
+         this.setName(n);
          this.setStart(s);
          this.setEnd(e);
+//         this.setAMPM(get);
       }
       
+      // Get and Set methods
       public int getStartHours()
-      { return start/100; }
+      { return start / 100; }
       public int getStartMinutes()
-      { return start%100; }
+      { return start % 100; }
 
       public int getEndHours()
-      { return end/100; }
+      { return end / 100; }
       public int getEndMinutes()
-      { return end%100; }
+      { return end % 100; }
 
       private String getName()
       { return name; }
@@ -86,6 +115,16 @@ public class Day implements Comparable<Day>
       private void setEnd(int end)
       { this.end = end; }
 
+//      private boolean getAMPM()
+//      { return ampm; }
+//      private void setAMPM(int hour)
+//      {
+//         if (hour < 12)
+//            ampm = false;
+//         else
+//            ampm = true;
+//      }
       
    }
+   
 }
