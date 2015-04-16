@@ -11,6 +11,11 @@ public class Day implements Comparable<Day>
 
    ArrayList<Event> events;
 
+   void setDay(GregorianCalendar d)
+   {
+      this.day = d;
+   }
+
    GregorianCalendar getDay()
    {
       return day;

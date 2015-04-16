@@ -1,5 +1,6 @@
 package hw4;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EventListener;
@@ -67,12 +68,25 @@ public class Model
       Day result = calendar.get(key);
       
       // Update view
+      view.current = this.currentDay;
+      view.monthName = intToMonth(currentDay.get(Calendar.MONTH));
       view.drawDay(result);
 
       // Advance and get from hashmap
          // Send day to view for redraw
       // Check if day is on new month
          // Send day to month for redraw
+   }
+
+   private String intToMonth(int i)
+   {
+      String month = "wrong";
+      DateFormatSymbols dfs = new DateFormatSymbols();
+      String[] months = dfs.getMonths();
+      if (i >= 0 && i <= 11 ) {
+          month = months[i];
+      }
+      return month;
    }
 
    public void prev()
