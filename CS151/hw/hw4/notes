@@ -1,0 +1,17 @@
+Can use this for month view
+
+
+      keyPanel.setLayout(new GridLayout(4, 3));
+      for (int i = 0; i < keyLabels.length(); i++)
+      {
+         final String label = keyLabels.substring(i, i + 1);
+         JButton keyButton = new JButton(label);
+         keyPanel.add(keyButton);
+         keyButton.addActionListener(new ActionListener()
+         {
+            public void actionPerformed(ActionEvent event)
+            {
+               connect.dial(label);
+            }
+         });
+      }

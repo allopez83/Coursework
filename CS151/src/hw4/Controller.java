@@ -1,18 +1,18 @@
 package hw4;
 
 /**
- * Initializes the SimpleGUICalendar program
+ * Initializes the SimpleCalendar program
  * @author Hansen Wu
  *
  */
 public class Controller
 {
-   public static void main(String[] args)
+   public Controller()
    {
       System.out.println("Controller main()");
       
-      Model calMod = new Model();
       View calView = new View();
+      Model calMod = new Model(calView);
 
       // Add buttons in view to model
    }
