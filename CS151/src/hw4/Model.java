@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EventListener;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -18,19 +19,16 @@ import javax.swing.JButton;
 public class Model
 {
    // Contains days and events
-   LinkedList<Day> calendar;
-   Iterator<Day> calIterator;
+   HashMap<Integer, Day> calendar;
 
    // Buttons on view and associated listeners
    ArrayList<JButton> buttons;
    ArrayList<EventListener> listeners;
 
    // Stores the day user's system is on
-   GregorianCalendar todayGC;
+   GregorianCalendar today;
    // Day that calendar is looking at
    GregorianCalendar currentDay;
-   
-   Day prev, current, next;
    
    View view;
 
@@ -39,12 +37,11 @@ public class Model
       System.out.println("Model");
       
       // Read file
+      // loadFile();
       
-      calendar = new LinkedList<Day>();
-      calIterator = calendar.iterator();
-      todayGC = new GregorianCalendar();
-      currentDay = todayGC;
-      Day currentDay;
+      calendar = new HashMap<Integer, Day>();
+      today = new GregorianCalendar();
+      currentDay = today;
       // calIterator go to today
       
       view = calView;
@@ -57,23 +54,22 @@ public class Model
 
    public void next()
    {
-      // Try to get next element
-      next = calIterator.next();
-
-      // Advance and check if next matches
-      currentDay.add(Calendar.DATE, 1);
-      if (next.equals(currentDay)) // If next day entry is the current day
-      {
-         current = next;
-         if (calIterator.hasNext()) // Advance
-            next = calIterator.next();
-      }
-      // Else, currentDay still hasn't reached next
-
-      view.drawDay(current);
       System.out.println("next");
+      // Advance
+      int oldMonth = currentDay.get(Calendar.MONTH);
+      currentDay.add(Calendar.DATE, 1);
+      int newMonth = currentDay.get(Calendar.MONTH);
+      // Check if month changed
+      boolean monthSame = (oldMonth == newMonth);
       
-      // check with iterator if next day has events
+      // Get
+      Integer key = gcToInt(currentDay);
+      Day result = calendar.get(key);
+      
+      // Update view
+      view.drawDay(result);
+
+      // Advance and get from hashmap
          // Send day to view for redraw
       // Check if day is on new month
          // Send day to month for redraw
@@ -83,9 +79,29 @@ public class Model
    {
       System.out.println("prev");
       
-      Day d = calIterator.next();
-      view.drawDay(d);
+//      Day d = calIterator.next();
+//      view.drawDay(d);
       
+   }
+   
+   /**
+    * Produces an integer in yyyymmdd format from given Gregorian Calendar
+    * @param gc Gregorian Calendar object to extract date from
+    * @return date of gc in yyyymmdd format, i.e. 20150024 for January 24th 2015
+    */
+   private Integer gcToInt(GregorianCalendar gc)
+   {
+      int year = gc.get(Calendar.YEAR);
+      int month = gc.get(Calendar.MONTH);
+      int day = gc.get(Calendar.DATE);
+
+      int result = 0;
+      result += day;
+      result += month * 100;
+      result += year * 100 * 100;
+      // should result in yyyymmdd int
+
+      return result;
    }
 
 }
