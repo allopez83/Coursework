@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Day implements Comparable<Day>
+public class Events implements Comparable<Events>
 {
    // Each day obj is on a GregorianCalendar day
-   GregorianCalendar day;
-
-   ArrayList<Event> events;
+   private GregorianCalendar day;
+   private ArrayList<Event> events;
 
    void setDay(GregorianCalendar d)
    {
@@ -26,12 +25,17 @@ public class Day implements Comparable<Day>
       events.add(new Event(name, start, end));
    }
 
-   public boolean equals(Day d)
+   public boolean equals(Events d)
    {
       if (this.compareTo(d) == 0)
          return true;
       else
          return false;
+   }
+   
+   public int getQuantity()
+   {
+      return events.size();
    }
 
    public boolean equals(GregorianCalendar gc)
@@ -66,7 +70,7 @@ public class Day implements Comparable<Day>
     * A Day is equivalent to another only when it's on the same day. Time of day
     * is irrelevant
     */
-   public int compareTo(Day d)
+   public int compareTo(Events d)
    {
       // Check if it's the same day
       if (this.equals(d.getDay()))

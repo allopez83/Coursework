@@ -9,10 +9,12 @@ public class Controller
 {
    public Controller()
    {
-      System.out.println("Controller main()");
+      System.out.println("Controller");
       
+      Model calMod = new Model();
       View calView = new View();
-      Model calMod = new Model(calView);
+      calMod.setView(calView);
+      calView.display();
 
       // Add buttons in view to model
    }
