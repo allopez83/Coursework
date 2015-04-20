@@ -7,15 +7,24 @@ package hw4;
  */
 public class Controller
 {
+   View view;
+   Model model;
+
    public Controller()
    {
       System.out.println("Controller");
-      
-      Model calMod = new Model();
-      View calView = new View();
-      calMod.setView(calView);
-      calView.display();
 
+      model = new Model();
+      view = new View();
+      model.setView(view);
+      view.display();
+
+      setUpButtons();
       // Add buttons in view to model
+   }
+
+   private void setUpButtons()
+   {
+      
    }
 }

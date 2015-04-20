@@ -30,7 +30,8 @@ public class Model
    GregorianCalendar today;
    // Day that calendar is looking at
    GregorianCalendar currentDay;
-
+   
+   Events events;
    View view;
    DateFormatSymbols dfs;
 
@@ -44,6 +45,10 @@ public class Model
       calendar = new HashMap<Integer, Events>();
       today = new GregorianCalendar();
       currentDay = today;
+
+      // Are there any events on the current day?
+      Integer key = gcToInt(currentDay);
+      events = calendar.get(key);
       
       dfs = new DateFormatSymbols();
    }
@@ -57,6 +62,7 @@ public class Model
       System.out.println("Model-setView");
       
       this.view = v;
+      view.setEvents(events);
       view.setDay(currentDay);
       view.setDayText(getDayViewString(currentDay));
       view.setMonthText(getMonthViewString(currentDay));
@@ -68,7 +74,7 @@ public class Model
 
       // Are there any events on the current day?
       Integer key = gcToInt(currentDay);
-      Events events = calendar.get(key);
+      events = calendar.get(key);
       
       // Update date information on view
       view.setDay(currentDay);
@@ -108,7 +114,7 @@ public class Model
       result += day;
       result += month * 100;
       result += year * 100 * 100;
-      // should result in yyyymmdd int
+      // Should result in yyyymmdd int
    
       return result;
    }

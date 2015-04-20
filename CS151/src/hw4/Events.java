@@ -10,6 +10,12 @@ public class Events implements Comparable<Events>
    private GregorianCalendar day;
    private ArrayList<Event> events;
 
+   public Events(GregorianCalendar gc)
+   {
+      this.day = gc;
+      events = new ArrayList<Event>();
+   }
+   
    void setDay(GregorianCalendar d)
    {
       this.day = d;
@@ -31,6 +37,11 @@ public class Events implements Comparable<Events>
          return true;
       else
          return false;
+   }
+   
+   public ArrayList<Event> getEvents()
+   {
+      return events;
    }
    
    public int getQuantity()
@@ -82,58 +93,67 @@ public class Events implements Comparable<Events>
       System.out.println("compareTo - revert");
       return this.getDay().compareTo(d.getDay());
    }
-
-   private class Event
-   {
-      private String name;
-      private int start;
-      private int end;
-      //private boolean ampm; // false for AM true for PM
-
-      public Event(String n, int s, int e)
-      {
-         this.setName(n);
-         this.setStart(s);
-         this.setEnd(e);
-//         this.setAMPM(get);
-      }
-      
-      // Get and Set methods
-      public int getStartHours()
-      { return start / 100; }
-      public int getStartMinutes()
-      { return start % 100; }
-
-      public int getEndHours()
-      { return end / 100; }
-      public int getEndMinutes()
-      { return end % 100; }
-
-      private String getName()
-      { return name; }
-      private void setName(String name)
-      { this.name = name; }
-      
-      private int getStart()
-      { return start; }
-      private void setStart(int start)
-      { this.start = start; }
-
-      private int getEnd()
-      { return end; }
-      private void setEnd(int end)
-      { this.end = end; }
-
-//      private boolean getAMPM()
-//      { return ampm; }
-//      private void setAMPM(int hour)
-//      {
-//         if (hour < 12)
-//            ampm = false;
-//         else
-//            ampm = true;
-//      }
-      
-   }
    
+}
+
+class Event
+{
+   private String name;
+   private int start;
+   private int end;
+
+   /**
+    * Event entry with the given data, where time is in 24 hours, i.e. 1425
+    * -> 2:25 pm
+    * @param n name of the event
+    * @param s start of the event
+    * @param e end of the event
+    */
+   public Event(String n, int s, int e)
+   {
+      this.setName(n);
+      this.setStart(s);
+      this.setEnd(e);
+   }
+
+   // Get and Set methods
+   
+   public String getStartHours()
+   {
+      return String.format("%02d", start / 100);
+   }
+
+   public String getStartMinutes()
+   {
+      return String.format("%02d", start % 100);
+   }
+
+   public String getEndHours()
+   {
+      return String.format("%02d", end / 100);
+   }
+
+   public String getEndMinutes()
+   {
+      return String.format("%02d", end % 100);
+   }
+
+   public String getName() { return name; }
+   private void setName(String name) { this.name = name; }
+   
+   public int getStart() { return start; }
+   private void setStart(int start) { this.start = start; }
+
+   public int getEnd() { return end; }
+   private void setEnd(int end) { this.end = end; }
+
+   public String toSring()
+   {
+      String s = getStartHours() + ":" + getStartMinutes();
+      String e = getEndHours() + ":" + getEndMinutes();
+
+      System.out.println(end);
+      System.out.println(e);
+      return s + "-" + e + "; " + name;
+   }
 }

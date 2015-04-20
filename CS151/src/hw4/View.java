@@ -2,9 +2,12 @@ package hw4;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -23,11 +26,13 @@ public class View extends JFrame
 {
    private final int DAY_IN_WEEK = 7, WEEK_IN_MONTH = 6, DAY_HOURS = 24;
    private JPanel left, right, top;
-   private JPanel day; //, dayTime, dayEvents;
+   private JPanel day, dayTime, dayEvents;
    private JPanel month;
    private JButton next, prev, createEvent, quit;
    private JLabel monthLabel, dayLabel;
+   
    private GregorianCalendar currentDay;
+   private Events events;
    
    /**
     * Creates the primary window
@@ -58,6 +63,9 @@ public class View extends JFrame
       right.setBorder(BorderFactory.createLineBorder(Color.BLACK));
       month.setBorder(BorderFactory.createLineBorder(Color.BLACK));
       day.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+      dayTime.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+      dayEvents.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+      day.setPreferredSize(new Dimension(300, 800));
 
       // Main
       this.setLayout(new BorderLayout());
@@ -112,14 +120,19 @@ public class View extends JFrame
    private void rightPanel()
    {
       System.out.println("View-rightPanel");
-      
+
       right = new JPanel(new BorderLayout());
-      day = new JPanel(new GridBagLayout()); // TODO find what layout
-      
-      drawDay(null); // Draw just the day 
+      day = new JPanel(new BorderLayout());
+      dayTime = new JPanel(new GridLayout(24*2, 2));
+      dayEvents = new JPanel(new BorderLayout());
 
       right.add(dayLabel, BorderLayout.NORTH);
       right.add(day, BorderLayout.CENTER);
+
+      day.add(dayTime, BorderLayout.WEST);
+      day.add(dayEvents, BorderLayout.CENTER);
+
+      drawDay(events); // Draw the day
    }
 
    /**
@@ -129,7 +142,7 @@ public class View extends JFrame
    public void update(Events events, Integer i)
    {
       System.out.println("View-update");
-      
+
       drawDay(events);
       drawMonth(i);
    }
@@ -141,12 +154,6 @@ public class View extends JFrame
    {
       System.out.println("View-drawMonth");
 
-      // TODO more stuff
-      // find which day of week the first day of month starts on
-   
-      // Loop through by drawing blanks where day doesn't exist, going to next
-      // row when end of week reached, for all days in a month
-   
       int days = 1;
       int countdown = delay;
       int max = currentDay.getActualMaximum(Calendar.DATE);
@@ -155,12 +162,12 @@ public class View extends JFrame
       String[] weekdayNames = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
       JLabel weekday;
       JButton dayButton;
-      
+
       // Draw weekday labels
       for (int i = 0; i < DAY_IN_WEEK; i++) // week
       {
          weekday = new JLabel(weekdayNames[i]);
-         c.fill = GridBagConstraints.HORIZONTAL;
+         c.fill = GridBagConstraints.BOTH;
          c.gridx = i;
          c.gridy = 0;
          month.add(weekday, c);
@@ -176,10 +183,10 @@ public class View extends JFrame
             {
                dayButton = new JButton(days + "");
                days++;
-               c.fill = GridBagConstraints.HORIZONTAL;
+               c.fill = GridBagConstraints.BOTH;
                c.ipady = 20;
                c.gridx = j;
-               c.gridy = i + 1; // +1 because of weekday row
+               c.gridy = i+1  ; // +1 because of weekday row
                month.add(dayButton, c);
             }
          }
@@ -194,25 +201,23 @@ public class View extends JFrame
    {
       System.out.println("View-drawDay");
 
-      GridBagConstraints c = new GridBagConstraints();
-      JLabel time;
-
       // Draw time of day labels
       for (int i = 0; i < DAY_HOURS; i++) // Week
       {
-         time = new JLabel(i + ":00");
-         c.fill = GridBagConstraints.HORIZONTAL;
-         c.ipady = 10;
-         c.gridx = 0;
-         c.gridy = i;
-         day.add(time, c);
+         dayTime.add(new JLabel(i + ":00"));
+         dayTime.add(new JLabel("")); // Extra space
       }
 
       // day.add(new DayViewComponent(day));
       // Draw rectangles and stuff
-      
-      if (events != null)
-         drawEvents(events);
+      // TODO test event remove later
+      events = new Events(currentDay);
+      events.add("zerohour", 0, 600);
+      events.add("same end time", 800, 1400);
+      events.add("same start time", 1400, 1530);
+      events.add("long name for event off in the middle of nowhere", 1700, 2300);
+      drawEvents(events);
+      events = null;
    }
 
    /**
@@ -222,10 +227,15 @@ public class View extends JFrame
    private void drawEvents(Events events)
    {
       System.out.println("View-drawEvents");
-      
+      GridBagConstraints c = new GridBagConstraints();
       if (events != null)
       {
+         System.out.println("drawing...");
          // Draw the day
+         
+         // Draw a pseudo event
+         DayViewComponent dvc = new DayViewComponent(dayEvents, events);
+         this.dayEvents.add(dvc);
       }
       else
       {
@@ -252,6 +262,12 @@ public class View extends JFrame
       System.out.println("View-setDayText");
       
       this.dayLabel.setText(d);
+   }
+
+   public void setEvents(Events events)
+   {
+      System.out.println("View-setEvents");
+      this.events = events;
    }
 
    public void repaint()
