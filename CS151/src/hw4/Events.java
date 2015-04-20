@@ -151,9 +151,6 @@ class Event
    {
       String s = getStartHours() + ":" + getStartMinutes();
       String e = getEndHours() + ":" + getEndMinutes();
-
-      System.out.println(end);
-      System.out.println(e);
       return s + "-" + e + "; " + name;
    }
 }

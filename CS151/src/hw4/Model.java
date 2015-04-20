@@ -62,10 +62,7 @@ public class Model
       System.out.println("Model-setView");
       
       this.view = v;
-      view.setEvents(events);
-      view.setDay(currentDay);
-      view.setDayText(getDayViewString(currentDay));
-      view.setMonthText(getMonthViewString(currentDay));
+      updateViewData();
    }
 
    private void updateView()
@@ -77,10 +74,19 @@ public class Model
       events = calendar.get(key);
       
       // Update date information on view
+      updateViewData();
+      view.redraw();
+   }
+   
+   /**
+    * Push new data for view to use
+    */
+   private void updateViewData()
+   {
+      view.setEvents(events);
       view.setDay(currentDay);
       view.setDayText(getDayViewString(currentDay));
       view.setMonthText(getMonthViewString(currentDay));
-      view.update(events, 3);
    }
 
    public void next()
@@ -114,7 +120,7 @@ public class Model
       result += day;
       result += month * 100;
       result += year * 100 * 100;
-      // Should result in yyyymmdd int
+      // should result in yyyymmdd int
    
       return result;
    }

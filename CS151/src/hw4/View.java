@@ -6,11 +6,9 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,19 +26,25 @@ public class View extends JFrame
    private JPanel left, right, top;
    private JPanel day, dayTime, dayEvents;
    private JPanel month;
-   private JButton next, prev, createEvent, quit;
+   private JButton next, prev, create, quit;
    private JLabel monthLabel, dayLabel;
-   
+
    private GregorianCalendar currentDay;
    private Events events;
-   
+   private ActionListener monthAction;
+
    /**
     * Creates the primary window
     */
    public View()
    {
       System.out.println("View");
-      
+
+      create = new JButton("Create Event");
+      prev = new JButton("<- Prev");
+      next = new JButton("Next ->");
+      quit = new JButton("Quit");
+
       monthLabel = new JLabel();
       dayLabel = new JLabel();
    }
@@ -49,11 +53,6 @@ public class View extends JFrame
    {
       System.out.println("View-display");
 
-      createEvent = new JButton("Create Event");
-      prev = new JButton("<-");
-      next = new JButton("->");
-      quit = new JButton("Quit");
-      
       topPanel();
       leftPanel();
       rightPanel();
@@ -81,30 +80,30 @@ public class View extends JFrame
    private void topPanel()
    {
       System.out.println("View-topPanel");
-      
+
       top = new JPanel();
 
-      top.add(createEvent);
+      top.add(create);
       top.add(prev);
       top.add(next);
       top.add(quit);
    }
 
-   /**   
+   /**
     * Creates left SimpleCalendar panel with month view along with create event
     * and navigation buttons
     */
    private void leftPanel()
    {
       System.out.println("View-leftPanel");
-      
+
       left = new JPanel(new BorderLayout());
       month = new JPanel(new GridBagLayout());
 
       left.add(monthLabel, BorderLayout.NORTH);
       left.add(month, BorderLayout.CENTER);
-      
-      drawMonth(getMonthDelay()); // Initially nothing
+
+      drawMonth(); // Initially nothing
    }
 
    private Integer getMonthDelay()
@@ -123,7 +122,7 @@ public class View extends JFrame
 
       right = new JPanel(new BorderLayout());
       day = new JPanel(new BorderLayout());
-      dayTime = new JPanel(new GridLayout(24*2, 2));
+      dayTime = new JPanel(new GridLayout(24 * 2, 2));
       dayEvents = new JPanel(new BorderLayout());
 
       right.add(dayLabel, BorderLayout.NORTH);
@@ -137,28 +136,28 @@ public class View extends JFrame
 
    /**
     * Redraw the month and day view to reflect new day or view to look at
-    * @param events
+    * @param Integer 
     */
-   public void update(Events events, Integer i)
+   public void redraw()
    {
       System.out.println("View-update");
 
       drawDay(events);
-      drawMonth(i);
+      drawMonth();
    }
 
    /**
     * Draw a month
     */
-   public void drawMonth(Integer delay)
+   public void drawMonth()
    {
       System.out.println("View-drawMonth");
 
       int days = 1;
-      int countdown = delay;
+      int countdown = this.getMonthDelay();
       int max = currentDay.getActualMaximum(Calendar.DATE);
       GridBagConstraints c = new GridBagConstraints();
-      
+
       String[] weekdayNames = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
       JLabel weekday;
       JButton dayButton;
@@ -182,11 +181,12 @@ public class View extends JFrame
             if (days > countdown)
             {
                dayButton = new JButton(days + "");
+               dayButton.addActionListener(monthAction);
                days++;
                c.fill = GridBagConstraints.BOTH;
                c.ipady = 20;
                c.gridx = j;
-               c.gridy = i+1  ; // +1 because of weekday row
+               c.gridy = i + 1; // +1 because of weekday row
                month.add(dayButton, c);
             }
          }
@@ -230,10 +230,7 @@ public class View extends JFrame
       GridBagConstraints c = new GridBagConstraints();
       if (events != null)
       {
-         System.out.println("drawing...");
          // Draw the day
-         
-         // Draw a pseudo event
          DayViewComponent dvc = new DayViewComponent(dayEvents, events);
          this.dayEvents.add(dvc);
       }
@@ -243,24 +240,36 @@ public class View extends JFrame
       }
    }
 
+   void addQuitListener(ActionListener l) { quit.addActionListener(l); }
+   void addPrevListener(ActionListener l) { prev.addActionListener(l); }
+   void addNextListener(ActionListener l) { next.addActionListener(l); }
+   void addCreateListener(ActionListener l) { create.addActionListener(l); }
+   void addMonthViewListener(ActionListener l) { monthAction = l; monthListener(); }
+
+   private void monthListener()
+   {
+      // TODO Auto-generated method stub
+      
+   }
+
    public void setMonthText(String m)
    {
       System.out.println("View-setMonthText");
-      
+
       this.monthLabel.setText(m);
    }
 
    public void setDay(GregorianCalendar gc)
    {
       System.out.println("View-setDay");
-      
+
       this.currentDay = gc;
    }
 
    public void setDayText(String d)
    {
       System.out.println("View-setDayText");
-      
+
       this.dayLabel.setText(d);
    }
 

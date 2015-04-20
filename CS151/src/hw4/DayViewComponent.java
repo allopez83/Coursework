@@ -47,8 +47,6 @@ public class DayViewComponent extends JComponent
       ArrayList<Event> all = ev.getEvents();
       for (Event e : all)
       {
-         System.out.println("paintrec");
-
          int start = e.getStart();
          double actualStart = start / MAX * panelHeight;
          int end = e.getEnd();
