@@ -12,73 +12,78 @@ import javax.swing.JButton;
  */
 public class Controller
 {
-   View view;
-   Model model;
+    protected static final boolean DEBUG = true;
+    View view;
+    Model model;
 
-   public Controller()
-   {
-      System.out.println("Controller");
+    public Controller()
+    {
+        if (DEBUG) System.out.println("Controller");
 
-      model = new Model();
-      view = new View();
-      
-      setUpButtons();
-      
-      model.setView(view);
-      view.display();
+        model = new Model();
+        view = new View();
 
-   }
+        setUpButtons();
 
-   /**
-    * Gives buttons their listeners
-    */
-   private void setUpButtons()
-   {
-      view.addQuitListener(new ActionListener()
-      {
-         public void actionPerformed(ActionEvent e)
-         {
-            System.out.println(" > Quit pressed");
-//            model.quit();
-         }
-      });
+        model.setView(view);
+        view.display();
+    }
 
-      view.addPrevListener(new ActionListener()
-      {
-         public void actionPerformed(ActionEvent e)
-         {
-            System.out.println(" > Prev pressed");
-            model.prev();
-         }
-      });
+    /**
+     * Gives buttons their listeners
+     */
+    private void setUpButtons()
+    {
+        view.addQuitListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (DEBUG) System.out.println(" > Quit pressed");
+                model.saveData();
+                view.dispose();
+            }
+        });
 
-      view.addNextListener(new ActionListener()
-      {
-         public void actionPerformed(ActionEvent e)
-         {
-            System.out.println(" > Next pressed");
-            model.next();
-         }
-      });
+        view.addPrevListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (DEBUG) System.out.println(" > Prev pressed");
+                model.prev();
+            }
+        });
 
-      view.addCreateListener(new ActionListener()
-      {
-         public void actionPerformed(ActionEvent e)
-         {
-            System.out.println(" > Create pressed");
-//            model.createMenu();
-         }
-      });
+        view.addNextListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (DEBUG) System.out.println(" > Next pressed");
+                model.next();
+            }
+        });
 
-      view.addMonthViewListener(new ActionListener()
-      {
-         public void actionPerformed(ActionEvent e)
-         {
-            System.out.println(" > MonthView pressed");
-            JButton source = (JButton) e.getSource();
-            System.out.println(source.getText());
-//            model.jumpToDay();
-         }
-      });
-   }
+        view.addCreateListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (DEBUG) System.out.println(" > Create pressed");
+                model.createMenu();
+            }
+        });
+
+        view.addMonthViewListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (DEBUG) System.out.println(" > MonthView pressed");
+
+                // Get day number
+                JButton source = (JButton) e.getSource();
+                int day = Integer.parseInt(source.getText());
+                if (DEBUG) System.out.println(day);
+
+                model.jumpToDay(day);
+            }
+        });
+    }
 }

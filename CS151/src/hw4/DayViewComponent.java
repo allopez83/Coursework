@@ -14,63 +14,71 @@ import javax.swing.JPanel;
 
 public class DayViewComponent extends JComponent
 {
-   // Keep track of panel dimensions
-   private final double MAX = 2400;
-   private JPanel panel;
-   int panelWidth, panelHeight;
-   private Rectangle2D border, event;
-   private Events ev;
-   private Color fillColor;
-   private JLabel eventName;
+    // Keep track of panel dimensions
+    private final double MAX = 2400;
+    private JPanel panel;
+    int panelWidth, panelHeight;
+    private Rectangle2D border, event;
+    private Events ev;
+    private Color fillColor;
+    private JLabel eventName;
 
-   public DayViewComponent(JPanel p, Events e)
-   {
-      this.panel = p;
-      this.ev = e;
-   }
+    public DayViewComponent(JPanel p, Events e)
+    {
+        this.panel = p;
+        this.ev = e;
+    }
 
-   public void paintComponent(Graphics g)
-   {
-      System.out.println("DVC-paintComponent");
-      Graphics2D g2 = (Graphics2D) g;
+    public void setEvents(Events e)
+    {
+        this.ev = e;
+        super.repaint();
+    }
 
-      // Update dimensions
-      panelWidth = panel.getWidth();
-      panelHeight = panel.getHeight();
+    public void paintComponent(Graphics g)
+    {
+        System.out.println("DVC-paintComponent");
 
-      // Draw border
-      border = new Rectangle2D.Float(2, 2, panelWidth - 6, panelHeight - 6);
-      g2.draw(border);
+        this.removeAll();
+        Graphics2D g2 = (Graphics2D) g;
 
-      // Events
-      int counter = 0;
-      ArrayList<Event> all = ev.getEvents();
-      for (Event e : all)
-      {
-         int start = e.getStart();
-         double actualStart = start / MAX * panelHeight;
-         int end = e.getEnd();
-         double duration = end / MAX * panelHeight - actualStart;
+        // Update dimensions
+        panelWidth = panel.getWidth();
+        panelHeight = panel.getHeight();
 
-         event = new Rectangle2D.Double(2, actualStart, panelWidth - 6,
-               duration);
+        // Draw border
+        border = new Rectangle2D.Float(2, 2, panelWidth - 6, panelHeight - 6);
+        g2.draw(border);
 
-         // Differentiate between events
-         if (counter % 2 == 0)
-            g2.setColor(Color.LIGHT_GRAY);
-         else
-            g2.setColor(Color.WHITE);
-         counter++;
+        // Events
+        int counter = 0;
+        ArrayList<Event> all = ev.getEvents();
+        for (Event e : all)
+        {
+            int start = e.getStart();
+            double actualStart = start / MAX * panelHeight;
+            int end = e.getEnd();
+            double duration = end / MAX * panelHeight - actualStart;
 
-         eventName = new JLabel(e.toSring());
-         eventName.setBounds(2, (int) actualStart, panelWidth - 6,
-               (int) duration);
-         this.add(eventName);
+            event = new Rectangle2D.Double(2, actualStart, panelWidth - 6,
+                    duration);
 
-         g2.setColor(fillColor);
-         g2.fill(event);
-      }
+            // Differentiate between events
+            if (counter % 2 == 0)
+                g2.setColor(Color.LIGHT_GRAY);
+            else
+                g2.setColor(Color.WHITE);
+            counter++;
 
-   }
+            eventName = new JLabel(e.toSring());
+            eventName.setBounds(2, (int) actualStart, panelWidth - 6,
+                    (int) duration);
+            this.add(eventName);
+
+            g2.setColor(fillColor);
+            g2.fill(event);
+        }
+
+    }
 
 }
