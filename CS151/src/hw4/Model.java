@@ -1,19 +1,12 @@
 package hw4;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.EventListener;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Date;
-
-import javax.swing.JButton;
 
 /**
  * Engine of SimpleCalendar, interacts with data, does the processing, and
@@ -23,47 +16,41 @@ import javax.swing.JButton;
  */
 public class Model
 {
-    // Contains days and events
-    HashMap<Integer, Events> calendar;
-
-    // Buttons on view and associated listeners
-    ArrayList<JButton> buttons;
-    ArrayList<EventListener> listeners;
-
-    // Stores the day user's system is on
-    GregorianCalendar today;
-    // Day that calendar is looking at
-    GregorianCalendar currentDay;
-
-    Events events;
-    View view;
-    DateFormatSymbols dfs;
-    
-    FileIO io;
+    private static final boolean DEBUG = true;
+    private static final boolean DEMO_EVENTS = false;
+    private HashMap<Integer, Events> calendar;// Contains days and events
+    private GregorianCalendar today; // Stores the day user's system is on
+    private GregorianCalendar currentDay; // Day that calendar is looking at
+    private Events events;
+    private View view;
+    private CreateView menu; 
+    private DateFormatSymbols dfs;
+    private FileIO io;
 
     public Model()
     {
-        System.out.println("Model");
+        if (DEBUG) System.out.println("Model");
 
-        // Read file
-        // loadFile();
-        io = new FileIO();;
-
-        calendar = new HashMap<Integer, Events>();
+        io = new FileIO();
+        dfs = new DateFormatSymbols();
         today = new GregorianCalendar();
         currentDay = today;
-        
-        addDemoEvent();
 
-        // Are there any events on the current day?
-        Integer key = gcToKey(currentDay);
-        events = calendar.get(key);
+        calendar = io.loadCalendar();
 
-        dfs = new DateFormatSymbols();
+        if (DEMO_EVENTS) addDemoEvent();
+
+        // Check for events today
+        events = calendar.get(gcToKey(currentDay));
     }
 
+    /**
+     * Adds a list of events for test and debugging
+     */
     private void addDemoEvent()
     {
+        if (DEBUG) System.out.println("Model-addDemoEvents");
+
         events = new Events(currentDay);
         events.add("zerohour", 0, 600);
         events.add("same end time", 800, 1400);
@@ -86,11 +73,11 @@ public class Model
 
     /**
      * Initial association between model and view
-     * @param v
+     * @param v View to associate with this model
      */
     public void setView(View v)
     {
-        System.out.println("Model-setView");
+        if (DEBUG) System.out.println("Model-setView");
 
         this.view = v;
         updateViewData();
@@ -101,7 +88,7 @@ public class Model
      */
     private void updateView()
     {
-        System.out.println("Model-updateView");
+        if (DEBUG) System.out.println("Model-updateView");
 
         // Are there any events on the current day?
         Integer key = gcToKey(currentDay);
@@ -117,7 +104,7 @@ public class Model
      */
     private void updateViewData()
     {
-        System.out.println("Model-updateViewData");
+        if (DEBUG) System.out.println("Model-updateViewData");
 
         view.setEvents(events);
         view.setDay(currentDay);
@@ -125,66 +112,63 @@ public class Model
         view.setMonthText(getMonthViewString(currentDay));
     }
 
+    /**
+     * Advance day by 1 to the next day
+     */
     public void next()
     {
-        System.out.println("Model-next");
+        if (DEBUG) System.out.println("Model-next");
 
         currentDay.add(Calendar.DATE, 1);
         updateView();
     }
 
+    /**
+     * Go back by 1 day to previous day
+     */
     public void prev()
     {
-        System.out.println("Model-prev");
+        if (DEBUG) System.out.println("Model-prev");
 
         currentDay.add(Calendar.DATE, -1);
         updateView();
     }
 
+    /**
+     * Go to some day of the current month
+     * @param day day of the month to go to
+     */
     public void jumpToDay(int day)
     {
-        System.out.println("Model-jumpToDay");
+        if (DEBUG) System.out.println("Model-jumpToDay");
 
         currentDay.set(Calendar.DATE, day);
         updateView();
     }
 
+    /**
+     * Launches event creation menu
+     */
     public void createMenu()
     {
-        System.out.println("Model-createMenu");
+        if (DEBUG) System.out.println("Model-createMenu");
 
         String day = "";
         int y = currentDay.get(Calendar.YEAR) % 100;
         int m = currentDay.get(Calendar.MONTH) + 1;
         int d = currentDay.get(Calendar.DATE);
         day = m + "/" + d + "/" + y;
-        CreateView menu = new CreateView(day);
-
-        menu.addSaveListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                System.out.println(" > Save pressed");
-
-                if (saveEvent(menu)) // calendar.put(key, value);
-                {
-                    menu.dispose();
-                    updateView();
-                }
-                else
-                    menu.fail();
-            }
-        });
+        menu = view.createMenu(day);
     }
 
     /**
      * Save an event user created in event creation menu "CreateView"
-     * @param menu the CreateView with user input to save as event
-     * @return boolean representign if method succeded or not
+     * @return boolean representing if method succeeded or not
      */
-    private boolean saveEvent(CreateView menu)
+    public boolean saveEvent()
     {
-        System.out.println("Model-saveEvent");
+        if (DEBUG) System.out.println("Model-saveEvent");
+        
         String name = menu.getName();
         String dateString = menu.getDate();
         String startString = menu.getStart();
@@ -192,9 +176,9 @@ public class Model
         Date result;
         int start = 0, end = 0;
 
+        // Convert time to int
         SimpleDateFormat displayFormat = new SimpleDateFormat("HHmm");
         SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mma");
-
         try
         {
             // Start
@@ -204,28 +188,35 @@ public class Model
             result = parseFormat.parse(endString);
             end = Integer.parseInt(displayFormat.format(result));
         }
-        catch (ParseException e) { e.printStackTrace(); }
+        catch (ParseException e) { e.printStackTrace(); } // Should not happen
 
         // If target day's Events entry didn't exist yet, create and enter it
         int key = stringToKey(dateString);
-        Events target = calendar.get(key);
-        if (target == null)
+        Events entry = calendar.get(key);
+        if (entry == null)
         {
             String[] split = dateString.split("/");
             int y = Integer.parseInt(split[2]);
             int m = Integer.parseInt(split[0]);
             int d = Integer.parseInt(split[1]);
-            target = new Events(new GregorianCalendar(y, m, d));
-            calendar.put(key, target);
+            entry = new Events(new GregorianCalendar(y, m, d));
+            calendar.put(key, entry);
         }
-        // Otherwise, make sure there isn't a time conflict
+        // Otherwise there's events, make sure there isn't a time conflict
         else
         {
-            if (target.checkOverlap(start, end)) return false;
+            if (entry.checkOverlap(start, end))
+            {
+                // Conflict
+                menu.fail();
+                return false;
+            }
         }
 
-        target.add(name, start, end);
-        
+        entry.add(name, start, end);
+        view.repaint();
+        menu.dispose();
+
         return true;
     }
 
@@ -276,10 +267,15 @@ public class Model
     private String getMonthViewString(GregorianCalendar gc)
     {
         int monthInt = gc.get(Calendar.MONTH);
-        String[] months = dfs.getMonths();
-        return months[monthInt] + " " + gc.get(Calendar.YEAR);
+        return dfs.getMonths()[monthInt] + " " + gc.get(Calendar.YEAR);
     }
 
+    /**
+     * Renders the string for dayview of the current focused day in WKD M/D
+     * format, i.e. "Wednesday 4/29"
+     * @param gc GregorianCalendar of the day in focus
+     * @return String in WKD M/D format representing focused day
+     */
     private String getDayViewString(GregorianCalendar gc)
     {
         String result = "";
@@ -292,11 +288,13 @@ public class Model
         return result;
     }
 
+    /**
+     * Save all created events to disk
+     */
     public void saveData()
     {
-        System.out.println("Model-saveData");
-        
-        io.saveCalendar();
+        if (DEBUG) System.out.println("Model-saveData");
+        io.saveCalendar(calendar);
     }
 
 }

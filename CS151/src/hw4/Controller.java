@@ -12,9 +12,9 @@ import javax.swing.JButton;
  */
 public class Controller
 {
-    protected static final boolean DEBUG = true;
-    View view;
-    Model model;
+    private static final boolean DEBUG = true;
+    private View view;
+    private Model model;
 
     public Controller()
     {
@@ -68,6 +68,15 @@ public class Controller
             {
                 if (DEBUG) System.out.println(" > Create pressed");
                 model.createMenu();
+            }
+        });
+        
+        view.addSaveListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (DEBUG) System.out.println(" > Save pressed");
+                model.saveEvent();
             }
         });
 

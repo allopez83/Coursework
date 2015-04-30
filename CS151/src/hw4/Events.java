@@ -1,12 +1,17 @@
 package hw4;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Events implements Comparable<Events>
+/**
+ * Keeps track of events in a day, specified by the internal GregorianCalendar
+ * @author Hansen Wu
+ *
+ */
+public class Events implements Serializable
 {
-    // Each day obj is on a GregorianCalendar day
+    private static final long serialVersionUID = 1L;
     private GregorianCalendar day;
     private ArrayList<Event> events;
 
@@ -16,27 +21,22 @@ public class Events implements Comparable<Events>
         events = new ArrayList<Event>();
     }
 
-    void setDay(GregorianCalendar d)
-    {
-        this.day = d;
-    }
+    /*
+     * void setDay(GregorianCalendar d) { this.day = d; }
+     * 
+     * GregorianCalendar getDay() { return day; }
+     */
 
-    GregorianCalendar getDay()
-    {
-        return day;
-    }
-
+    /**
+     * Create an individual event. The day it is on is represented by the Events
+     * object's internal GregorianCalendar.
+     * @param name name of the event
+     * @param start when it starts in 24hr format
+     * @param end when it ends in 24hr format
+     */
     public void add(String name, int start, int end)
     {
         events.add(new Event(name, start, end));
-    }
-
-    public boolean equals(Events d)
-    {
-        if (this.compareTo(d) == 0)
-            return true;
-        else
-            return false;
     }
 
     public ArrayList<Event> getEvents()
@@ -49,50 +49,13 @@ public class Events implements Comparable<Events>
         return events.size();
     }
 
-    public boolean equals(GregorianCalendar gc)
-    {
-        System.out.println("equals gc");
-        // extract y/m/d and send to other equals()
-        int year = gc.get(Calendar.YEAR);
-        int month = gc.get(Calendar.MONTH);
-        int day = gc.get(Calendar.DATE);
-        return this.equals(year, month, day);
-    }
-
     /**
-     * Check if the given day is represented by this Day object
-     * @param y year to compare with
-     * @param m month to compare with
-     * @param d day to compare with
-     * @return boolean representing if the day matches the given values
+     * Check if existing events conflict with the given time parameter. Events
+     * starting/ending on or within any other existing event will be a conflict.
+     * @param start start of timeframe to check
+     * @param end end of timeframe to check
+     * @return true for overlap, false if the time is available
      */
-    public boolean equals(int y, int m, int d)
-    {
-        // check if y/m/d matches
-        System.out.println("equals ymd");
-        if (this.day.get(Calendar.YEAR) == y)
-            if (this.day.get(Calendar.MONTH) == m)
-                if (this.day.get(Calendar.DATE) == d) return true;
-        return false;
-    }
-
-    /**
-     * A Day is equivalent to another only when it's on the same day. Time of
-     * day is irrelevant
-     */
-    public int compareTo(Events d)
-    {
-        // Check if it's the same day
-        if (this.equals(d.getDay()))
-        {
-            System.out.println("compareTo - equal");
-            return 0;
-        }
-        // Else, compareTo
-        System.out.println("compareTo - revert");
-        return this.getDay().compareTo(d.getDay());
-    }
-
     public boolean checkOverlap(int start, int end)
     {
         System.out.println("Events-checkOverlap");
@@ -100,18 +63,19 @@ public class Events implements Comparable<Events>
         {
             int eStart = e.getStart();
             int eEnd = e.getEnd();
-            // If the start or end time is within event duration, it overlaps
+            // If the start or end time is on or within event duration
+            // Equals sign check for exactly the same start or end times
             if (eStart <= start && start < eEnd) return true;
             if (eStart < end && end <= eEnd) return true;
-            // Equals sign check for exactly the same start or end times
         }
         return false;
     }
 
 }
 
-class Event
+class Event implements Serializable
 {
+    private static final long serialVersionUID = 2L;
     private String name;
     private int start;
     private int end;
@@ -125,63 +89,26 @@ class Event
      */
     public Event(String n, int s, int e)
     {
-        this.setName(n);
-        this.setStart(s);
-        this.setEnd(e);
+        this.name = n;
+        this.start = s;
+        this.end = e;
     }
 
     // Get and Set methods
+    public String getStartHours() { return String.format("%02d", start / 100); }
+    public String getStartMinutes() { return String.format("%02d", start % 100); }
+    public String getEndHours() { return String.format("%02d", end / 100); }
+    public String getEndMinutes() { return String.format("%02d", end % 100); }
 
-    public String getStartHours()
-    {
-        return String.format("%02d", start / 100);
-    }
+    public String getName() { return name; }
+    public int getStart() { return start; }
+    public int getEnd() { return end; }
 
-    public String getStartMinutes()
-    {
-        return String.format("%02d", start % 100);
-    }
-
-    public String getEndHours()
-    {
-        return String.format("%02d", end / 100);
-    }
-
-    public String getEndMinutes()
-    {
-        return String.format("%02d", end % 100);
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    private void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public int getStart()
-    {
-        return start;
-    }
-
-    private void setStart(int start)
-    {
-        this.start = start;
-    }
-
-    public int getEnd()
-    {
-        return end;
-    }
-
-    private void setEnd(int end)
-    {
-        this.end = end;
-    }
-
+    /**
+     * Creates string in HH:mm-HH:mm; TITLE format representing event
+     * information
+     * @return string of event information
+     */
     public String toSring()
     {
         String s = getStartHours() + ":" + getStartMinutes();

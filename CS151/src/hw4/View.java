@@ -3,7 +3,6 @@ package hw4;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -16,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 /**
@@ -36,6 +34,7 @@ public class View extends JFrame
     private GregorianCalendar currentDay;
     private Events events;
     private ActionListener monthAction;
+    private ActionListener saveAction;
     private DayViewComponent dvc;
     private Border blackBorder = BorderFactory.createLineBorder(Color.BLACK);
 
@@ -55,6 +54,9 @@ public class View extends JFrame
         dayLabel = new JLabel();
     }
 
+    /**
+     * Renders and displays the GUI of SimpleCalendar
+     */
     public void display()
     {
         System.out.println("View-display");
@@ -83,6 +85,9 @@ public class View extends JFrame
         setVisible(true);
     }
 
+    /**
+     * Creates top SimpleCalendar panel with buttons
+     */
     private void topPanel()
     {
         System.out.println("View-topPanel");
@@ -96,8 +101,7 @@ public class View extends JFrame
     }
 
     /**
-     * Creates left SimpleCalendar panel with month view along with create event
-     * and navigation buttons
+     * Creates left SimpleCalendar panel with month view
      */
     private void leftPanel()
     {
@@ -110,13 +114,6 @@ public class View extends JFrame
         left.add(month, BorderLayout.CENTER);
 
         drawMonth(); // Initially nothing
-    }
-
-    private Integer getMonthDelay()
-    {
-        GregorianCalendar gc = (GregorianCalendar) currentDay.clone();
-        gc.set(Calendar.DATE, 1);
-        return gc.get(Calendar.DAY_OF_WEEK);
     }
 
     /**
@@ -156,7 +153,7 @@ public class View extends JFrame
     }
 
     /**
-     * Draw a month
+     * Draw month, including day buttons and day of week labels
      */
     public void drawMonth()
     {
@@ -166,7 +163,7 @@ public class View extends JFrame
         month.removeAll();
 
         int days = 1;
-        int countdown = this.getMonthDelay();
+        int countdown = getMonthDelay();
         int max = currentDay.getActualMaximum(Calendar.DATE);
         GridBagConstraints c = new GridBagConstraints();
         int today = currentDay.get(Calendar.DATE);
@@ -215,6 +212,18 @@ public class View extends JFrame
     }
 
     /**
+     * Finds the number of days before the first day of the month, in order to
+     * render days of the week correctly
+     * @return
+     */
+    private Integer getMonthDelay()
+    {
+        GregorianCalendar gc = (GregorianCalendar) currentDay.clone();
+        gc.set(Calendar.DATE, 1);
+        return gc.get(Calendar.DAY_OF_WEEK);
+    }
+
+    /**
      * Draws timestamp on dayTime JPanel. Only needs to be done once.
      * @param events
      */
@@ -231,8 +240,8 @@ public class View extends JFrame
     }
 
     /**
-     * Draw new events that are on the current day.
-     * @param events
+     * Draws the events on the current day
+     * @param events the Events object that contains data to be drawn
      */
     private void drawDayEvents(Events events)
     {
@@ -254,30 +263,13 @@ public class View extends JFrame
         }
     }
 
-    void addQuitListener(ActionListener l)
-    {
-        quit.addActionListener(l);
-    }
-
-    void addPrevListener(ActionListener l)
-    {
-        prev.addActionListener(l);
-    }
-
-    void addNextListener(ActionListener l)
-    {
-        next.addActionListener(l);
-    }
-
-    void addCreateListener(ActionListener l)
-    {
-        create.addActionListener(l);
-    }
-
-    void addMonthViewListener(ActionListener l)
-    {
-        monthAction = l;
-    }
+    // ActionListeners
+    public void addQuitListener(ActionListener l) { quit.addActionListener(l); }
+    public void addPrevListener(ActionListener l) { prev.addActionListener(l); }
+    public void addNextListener(ActionListener l) { next.addActionListener(l); }
+    public void addCreateListener(ActionListener l) { create.addActionListener(l); }
+    public void addSaveListener(ActionListener l) { saveAction = l; }
+    public void addMonthViewListener(ActionListener l) { monthAction = l; }
 
     public void setMonthText(String m)
     {
@@ -310,6 +302,13 @@ public class View extends JFrame
     {
         System.out.println("View-repaint");
         super.repaint();
+    }
+
+    public CreateView createMenu(String day)
+    {
+        CreateView cv = new CreateView(day);
+        cv.addSaveListener(saveAction);
+        return cv;
     }
 
 }
