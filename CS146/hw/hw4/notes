@@ -1,6 +1,9 @@
 Emphasis on the programming portion
+
 #??? - Final sequence may not be completely sorted due to cutoff, but it's ok, use insertion sort 
+
 4.4,5,6, don't need to show intermediate step
+
 4.7? Programming portion - it's just one program, with all the different algorithms
     Hint - start with only a few integers, and not all 100k integers. Only set it at the end.
     Generate the random numbers only one time, and pass into the different algorithms. Same input for all sorting methods. It's ok for there to be duplicate #s.
@@ -9,3 +12,4 @@ Emphasis on the programming portion
     Also keep track of how long sorting takes
     Maintain counter keeping track of how many comparisons and swaps are done, and output them with a label
 
+Print out times in seconds
