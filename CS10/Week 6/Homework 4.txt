@@ -1,0 +1,9 @@
+4.2, 4.5, 4.8.1-5, 4.13.1-3
+
+4.5.1
+Data memory is used 35% of the time since store and load word is used 35% of the time.
+
+4.5.2
+The sign-extension circuit is being used 60% of the time. This is for the branch, load, and store operations. If the instruction being executed does not need the sign-extension circuit, it is still applied, but the added sign bits are thrown away.
+
+4.8

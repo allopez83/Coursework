@@ -1,0 +1,21 @@
+HOMEWORK DOCUMENT:
+	Make a matrix of G, R, and S (8 combinations) and show the result of rounding the three two bit binary values bit1,bit0:  01, 10, and 11. Remember that if the top bit is 0 then a normalization shift is required. (00 is an invalid case since it can’t be normalized).  Use unbiased rounding; i.e. round to nearest or zero. There are 24 total cases.
+
+	For example, the first case is 01000 representing  b1b0GRS.
+
+	- 0(b1)1(b2)0(g)0(r)0(s)
+	-Plan:
+		Have data either hardcoded or in stack
+		Get the data and round it
+		print the result after each rounding
+	
+LAB DOCUMENT:
+	First, recall how matrices are multiplied. http://www.mathsisfun.com/algebra/matrix-multiplying.html
+	
+	Now, convert the matrix multiply starting on page 215 of the text to a program that multiplies 3x3 integer matrices instead of 32x32 floating-point matrices.
+
+	Make a simple console routine that allows you to input the elements of the matrices by row (row major order). After receiving all the matrix elements, multiply the two matrices and print the result, by rows, to the console. Once you get the right answer for an arbitrary pair of matices email the program to me. I will then sell it for a million dollars. I wish.
+	
+	-Have user enter data and put onto stack
+	-Run data through matrix multiplier
+	-Go to next data point by multiplication, which will be replicated by addition

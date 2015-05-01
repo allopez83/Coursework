@@ -13,12 +13,12 @@ Eventually, all the following directories will be added, each representing a cou
 **CS146**
 - Data Structures & Algorithms
 - SJSU
-- In progress
+- Course in progress
 
 **CS151**
 - Object-Oriented Design
 - SJSU
-- In progress
+- Course in progress
 
 **CS1A**
 - Intro to Java
@@ -37,7 +37,7 @@ Eventually, all the following directories will be added, each representing a cou
 - Foothill
 - C++
 
-**CS10 - not available yet**
+**CS10**
 - Computer Architecture & Organization
 - Foothill
 - MIPS

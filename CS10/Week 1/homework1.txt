@@ -1,0 +1,106 @@
+Homework #1 Due Tuesday Jan 14th  
+
+1.4, 1.5, 1.6, 1.7, 1.9, 1.12, 1.13, 1.15
+
+Note: A ">" denotes a line in response to the question.
+
+1.4
+Assume a color display using 8 bits for each of the primary colors (red, green, blue) per pixel and a frame size of 1280×1024.
+a. What is the minimum size in bytes of the frame buffer to store a frame?
+> bits per color * colors * total pixels = 8 * 3 * 1280 * 1024 = 31457280 bits.
+> Since 8 bits is 1 byte, 31457280 bits = 3932160 byte = 3.932160 MegaBytes
+b. How long would it take, at a minimum, for the frame to be sent over a 100 Mbit/s network?
+> Frame size/network speed = seconds taken
+> 31457280 bits / 100 Mbits/s = 31457280/10^8 seconds = 0.3145728 seconds
+
+1.5
+Consider three different processors P1, P2, and P3 executing the same instruction set. P1 has a 3 GHz clock rate and a CPI of 1.5. P2 has a 2.5 GHz clock rate and a CPI of 1.0. P3 has a 4.0 GHz clock rate and has a CPI of 2.2.
+a. Which processor has the highest performance expressed in instructions per second?
+> Instructions/second = clock rate/CPI
+> Calculating each, the highest performance in this case is P2 at 2.5 instructions per second.
+b. If the processors each execute a program in 10 seconds, find the number of cycles and the number of instructions.
+> P1: 3.0*10^10 cycles, 2*10^10 instructions
+> P2: 2.5*10^10 cycles, 2.5*10^10 instructions
+> P3: 4.0*10^10 cycles, 1.82*10^10 instructions
+c. We are trying to reduce the time by 30% but this leads to an increase of 20% in the CPI. What clock rate should we have to get this time reduction?
+> P1: about 5.14 GHz
+> P2: about 4.28 GHz
+> P3: about 6.86 GHz
+
+1.6
+Consider two different implementations of the same instruction set architecture. The instructions can be divided into four classes according to their CPI (class A, B, C, and D). P1 with a clock rate of 2.5 GHz and CPIs of 1, 2, 3, and 3, and P2 with a clock rate of 3 GHz and CPIs of 2, 2, 2, and 2.
+Given a program with a dynamic instruction count of 1.0E6 instructions divided into classes as follows: 10% class A, 20% class B, 50% class C, and 20% class D, which implementation is faster?
+> P2 is definitely faster in terms of time taken to complete the instructions.
+a. What is the global CPI for each implementation?
+> P1: average CPI is 2.5
+> P2: average CPI is 2
+b. Find the clock cycles required in both cases.
+> P1: 2.8*10^6 cycles
+> P2: 2.0*10^6 cycles
+
+1.7
+Compilers can have a profound impact on the performance of an application. Assume that for a program, compiler A results in a dynamic instruction count of 1.0E9 and has an execution time of 1.1 s, while compiler B results in a dynamic instruction count of 1.2E9 and an execution time of 1.5 s.
+a. Find the average CPI for each program given that the processor has a clock cycle time of 1 ns.
+b. Assume the compiled programs run on two different processors. If the execution times on the two processors are the same, how much faster is the clock of the processor running compiler A’s code versus the clock of the processor running compiler B’s code?
+c. A new compiler is developed that uses only 6.0E8 instructions and has an average CPI of 1.1. What is the speedup of using this new compiler versus using compiler A or B on the original processor?
+
+1.9
+Assume for arithmetic, load/store, and branch instructions, a processor has CPIs of 1, 12, and 5, respectively. Also assume that on a single processor a program requires the execution of 2.56E9 arithmetic instructions, 1.28E9 load/store instructions, and 256 million branch instructions. Assume that each processor has a 2 GHz clock frequency.
+Assume that, as the program is parallelized to run over multiple cores, the number of arithmetic and load/store instructions per processor is divided by 0.7 x p (where p is the number of processors) but the number of branch instructions per processor remains the same.
+
+Find the total execution time for this program on 1, 2, 4, and 8 processors, and show the relative speedup of the 2, 4, and 8 processor result relative to the single processor result.
+
+If the CPI of the arithmetic instructions was doubled, what would the impact be on the execution time of the program on 1, 2, 4, or 8 processors?
+
+To what should the CPI of load/store instructions be reduced in order for a single processor to match the performance of four processors using the original CPI values?
+
+1.12
+Section 1.10 cites as a pitfall the utilization of a subset of the performance equation as a performance metric. To illustrate this, consider the following two processors. P1 has a clock rate of 4 GHz, average CPI of 0.9, and requires the execution of 5.0E9 instructions. P2 has a clock rate of 3 GHz, an average CPI of 0.75, and requires the execution of 1.0E9 instructions.
+
+One usual fallacy is to consider the computer with the largest clock rate as having the largest performance. Check if this is true for P1 and P2.
+
+Another fallacy is to consider that the processor executing the largest number of instructions will need a larger CPU time. Considering that processor P1 is executing a sequence of 1.0E9 instructions and that the CPI of processors P1 and P2 do not change, determine the number of instructions that P2 can execute in the same time that P1 needs to execute 1.0E9 instructions.
+
+A common fallacy is to use MIPS (millions of instructions per second) to compare the performance of two different processors, and consider that the processor with the largest MIPS has the largest performance. Check if this is true for P1 and P2.
+
+Another common performance figure is MFLOPS (millions of floating-point operations per second), defined as MFLOPS = No. FP operations / (execution time * 1E6) but this figure has the same problems as MIPS. Assume that 40% of the instructions executed on both P1 and P2 are floating-point instructions. Find the MFLOPS figures for the programs.
+
+1.13
+Another pitfall cited in Section 1.10 is expecting to improve the overall performance of a computer by improving only one aspect of the computer. Consider a computer running a program that requires 250 s, with 70 s spent executing FP instructions, 85 s executed L/S instructions, and 40 s spent executing branch instructions.
+
+By how much is the total time reduced if the time for FP operations is reduced by 20%?
+
+By how much is the time for INT operations reduced if the total time is reduced by 20%?
+
+Can the total time can be reduced by 20% by reducing only the time for branch instructions?
+
+1.15
+When a program is adapted to run on multiple processors in a multiprocessor system, the execution time on each processor is comprised of computing time and the overhead time required for locked critical sections and/or to send data from one processor to another.
+Assume a program requires t=100 s of execution time on one processor. When run p processors, each processor requires t/p s, as well as an additional 4 s of overhead, irrespective of the number of processors. Compute the per-processor execution time for 2, 4, 8, 16, 32, 64, and 128 processors. For each case, list the corresponding speedup relative to a single processor and the ratio between actual speedup versus ideal speedup (speedup if there was no overhead).
+
+
+1.4
+Semiconductor DRAM memory, flash memory, and disk storage differ significantly. For each technology, list its volatility, approximate relative access time, and approximate relative cost compared to DRAM.
+> DRAM: volatile, low access time
+> Flash Memory: nonvolatile, long access time, cheaper than DRAM
+> Disk Storage: nonvolatile, long access time, significantly cheaper than DRAM
+
+1.5
+A key factor in determining the cost of an integrated circuit is volume. Which of the following are reasons why a chip made in high volume should cost less?
+> I believe it should be the fifth choice:
+> "5. High-volume parts usually have smaller die sizes than low-volume parts and therefore have higher yield per wafer."
+
+1.6
+Suppose we know that an application that uses both personal mobile devices and the Cloud is limited by network performance. For the following changes, state whether only the throughput improves, both response time and throughput improve, or neither improves.
+a. An extra network channel is added between the PMD and the Cloud, increasing the total network throughput and reducing the delay to obtain network access (since there are now two channels).
+> Both response time and throughput improves.
+b. The networking software is improved, thereby reducing the network communication delay, but not increasing throughput.
+> Both respones time and throughput improves.
+c. More memory is added to the computer.
+> Neither.
+
+Computer C’s performance is 4 times as fast as the performance of computer B, which runs a given application in 28 seconds. How long will computer C take to run that application?
+> The time Computer C should take is 1/4 of Computer B. Thus, the time is 28/4, or 7 seconds.
+
+A given application written in Java runs 15 seconds on a desktop processor. A new Java compiler is released that requires only 0.6 as many instructions as the old compiler. Unfortunately, it increases the CPI by 1.1. How fast can we expect the application to run using this new compiler? Pick the right answer from the three choices below:
+> I think it's b, "15*0.6*1.1=9.9 sec"

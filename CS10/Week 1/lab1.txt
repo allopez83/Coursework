@@ -1,0 +1,69 @@
+Hansen Wu
+
+Which registers have a non-zero value at this point? 
+ > The follow are non-zero: $gp, $sp, and pc.
+
+Explain what the value of the pc indicates:
+ > It seems to indicate the current memory address that the program is looking at. Before running any part of the program, it appears to start at 0x00400000. This is also the "Address" of the first line of code. This value changes according to the Address that the program is currently on.
+
+What does the 0x notation mean which precedes the 8-digit numbers you see displayed in these panels?
+ > It's part of hexadecimal notation to precede the number with an "0x".
+
+The Text Segment contains the code from the .text section of  the program (the program instructions).  Explain what you think each column in this panel is used for:
+ > Bkpt: Short for breakpoint, pauses when program reaches that line. It appears unable to stop at the first line in the example program.
+ > Address: The location in memory.
+? > Code: Data stored in the memory location?
+ > Basic: Summary of what the line of code does
+ > Source: A copy of the exact line of code in the program.
+
+What is the starting address of the program? 
+ > The first line of code is given the address 0x00400000.
+
+The Data Segment contains the code from the .data section of the program (the variables and constants defined in the program). What is the starting address of the Data Segment?
+ > The initial address is 0x10010000
+
+Each row in the Data Segment lists the contents of 8 words in memory, each of which contains 32 bits, or 4 bytes, of data.  Notice that the first 7 words in the Data Segment contain non-zero values. Why are these non-zero for this program?
+ > The data currently in there represents the strings that the program uses, specifically, "prompt_string" and "result_string".
+
+•	Examine the value of $t3 at this point.  What is it?
+	> 0x00000000, or zero
+•	Examine the value of $t3 again.  What is it now?
+	> Hexadecimal of the sum of the numbers.
+
+Examine the Data Segment.  Record the values shown for the first 16 bytes in data memory (write exactly as shown in the MARS data segment, where 4 bytes are grouped together in each entry): 
+
+Data Segment  
+Address	   Value (+0)           Value (+4)         Value (+8) 	         Value (+C) 	
+> 0x1001000  0x72756f79         0x646f6320         0x73692065            0x0020203a
+
+Record the address and data contents of each byte location in the Data Segment using the stack model of memory.
+
+•	Show one byte per row. 
+•	Lowest address should be at bottom of stack.
+•	Label the address which corresponds to the start of the prompt string
+•	Label the address which corresponds to val     (NOTE:   the Labels panel lists the addresses).  
+
+Address      Label      Data
+0x10010010   val        08
+0x1001000f              00
+0x1001000e              20
+0x1001000d              20
+0x1001000c              3a
+0x1001000b              73
+0x1001000a              69
+0x10010009              20
+0x10010008              65
+0x10010007              64
+0x10010006              6f
+0x10010005              63
+0x10010004              20
+0x10010003              72
+0x10010002              75
+0x10010001              6f
+0x10010000   prompt     79
+
+What is the meaning of the first byte that has a 00 value?
+ > That byte is null, which comes at the end of a null-terminated string to signal that the string has ended.
+
+Where does the value of 08 come from in the byte with that value?
+ > In the code, it's the very last line that creates a byte called "val" with a value of 8.
