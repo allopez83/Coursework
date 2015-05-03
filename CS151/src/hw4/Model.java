@@ -214,7 +214,7 @@ public class Model
         }
 
         entry.add(name, start, end);
-        view.repaint();
+        updateView();
         menu.dispose();
 
         return true;

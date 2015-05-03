@@ -25,6 +25,7 @@ import javax.swing.border.Border;
 public class View extends JFrame
 {
     private final int DAY_IN_WEEK = 7, WEEK_IN_MONTH = 6, DAY_HOURS = 24;
+    private final Border blackBorder = BorderFactory.createLineBorder(Color.BLACK);
     private JPanel left, right, top;
     private JPanel day, dayTime, dayEvents;
     private JPanel month;
@@ -36,7 +37,6 @@ public class View extends JFrame
     private ActionListener monthAction;
     private ActionListener saveAction;
     private DayViewComponent dvc;
-    private Border blackBorder = BorderFactory.createLineBorder(Color.BLACK);
 
     /**
      * Creates the primary window

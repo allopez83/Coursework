@@ -44,7 +44,7 @@ public class CreateView extends JFrame
         bottom.add(to);
         bottom.add(end);
         bottom.add(save);
-        
+
         name.setText("Untitled Event");
 
         this.setLayout(new BorderLayout());

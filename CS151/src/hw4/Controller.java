@@ -70,7 +70,7 @@ public class Controller
                 model.createMenu();
             }
         });
-        
+
         view.addSaveListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)

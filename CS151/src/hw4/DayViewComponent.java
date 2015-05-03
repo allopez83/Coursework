@@ -75,7 +75,6 @@ public class DayViewComponent extends JComponent
                     duration);
 
             // Differentiate between events
-            System.out.println(counter);
             if (counter % 2 == 0)
                 g2.setColor(Color.LIGHT_GRAY);
             else
