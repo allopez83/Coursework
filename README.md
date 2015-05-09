@@ -8,7 +8,7 @@ The institutions here include Foothill Community College, and San Jose State Uni
 
 ### Contents
 
-Eventually, all the following directories will be added, each representing a course. They are all in Java unless otherwise noted. Course titles may be simplified.
+Eventually, all the following courses will be added as a directory. They are all in Java unless otherwise noted. Course titles may be simplified.
 
 **CS146**
 - Data Structures & Algorithms
@@ -41,3 +41,4 @@ Eventually, all the following directories will be added, each representing a cou
 - Computer Architecture & Organization
 - Foothill
 - MIPS
+
