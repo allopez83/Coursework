@@ -1,14 +1,17 @@
 # Coursework
 
-### Description
+##Description
 
 Various coursework from all current and previous courses at institutions I have attended. Usually comprised of Java, but other languages exist.
 
 The institutions here include Foothill Community College, and San Jose State University.
 
-### Contents
+## Contents
 
 Eventually, all the following directories will be added, each representing a course. They are all in Java unless otherwise noted. Course titles may be simplified.
+
+
+### San Jose State University
 
 **CS146**
 - Data Structures & Algorithms
@@ -19,6 +22,8 @@ Eventually, all the following directories will be added, each representing a cou
 - Object-Oriented Design
 - SJSU
 - In progress
+
+### Foothill College
 
 **CS1A**
 - Intro to Java
