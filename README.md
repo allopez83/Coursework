@@ -1,6 +1,6 @@
 # Coursework
 
-##Description
+## Description
 
 Various coursework from all current and previous courses at institutions I have attended. Usually comprised of Java, but other languages exist.
 
@@ -42,7 +42,7 @@ Eventually, all the following directories will be added, each representing a cou
 - Foothill
 - C++
 
-**CS10 - not available yet**
+**CS10**
 - Computer Architecture & Organization
 - Foothill
 - MIPS
