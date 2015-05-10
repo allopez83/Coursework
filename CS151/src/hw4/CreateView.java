@@ -3,23 +3,29 @@ package hw4;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.util.GregorianCalendar;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.Popup;
 
+/**
+ * Menu for creating new events
+ * @author Hansen Wu
+ *
+ */
 public class CreateView extends JFrame
 {
-    private JPanel btm;
+    private JPanel bottom;
     private JTextField name, date, start, end;
     private JLabel to;
     private JButton save;
 
+    /**
+     * Creates CreateView in individual window
+     * @param day the default day to create events on
+     */
     public CreateView(String day)
     {
         System.out.println("CreateView");
@@ -31,19 +37,19 @@ public class CreateView extends JFrame
         end = new JTextField("11:30am");
         save = new JButton("SAVE");
 
-        btm = new JPanel(new FlowLayout());
+        bottom = new JPanel(new FlowLayout());
 
-        btm.add(date);
-        btm.add(start);
-        btm.add(to);
-        btm.add(end);
-        btm.add(save);
-        
+        bottom.add(date);
+        bottom.add(start);
+        bottom.add(to);
+        bottom.add(end);
+        bottom.add(save);
+
         name.setText("Untitled Event");
 
         this.setLayout(new BorderLayout());
         this.add(name, BorderLayout.NORTH);
-        this.add(btm, BorderLayout.SOUTH);
+        this.add(bottom, BorderLayout.SOUTH);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
@@ -52,25 +58,10 @@ public class CreateView extends JFrame
 
     void addSaveListener(ActionListener l) { save.addActionListener(l); }
 
-    public String getName()
-    {
-        return name.getText();
-    }
-
-    public String getDate()
-    {
-        return date.getText();
-    }
-
-    public String getStart()
-    {
-        return start.getText();
-    }
-
-    public String getEnd()
-    {
-        return end.getText();
-    }
+    public String getName() {return name.getText(); }
+    public String getDate() { return date.getText(); }
+    public String getStart() { return start.getText(); }
+    public String getEnd() { return end.getText(); }
 
     /**
      * Displays a popup when user's event has time conflict
