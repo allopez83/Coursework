@@ -14,36 +14,44 @@ Eventually, all the following directories will be added, each representing a cou
 
 ### San Jose State University
 
-**CS146**
+**CS 146**
 - Data Structures & Algorithms
+- SJSU
+
+**CS 151**
+- Object-Oriented Design
+- SJSU
+
+**CS 157A**
+- Object-Oriented Design
 - SJSU
 - In progress
 
-**CS151**
-- Object-Oriented Design
+**CS 174**
+- Server-Side Web Programming
 - SJSU
 - In progress
 
 ### Foothill College
 
-**CS1A**
+**CS 1A**
 - Intro to Java
 - Foothill
 
-**CS1B**
+**CS 1B**
 - Intermediate Software Design In Java
 - Foothill
 
-**CS1C**
+**CS 1C**
 - Advanced Data Structures & Algorithms
 - Foothill
 
-**CS2A - not available yet**
+**CS 2A - not available yet**
 - Intro to C++
 - Foothill
 - C++
 
-**CS10**
+**CS 10**
 - Computer Architecture & Organization
 - Foothill
 - MIPS

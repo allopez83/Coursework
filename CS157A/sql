@@ -1,0 +1,5 @@
+use command
+
+mysql -h localhost -u root -p
+
+for mysql login on rayting @ local machine using password. this is what you want to do
