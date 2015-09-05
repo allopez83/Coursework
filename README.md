@@ -23,7 +23,7 @@ Eventually, all the following directories will be added, each representing a cou
 - SJSU
 
 **CS 157A**
-- Object-Oriented Design
+- Introduction to Database Management Systems
 - SJSU
 - In progress
 
