@@ -1,0 +1,135 @@
+Core set
+
+#1
+
+\project_{pizza} (
+    \select_{
+        age>20 and gender='female'
+    } Person
+    \join Eats
+)
+
+#2
+
+\project_{ name }
+(
+    \select_{ gender='female' } Person
+    \join (
+        Eats \join (
+            \project_{ pizza }
+                \select_{ pizzeria='Straw Hat' } Serves
+        )
+    )
+
+)
+
+#3
+
+\project_{ pizzeria }
+(
+    \select_{ price < 10 } Serves
+    \join
+    ( \select_{ name='Amy' or name='Fay' } Eats )
+)
+
+#4
+
+\project_{ pizzeria }
+(
+    \select_{ price < 10 } Serves
+    \join
+    (
+        \project_{ pizza } ( \select_{ name='Amy' } Eats )
+        \intersect
+        \project_{ pizza } ( \select_{ name='Fay' } Eats )
+    )
+)
+
+#5
+
+\project_{name}
+(
+    (
+        \project_{name}Frequents
+        \diff
+        \project_{name}(\select_{pizzeria='Dominos'} Frequents)
+    )
+    \join
+    Eats
+    \join
+    (
+        \project_{ pizza } \select_{pizzeria='Dominos'} Serves
+    )
+)
+\join
+(\project_{name} Person)
+
+Challenge level
+
+#1
+
+(
+    \project_{pizza} (\select_{age<24}Person \join Eats)
+    \diff
+    \project_{pizza} (\select_{age>=24}Person \join Eats)
+)
+\union
+(
+    (\project_{pizza}Serves \union \project_{pizza}Serves)
+    \diff
+    \project_{pizza}\select_{price>10}Serves
+)
+
+#2
+
+(
+    \project_{age1}
+    (
+        \rename_{age1}
+        (
+            \project_{age} \select_{pizza = 'mushroom'} (Person \join Eats)
+        )
+        \join_{age1>age2}
+        \rename_{age2}
+        (
+            \project_{age} \select_{pizza = 'mushroom'} (Person \join Eats)
+        )
+    )
+)
+\diff
+(
+    \project_{age2}
+    (
+        \rename_{age1}
+        (
+            \project_{age} \select_{pizza = 'mushroom'} (Person \join Eats)
+        )
+        \join_{age1>age2}
+        \rename_{age2}
+        (
+            \project_{age} \select_{pizza = 'mushroom'} (Person \join Eats)
+        )
+    )
+)
+
+#3
+
+difference of natural join is the ones without the elements from natural join sets
+
+\rename_{thePizzas} (
+    \project_{pizza} (Eats \join \select_{age>30}Person)
+)
+\join
+\project_{pizzeria} (
+    (\project_{pizza} ( Eats \join \select_{age>30}Person ) \join Serves)
+    \union
+    (\project_{pizza} ( Eats \join \select_{age>30}Person ) \join Serves)
+)
+
+
+\project_{pizzeria}
+(
+    (\project_{pizza} ( Eats \join \select_{age>30}Person ) \join Serves)
+    \union
+    (\project_{pizza} ( Eats \join \select_{age>30}Person ) \join Serves)
+)
