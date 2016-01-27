@@ -7,6 +7,8 @@ Various coursework from all current and previous courses at institutions I have 
 
 The institutions here include Foothill Community College, and San Jose State University.
 
+Note that work is being done to transition from Eclipse to IntelliJ. Currently the entire Coursework repo is an Eclipse workspace. Later, IntelliJ will be used, probably with each course as an individual project.
+
 ## Contents
 
 Eventually, all the following directories will be added, each representing a course. Course titles may be simplified.
@@ -61,4 +63,9 @@ Eventually, all the following directories will be added, each representing a cou
 **CS 10**
 - Computer Architecture & Organization
 - MIPS
+- Foothill
+
+**CS 21A**
+- Intro to Python
+- Python
 - Foothill
