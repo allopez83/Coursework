@@ -26,17 +26,21 @@ Eventually, all the following directories will be added, each representing a cou
 - Java
 - SJSU
 
+**CS 156**
+- Introduction to Artificial Intelligence
+- Java
+- SJSU
+- In Progress
+
 **CS 157A**
 - Introduction to Database Management Systems
 - Java and SQL
 - SJSU
-- In progress
 
 **CS 174**
 - Server-Side Web Programming
 - Java
 - SJSU
-- In progress
 
 ### Foothill College
 
@@ -69,3 +73,5 @@ Eventually, all the following directories will be added, each representing a cou
 - Intro to Python
 - Python
 - Foothill
+- In progress
+
