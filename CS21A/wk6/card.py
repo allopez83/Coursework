@@ -43,7 +43,7 @@ class Card:
         return str(rank) + " of " + Card.suitDict[self.getSuit()]
 
 
-""" Card test program if running card.py directly
+""" Card test program if running card.py as __main__
 """
 if __name__ == "__main__":
     # Default
