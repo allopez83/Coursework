@@ -1,18 +1,4 @@
-"""
-The __init__() method should not allow a Card object to be initialized with a 'c' for the rank and a 7 for the suit. More generally, the __init__() method should raise an Error when any inappropriate values are sent into its parameters. This will ensure that there will never be a meaningless Card object in any program ever.
-
-For this assignment, you will add code to the __init__() method that raises a:
-
-1) TypeError when the type of the first parameter is not an int.
-
-2) TypeError when the type of the second parameter is not a string.
-
-3) ValueError when the value of the first parameter is not in the range 1..13 inclusive.
-
-4) ValueError when the value of the second parameter is not one of the strings in the set {'s', 'h', 'c', 'd'}
-"""
-
-""" Card Object
+""" One object of class card represents a playing card, with a suit and rank value
 """
 class Card:
     suitDict = {'d': 'diamonds', 'c': 'clubs', 'h': 'hearts', 's': 'spades'}
@@ -57,54 +43,71 @@ class Card:
         return str(rank) + " of " + Card.suitDict[self.getSuit()]
 
 
-""" Card test program
+""" Card test program if running card.py directly
 """
-# Default
-card = Card()
-print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
+if __name__ == "__main__":
+    # Default
+    card = Card()
+    print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
 
-# Some values
-card = Card(1, "d")
-print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
-card = Card(5, "c")
-print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
-card = Card(10, "h")
-print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
+    # Some values
+    card = Card(1, "d")
+    print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
+    card = Card(5, "c")
+    print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
+    card = Card(10, "h")
+    print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
 
-# Face value test
-card = Card(11, "s")
-print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
-card = Card(12, "s")
-print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
-card = Card(13, "s")
-print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
+    # Face value test
+    card = Card(11, "s")
+    print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
+    card = Card(12, "s")
+    print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
+    card = Card(13, "s")
+    print(card, ", bjValue:", card.bjValue(), ", has rank:", card.getRank(), ", and suit:", card.getSuit())
 
-# Input checking
+    # Input checking
 
-# invalid type
-try:
-    card = Card(1, 2)
-except:
-    print("Caught error for invalid suit type")
-try:
-    card = Card('d', 'd')
-except:
-    print("Caught error for invalid rank type")
+    # invalid type
+    try:
+        card = Card(1, 2)
+    except:
+        print("Caught error for invalid suit type")
+    try:
+        card = Card('d', 'd')
+    except:
+        print("Caught error for invalid rank type")
 
-# out of bounds
-try:
-    card = Card(-1)
-except:
-    print("Caught error for out-of-bounds rank")
-try:
-    card = Card(14)
-except:
-    print("Caught error for out-of-bounds rank")
-try:
-    card = Card('test')
-except:
-    print("Caught error for invalid suit")
-try:
-    card = Card('z')
-except:
-    print("Caught error for invalid suit")
+    # out of bounds
+    try:
+        card = Card(-1)
+    except:
+        print("Caught error for out-of-bounds rank")
+    try:
+        card = Card(14)
+    except:
+        print("Caught error for out-of-bounds rank")
+    try:
+        card = Card('test')
+    except:
+        print("Caught error for invalid suit")
+    try:
+        card = Card('z')
+    except:
+        print("Caught error for invalid suit")
+
+""" Program Output:
+ace of spades , bjValue: 1 , has rank: 1 , and suit: s
+ace of diamonds , bjValue: 1 , has rank: 1 , and suit: d
+5 of clubs , bjValue: 5 , has rank: 5 , and suit: c
+10 of hearts , bjValue: 10 , has rank: 10 , and suit: h
+jack of spades , bjValue: 10 , has rank: 11 , and suit: s
+queen of spades , bjValue: 10 , has rank: 12 , and suit: s
+king of spades , bjValue: 10 , has rank: 13 , and suit: s
+Caught error for invalid suit type
+Caught error for invalid rank type
+Caught error for out-of-bounds rank
+Caught error for out-of-bounds rank
+Caught error for invalid suit
+Caught error for invalid suit
+"""
