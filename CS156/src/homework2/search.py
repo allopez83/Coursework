@@ -89,12 +89,7 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     tried = []
     fringe = util.Stack()
-    successors = problem.getSuccessors(problem.getStartState())
-    for child in successors:
-        # state, parent, action, cost
-        node = util.Node(child[0], None, child[1], child[2])
-        fringe.push(node)
-    tried.append(node.state)
+    fringe.push(util.Node(problem.getStartState()))
     # While there are still options
     while not fringe.isEmpty():
         tryNode = fringe.pop()
@@ -104,7 +99,7 @@ def depthFirstSearch(problem):
         if problem.isGoalState(tryNode.state):
             break
         # If n wasn't tried before
-        if tryNode not in tried:
+        if tryNode.state not in tried:
             tried.append(tryNode.state)
             # Add child nodes to search
             successors = problem.getSuccessors(tryNode.state)
@@ -114,21 +109,16 @@ def depthFirstSearch(problem):
                 # Haven't tried this node yet
                 if node.state not in tried:
                     fringe.push(node)
-    # Expanded out for debugging purposes
-    path = tryNode.path()
-    return [node.action for node in path]
+    actions = [node.action for node in tryNode.path()]
+    actions.pop(0)
+    return actions
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     tried = []
     fringe = util.Queue()
-    successors = problem.getSuccessors(problem.getStartState())
-    for child in successors:
-        # state, parent, action, cost
-        node = util.Node(child[0], None, child[1], child[2])
-        fringe.push(node)
-    tried.append(node.state)
+    fringe.push(util.Node(problem.getStartState()))
     # While there are still options
     while not fringe.isEmpty():
         tryNode = fringe.pop()
@@ -136,7 +126,7 @@ def breadthFirstSearch(problem):
         if problem.isGoalState(tryNode.state):
             break
         # If n wasn't tried before
-        if tryNode not in tried:
+        if tryNode.state not in tried:
             tried.append(tryNode.state)
             # Add child nodes to search
             successors = problem.getSuccessors(tryNode.state)
@@ -147,22 +137,16 @@ def breadthFirstSearch(problem):
                 if node.state not in tried:
                     fringe.push(node)
                     # print(node.path_cost)
-    # Expanded out for debugging purposes
-    path = tryNode.path()
-    return [node.action for node in path]
+    actions = [node.action for node in tryNode.path()]
+    actions.pop(0)
+    return actions
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     tried = []
     fringe = util.PriorityQueue()
-    points = problem.getSuccessors((1,2))
-    successors = problem.getSuccessors(problem.getStartState())
-    for child in successors:
-        # state, parent, action, cost
-        node = util.Node(child[0], None, child[1], child[2])
-        fringe.push(node, node.path_cost)
-    tried.append(node.state)
+    fringe.push(util.Node(problem.getStartState()), 0)
     # While there are still options
     while not fringe.isEmpty():
         tryNode = fringe.pop()
@@ -172,7 +156,7 @@ def uniformCostSearch(problem):
         if problem.isGoalState(tryNode.state):
             break
         # If n wasn't tried before
-        if tryNode not in tried:
+        if tryNode.state not in tried:
             tried.append(tryNode.state)
             # Add child nodes to search
             successors = problem.getSuccessors(tryNode.state)
@@ -184,9 +168,9 @@ def uniformCostSearch(problem):
                     fringe.push(node, node.path_cost)
                     # Debugging:
                     # print(node.path_cost)
-    # Expanded out for debugging purposes
-    path = tryNode.path()
-    return [node.action for node in path]
+    actions = [node.action for node in tryNode.path()]
+    actions.pop(0)
+    return actions
 
 def nullHeuristic(state, problem=None):
     """
