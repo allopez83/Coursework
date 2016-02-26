@@ -121,12 +121,72 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    tried = []
+    fringe = util.Queue()
+    successors = problem.getSuccessors(problem.getStartState())
+    for child in successors:
+        # state, parent, action, cost
+        node = util.Node(child[0], None, child[1], child[2])
+        fringe.push(node)
+    tried.append(node.state)
+    # While there are still options
+    while not fringe.isEmpty():
+        tryNode = fringe.pop()
+        # Are we there yet?
+        if problem.isGoalState(tryNode.state):
+            break
+        # If n wasn't tried before
+        if tryNode not in tried:
+            tried.append(tryNode.state)
+            # Add child nodes to search
+            successors = problem.getSuccessors(tryNode.state)
+            for child in successors:
+                # state, parent, action, cost
+                node = util.Node(child[0], tryNode, child[1], child[2])
+                # Haven't tried this node yet
+                if node.state not in tried:
+                    fringe.push(node)
+                    # print(node.path_cost)
+    # Expanded out for debugging purposes
+    path = tryNode.path()
+    return [node.action for node in path]
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    tried = []
+    fringe = util.PriorityQueue()
+    points = problem.getSuccessors((1,2))
+    successors = problem.getSuccessors(problem.getStartState())
+    for child in successors:
+        # state, parent, action, cost
+        node = util.Node(child[0], None, child[1], child[2])
+        fringe.push(node, node.path_cost)
+    tried.append(node.state)
+    # While there are still options
+    while not fringe.isEmpty():
+        tryNode = fringe.pop()
+        # Debugging:
+        # print("Trying:", tryNode.state)
+        # Are we there yet?
+        if problem.isGoalState(tryNode.state):
+            break
+        # If n wasn't tried before
+        if tryNode not in tried:
+            tried.append(tryNode.state)
+            # Add child nodes to search
+            successors = problem.getSuccessors(tryNode.state)
+            for child in successors:
+                # state, parent, action, cost
+                node = util.Node(child[0], tryNode, child[1], tryNode.path_cost + child[2])
+                # Haven't tried this node yet
+                if node.state not in tried:
+                    fringe.push(node, node.path_cost)
+                    # Debugging:
+                    # print(node.path_cost)
+    # Expanded out for debugging purposes
+    path = tryNode.path()
+    return [node.action for node in path]
 
 def nullHeuristic(state, problem=None):
     """
