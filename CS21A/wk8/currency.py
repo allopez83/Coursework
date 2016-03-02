@@ -60,3 +60,4 @@ if __name__ == "__main__":
     print(candyPrice > bookPrice)
     print(candyPrice == bookPrice)
     print(candyPrice <= bookPrice)
+    print(Currency.__lt__.__doc__)
