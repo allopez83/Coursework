@@ -69,47 +69,6 @@ Harriot Truman, ssn: 1111, salary: 10000, title: manager, bonus: 1000
 ZZZ ZZZ, ssn: 1111, salary: 10000
 
 Last, first format to see it's sorted:
-AAA AAA
-Bobs Adam
-Davis Andy
-Davis Carly
-Evans Daniel
-Gall Fredrick
-Gonzales David
-Simmons Zachary
-Taylor Emma
-Taylor GenericName
-Truman Harriot
-ZZZ ZZZ
-Original Employees:
-Adam Bobs, ssn: 1111, salary: 10000
-Carly Davis, ssn: 1111, salary: 10000
-Daniel Evans, ssn: 1111, salary: 10000
-Fredrick Gall, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-Harriot Truman, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-ZZZ ZZZ, ssn: 1111, salary: 10000
-Zachary Simmons, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-David Gonzales, ssn: 1111, salary: 10000
-GenericName Taylor, ssn: 1111, salary: 10000
-Emma Taylor, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-Andy Davis, ssn: 1111, salary: 10000
-AAA AAA, ssn: 1111, salary: 10000
-
-After sorting:
-AAA AAA, ssn: 1111, salary: 10000
-Adam Bobs, ssn: 1111, salary: 10000
-Andy Davis, ssn: 1111, salary: 10000
-Carly Davis, ssn: 1111, salary: 10000
-Daniel Evans, ssn: 1111, salary: 10000
-Fredrick Gall, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-David Gonzales, ssn: 1111, salary: 10000
-Zachary Simmons, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-Emma Taylor, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-GenericName Taylor, ssn: 1111, salary: 10000
-Harriot Truman, ssn: 1111, salary: 10000, title: manager, bonus: 1000
-ZZZ ZZZ, ssn: 1111, salary: 10000
-
-Last, first format to see it's sorted:
 AAA, AAA
 Bobs, Adam
 Davis, Andy
