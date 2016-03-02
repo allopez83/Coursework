@@ -1,4 +1,4 @@
-""" Tests employee and manager to ensure magic methods are functioning properly
+""" Tests employee and manager to ensure magic methods are functioning properly by sorting a list of combined employees and managers
 """
 
 import unittest
