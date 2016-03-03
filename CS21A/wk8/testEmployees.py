@@ -21,6 +21,9 @@ employeeList.append(Employee("GenericName", "Taylor"))
 employeeList.append(Manager("Emma", "Taylor"))
 employeeList.append(Employee("Andy", "Davis"))
 employeeList.append(Employee("AAA", "AAA"))
+employeeList.append(Employee("Donald", "Trump"))
+employeeList.append(Employee("Hillary", "Clinton"))
+
 
 print("Original Employees:")
 for employee in employeeList:
@@ -28,16 +31,11 @@ for employee in employeeList:
 # Get tidy!
 print("\nAfter sorting:")
 employeeList.sort()
-employeeList.sort()
-employeeList.sort()
-employeeList.sort()
 for employee in employeeList:
     print(employee)
 print("\nLast, first format to see it's sorted:")
 for employee in employeeList:
     print(employee.lastName + ", " + employee.firstName)
-
-
 
 """ Program Output
 Original Employees:
@@ -53,10 +51,13 @@ GenericName Taylor, ssn: 1111, salary: 10000
 Emma Taylor, ssn: 1111, salary: 10000, title: manager, bonus: 1000
 Andy Davis, ssn: 1111, salary: 10000
 AAA AAA, ssn: 1111, salary: 10000
+Donald Trump, ssn: 1111, salary: 10000
+Hillary Clinton, ssn: 1111, salary: 10000
 
 After sorting:
 AAA AAA, ssn: 1111, salary: 10000
 Adam Bobs, ssn: 1111, salary: 10000
+Hillary Clinton, ssn: 1111, salary: 10000
 Andy Davis, ssn: 1111, salary: 10000
 Carly Davis, ssn: 1111, salary: 10000
 Daniel Evans, ssn: 1111, salary: 10000
@@ -66,11 +67,13 @@ Zachary Simmons, ssn: 1111, salary: 10000, title: manager, bonus: 1000
 Emma Taylor, ssn: 1111, salary: 10000, title: manager, bonus: 1000
 GenericName Taylor, ssn: 1111, salary: 10000
 Harriot Truman, ssn: 1111, salary: 10000, title: manager, bonus: 1000
+Donald Trump, ssn: 1111, salary: 10000
 ZZZ ZZZ, ssn: 1111, salary: 10000
 
 Last, first format to see it's sorted:
 AAA, AAA
 Bobs, Adam
+Clinton, Hillary
 Davis, Andy
 Davis, Carly
 Evans, Daniel
@@ -80,6 +83,7 @@ Simmons, Zachary
 Taylor, Emma
 Taylor, GenericName
 Truman, Harriot
+Trump, Donald
 ZZZ, ZZZ
 
 """

@@ -32,12 +32,12 @@ class Employee:
     """ Determines if name of self is alphabetically less than the name of other, last name taking precedence
     """
     def __lt__(self, other):
-        if self.lastName.casefold() < other.lastName.casefold():
-            return True
-        elif self.firstName.casefold() < other.firstName.casefold():
-            return True
+        # Last names are the same, then compare first name
+        if self.lastName.casefold() == other.lastName.casefold():
+            return self.firstName.casefold() < other.firstName.casefold()
+        # Else, typical case, compare last name
         else:
-            return False
+            return self.lastName.casefold() < other.lastName.casefold()
 
 
 """ Test magic methods for employee
