@@ -34,12 +34,14 @@ description for details.
 Good luck and happy searching!
 """
 
-from game import Directions
-from game import Agent
-from game import Actions
-import util
 import time
+
 import search
+import util
+from game import Actions
+from game import Agent
+from game import Directions
+
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."

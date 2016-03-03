@@ -314,7 +314,7 @@ def getDisplay(graphicsByDefault, options=None):
         graphics = False
     if graphics:
         try:
-            import graphicsDisplay
+            from homework2 import graphicsDisplay
             return graphicsDisplay.PacmanGraphics(1, frameTime=.05)
         except ImportError:
             pass
