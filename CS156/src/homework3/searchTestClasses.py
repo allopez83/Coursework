@@ -13,9 +13,9 @@
 
 
 import re
+import testClasses
 import textwrap
 
-import testClasses
 # import project specific code
 import layout
 import pacman
