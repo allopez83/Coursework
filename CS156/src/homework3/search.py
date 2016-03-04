@@ -91,8 +91,30 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    tried = set()
+    fringe = util.Queue()
+    fringe.push(util.Node(problem.getStartState()))
+    # While there are still options
+    while not fringe.isEmpty():
+        tryNode = fringe.pop()
+        # Are we there yet?
+        if problem.isGoalState(tryNode.state):
+            break
+        # If n wasn't tried before
+        if tryNode.state not in tried:
+            tried.add(tryNode.state)
+            # Add child nodes to search
+            successors = problem.getSuccessors(tryNode.state)
+            for child in successors:
+                # state, parent, action, cost
+                node = util.Node(child[0], tryNode, child[1], child[2])
+                # Haven't tried this node yet
+                if node.state not in tried:
+                    fringe.push(node)
+                    # print(node.path_cost)
+    actions = [node.action for node in tryNode.path()]
+    actions.pop(0)
+    return actions
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -108,9 +130,11 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
+    print("Doing an A* search")
     tried = set()
     fringe = util.PriorityQueue()
     fringe.push(util.Node(problem.getStartState()), 0)
+    previous = ()
     # While there are still options
     while not fringe.isEmpty():
         tryNode = fringe.pop()
@@ -124,17 +148,13 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             tried.add(tryNode.state)
             # Add child nodes to search
             successors = problem.getSuccessors(tryNode.state)
-            for child in successors:
+            for state, action, cost in successors:
                 # state, parent, action, cost
-                node = util.Node(child[0], tryNode, child[1], tryNode.path_cost + child[2])
+                node = util.Node(state, tryNode, action, tryNode.path_cost + cost)
                 # Haven't tried this node yet
                 if node.state not in tried:
-                    forwardCost = heuristic(node.state, problem)
-                    backwardCost = node.path_cost
-                    currentHeuristic = forwardCost + backwardCost
+                    currentHeuristic = node.path_cost + heuristic(node.state, problem)
                     fringe.push(node, currentHeuristic)
-                    # fringe.push(node, node.path_cost)
-                    # fringe.push(node, manhattenDist(node.state) - node.path_cost)
                     # Debugging:
                     # print(node.path_cost)
     actions = [node.action for node in tryNode.path()]
