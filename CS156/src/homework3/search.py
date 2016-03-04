@@ -108,7 +108,6 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    # print(problem)
     tried = set()
     fringe = util.PriorityQueue()
     fringe.push(util.Node(problem.getStartState()), 0)
@@ -142,13 +141,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     actions.pop(0)
     return actions
     # util.raiseNotDefined()
-
-def manhattenDist(state, target):
-    """ Calculate manhatten distance from state to target
-    """
-    # state = (10, 5)
-    # target = (1, 1)
-
 
 # Abbreviations
 bfs = breadthFirstSearch

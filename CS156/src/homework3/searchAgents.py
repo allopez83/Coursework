@@ -360,8 +360,43 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     position, foodGrid = state
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    foodDistance = []
+    if foodGrid == ():
+        return 0
+    # Find manhatten distance for all food
+    for food in foodGrid:
+        foodDistance.append((manhattanDistance(position, food), food))
+    foodDistance.sort()
+    # Distance to closest food
+    closest = foodDistance[0][1]
+    heuristic = manhattanDistance(position, closest)
+
+    print position, "->", closest, "h:", heuristic
+
+    # # Make sure next spot isn't dead end
+    # deadEndPoint = xy1
+    # north = walls[deadEndPoint[0] - 1][deadEndPoint[1]]
+    # east = walls[deadEndPoint[0]][deadEndPoint[1] + 1]
+    # south = walls[deadEndPoint[0] + 1][deadEndPoint[1]]
+    # west = walls[deadEndPoint[0]][deadEndPoint[1] - 1]
+    # if north + east + south + west >= 3:
+    #     if deadEndPoint not in foodGrid:
+    #         # Abandon all hope and turn back now, nothing to find here
+    #         print "Nothing to find at the dead end", deadEndPoint
+    #         # heuristic
+
+    return heuristic
+
+
+def linearDistance(start, end):
+    "Find the straight line distance between two coordinates"
+    return ((start[0] - end[0]) ** 2 + (start[1] - end[1]) ** 2) ** 0.5
+
+
+def manhattanDistance(start, end):
+    "Find the manhattan distance between two coordinates"
+    return abs(start[0] - end[0]) + abs(start[1] - end[1])
+
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
