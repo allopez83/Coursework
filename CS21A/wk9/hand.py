@@ -47,14 +47,3 @@ class Hand:
         for card in self.hand:
             value += card.bjValue()
         return value
-
-
-""" Simple test to ensure basic functionality of Hand
-"""
-if __name__ == "__main__":
-    h = Hand(3)
-    print("bjValue:", h.bjValue())
-    print(str(h))
-    h.hitMe()
-    print("bjValue:", h.bjValue())
-    print(str(h))
