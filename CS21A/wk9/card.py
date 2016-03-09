@@ -1,18 +1,6 @@
 """
 Create a class Hand in its own module. One object of class Hand stores a number of Card objects. For this assignment you will submit three separate modules, one with the definition of class Card, one with the definition of class Hand and one with the main application that thoroughly tests class Hand.
 
-class Hand must contain the following four methods:
-
-1)   __init__(numCardsInHand) takes an integer as parameter and constructs a Hand object with numCardsInHand Card objects inside it. These Card objects are generated randomly. For simplicity, assume an infinite number of decks.
-
-2)   bjValue() returns the blackjack value for the whole Hand of cards
-
-3)   __str__() returns a string containing all the Cards in the Hand
-
-4)   hitMe() adds one randomly generated Card to the Hand
-
-Create a main program in its own module that thoroughly tests class Hand. You will have three modules/files to upload to your Etudes Assignment submission: card.py, hand.py and the module that contains your main program.
-
 Two alternatives for Extra Credit - you cannot get credit for both!
 
 (+1 point): After you have thoroughly tested the class Hand and all of its methods, add code to your main program that stores one Hand object as a Pickle file and reads it back into a new Hand object. You are only eligible for this extra credit if class Hand has all four of the methods above working.
