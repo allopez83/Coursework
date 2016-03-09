@@ -21,6 +21,11 @@ Eventually, all the following directories will be added, each representing a cou
 - Java
 - SJSU
 
+**CS 149**
+- Operating Systems
+- C++
+- SJSU
+
 **CS 151**
 - Object-Oriented Design
 - Java
@@ -36,6 +41,12 @@ Eventually, all the following directories will be added, each representing a cou
 - Introduction to Database Management Systems
 - Java and SQL
 - SJSU
+
+** CS 158A
+- Computer Networks
+- C
+- SJSU
+- In Progress
 
 **CS 174**
 - Server-Side Web Programming
