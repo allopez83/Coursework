@@ -1,0 +1,15 @@
+Project 1
+======================
+
+## Notes
+
+- don't hold lock on log file
+- VMMS.dll loaded in virtual memory
+
+## First part
+
+- Ensure shared memory works
+- memset('X') to initialize memory with something, in this case, X-es
+    - peek inside memory and should see the dummy data
+- second instance of process should point to different memory
+- stop a process using the system pause system call, or sleep() command
