@@ -1,34 +1,39 @@
 import tkinter
+""" sets up a gui that accepts the user's name and greets them when a button is pressed
+"""
 
 class MyFrame(tkinter.Frame):
-    """
-    class MyFrame is a tkinter.Frame that contains two Buttons and a Label. One Button increments a counter that is displayed on the Label and the other Button quits the application.
-    """
     def __init__(self):
+        """ Initializes the Frame by putting the widgets on it """
         tkinter.Frame.__init__(self)
         self.pack()
-        self.counter = 0  # i) initialize the counter
+        self.createWidgets()
 
-        self.incrementButton = tkinter.Button(self)
-        self.incrementButton["text"] = "Increment"
-        self.incrementButton["command"] = self.addOne
-        # ii) the statement above attaches the event handler addOne() to the incrementButton
-        self.incrementButton.pack({"side": "left"})
-
-        self.labelForOutput = tkinter.Label(self)
-        self.labelForOutput["text"] = 0
-        self.labelForOutput.pack({"side": "left"})
+    def createWidgets(self):
+        """ Instantiates all of the widgets and places them onto the frame """
+        self.nameEntry = tkinter.Entry()
+        self.nameEntry.insert(0, "your name here")
+        self.nameEntry.pack({"side": "left"})
 
         self.quitButton = tkinter.Button(self)
         self.quitButton["text"] = "Quit"
-        self.quitButton["command"] = self.quit
-        # iii) the statement above attaches the event handler self.quit() to the incrementButton
+        self.quitButton["command"] =  self.quit
         self.quitButton.pack({"side": "left"})
 
-    """
-    Python calls this method when the user clicks the incrementButton.
-    This is called an event handler or a callback.
-    """
-    def addOne(self):
-        self.counter = self.counter + 1
-        self.labelForOutput["text"] = self.counter
+        self.hiButton = tkinter.Button(self)
+        self.hiButton["text"] = "Hello",
+        self.hiButton["command"] = self.sayHi
+        self.hiButton.pack({"side": "left"})
+
+        self.greeting = tkinter.Label(self)
+        self.greeting.pack({"side": "left"})
+
+    def sayHi(self):
+        """ greets the user by taking the text from the nameEntry field and putting it into the greeting field """
+        self.greeting["text"] = "Hello " + self.nameEntry.get()
+
+if __name__ == "__main__":
+    root = tkinter.Tk()
+    app = MyFrame()
+    app.mainloop()
+    root.destroy()
