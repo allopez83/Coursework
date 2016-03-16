@@ -1,6 +1,6 @@
 import tkinter
-import myFrame    # the VIEW
-import counter    # the MODEL
+import view    # the VIEW
+import model    # the MODEL
 
 class Controller:
     """
@@ -16,8 +16,8 @@ class Controller:
         for the user to press a Button on the View.
         """
         root = tkinter.Tk()
-        self.model = counter.Counter()
-        self.view = myFrame.MyFrame(self)
+        self.model = model.Model()
+        self.view = view.View(self)
         self.view.mainloop()
         root.destroy()
 
@@ -26,7 +26,7 @@ class Controller:
         Python calls this method when the user presses the incrementButton in the View.
         """
         self.model.inc()
-        self.view.labelForOutput["text"] = str(self.model)
+        self.view.outputLabel["text"] = str(self.model)
 
 if __name__ == "__main__":
     c = Controller()
