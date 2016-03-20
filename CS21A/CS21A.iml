@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/wk10/examples/incrementGUI" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/wk10/examples/incrementMVC" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/wk10/hw" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/final" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

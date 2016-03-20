@@ -1,0 +1,21 @@
+from line import Line
+from point import Point
+
+l1 = Line()
+print(l1)
+print("length:", l1.length())
+p1 = Point(1, 1)
+p2 = Point(2, 2)
+l1 = Line(p1, p2)
+print(l1)
+print("length:", l1.length())
+p1 = Point(1, 1)
+p2 = Point(1, 5)
+l1 = Line(p1, p2)
+print(l1)
+p1 = Point(-1, -1)
+print("length:", l1.length())
+p2 = Point(-1, -5)
+l1 = Line(p1, p2)
+print(l1)
+print("length:", l1.length())
