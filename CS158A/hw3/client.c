@@ -44,32 +44,16 @@ int main(int argc , char *argv[])
         return 1;
     }
      
-    puts("Connected\n");
-     
-    //keep communicating with server
-    while(1)
+    puts("Connected\nEnter message : ");
+    scanf("%s" , message);
+
+    //Send some data
+    if( send(sock , message , strlen(message) , 0) < 0)
     {
-        printf("Enter message : ");
-        scanf("%s" , message);
-         
-        //Send some data
-        if( send(sock , message , strlen(message) , 0) < 0)
-        {
-            puts("Send failed");
-            return 1;
-        }
-         
-        //Receive a reply from the server
-        if( recv(sock , server_reply , 2000 , 0) < 0)
-        {
-            puts("recv failed");
-            break;
-        }
-         
-        puts("Server reply :");
-        puts(server_reply);
+        puts("Send failed");
+        return 1;
     }
-     
+
     close(sock);
     return 0;
 }

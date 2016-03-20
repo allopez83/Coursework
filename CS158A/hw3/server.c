@@ -70,19 +70,15 @@ int main(int argc , char *argv[])
     //Receive a message from client
     while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
     {
+        printf("%s\n", client_message);
         //Send the message back to client
-        write(client_sock , client_message , strlen(client_message));
+        // write(client_sock , client_message , strlen(client_message));
     }
-     
-    if(read_size == 0)
-    {
-        puts("Client disconnected");
-        fflush(stdout);
-    }
-    else if(read_size == -1)
-    {
-        perror("recv failed");
-    }
-     
+
+    // Exit after transmission
+    close(socket_desc);
+    puts("Client disconnected");
+    fflush(stdout);
+
     return 0;
 }
