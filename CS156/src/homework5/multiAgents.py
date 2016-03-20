@@ -73,7 +73,13 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Returns the total number of agents in the game
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # Find possible actions
+        # Worst/best case of each action
+            # figure out what other agents' actions
+        # determine optimal action from here
+        actions = gameState.getLegalActions(0)
+        print(gameState)
+        # util.raiseNotDefined()
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
