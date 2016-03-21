@@ -72,14 +72,8 @@ class MinimaxAgent(MultiAgentSearchAgent):
           gameState.getNumAgents():
             Returns the total number of agents in the game
         """
-        "*** YOUR CODE HERE ***"
-        # Find possible actions
-        # Worst/best case of each action
-            # figure out what other agents' actions
-        # determine optimal action from here
-        # util.raiseNotDefined()
         result = self.value(gameState, 0, 0)
-        print "for getAction:%s"  # result
+        # print "for getAction:%s"  # result
         return result[1]  # (value, action)
 
     def value(self, state, agent, descent):
@@ -87,7 +81,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
             agent = 0
             descent += 1
 
-        if len(state.getLegalActions(agent)) == 0 or descent == self.depth:
+        if descent == self.depth:
             return self.evaluationFunction(state)  # terminal state
 
         if agent == 0: # pacman
@@ -99,6 +93,9 @@ class MinimaxAgent(MultiAgentSearchAgent):
         results = []
         value = -sys.maxsize
 
+        if not state.getLegalActions(agent):
+            return self.evaluationFunction(state)
+
         for action in state.getLegalActions(agent):
             successorState = state.generateSuccessor(agent, action)
             successorVal = self.value(successorState, agent + 1, descent)
@@ -109,16 +106,18 @@ class MinimaxAgent(MultiAgentSearchAgent):
             value = max(value, successorVal)
             results.append((value, action))
 
-
-                # Sort results by value desc, with highest at first position
+        # Sort results by value desc, with highest at first position
         results.sort(key=lambda tup: tup[0], reverse=True)
-        print "Max %s for agent %s" % (str(results[0]), agent)
+        # print "Max %s for agent %s" % (str(results[0]), agent)
         return results[0]
 
     def minValue(self, state, agent, descent):
         results = []
         value = sys.maxsize
 
+        if not state.getLegalActions(agent):
+            return self.evaluationFunction(state)
+
         for action in state.getLegalActions(agent):
             successorState = state.generateSuccessor(agent, action)
             successorVal = self.value(successorState, agent + 1, descent)
@@ -126,12 +125,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
             if type(successorVal) is tuple:
                 successorVal = successorVal[0]
             
-            value = max(value, successorVal)
+            value = min(value, successorVal)
             results.append((value, action))
 
         # Sort results by value asc, with lowest at first position
         results.sort(key=lambda tup: tup[0])
-        print "Min %s for agent %s" % (str(results[0]), agent)
+        # print "Min %s for agent %s" % (str(results[0]), agent)
         return results[0]
 
 
@@ -145,4 +144,75 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
           Returns the minimax action using self.depth and self.evaluationFunction
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        result = self.value(gameState, 0, 0, -sys.maxsize, sys.maxsize)
+        # print "for getAction:%s"  # result
+        return result[1]  # (value, action)
+
+    def value(self, state, agent, descent, alpha, beta):
+        if agent >= state.getNumAgents():
+            agent = 0
+            descent += 1
+
+        if descent == self.depth:
+            return self.evaluationFunction(state)  # terminal state
+
+        if agent == 0: # pacman
+            return self.maxValue(state, agent, descent, alpha, beta)
+        else:
+            return self.minValue(state, agent, descent, alpha, beta)
+
+    def maxValue(self, state, agent, descent, alpha, beta):
+        results = []
+        value = -sys.maxsize
+
+        if not state.getLegalActions(agent):
+            return self.evaluationFunction(state)
+
+        for action in state.getLegalActions(agent):
+            successorState = state.generateSuccessor(agent, action)
+            successorVal = self.value(successorState, agent + 1, descent, alpha, beta)
+            
+            if type(successorVal) is tuple:
+                successorVal = successorVal[0]
+            
+            value = max(value, successorVal)
+
+            if value > beta:
+                return value
+
+            alpha = max(alpha, value)
+
+            results.append((value, action))
+
+        # Sort results by value desc, with highest at first position
+        results.sort(key=lambda tup: tup[0], reverse=True)
+        # print "Max %s for agent %s" % (str(results[0]), agent)
+        return results[0]
+
+    def minValue(self, state, agent, descent, alpha, beta):
+        results = []
+        value = sys.maxsize
+
+        if not state.getLegalActions(agent):
+            return self.evaluationFunction(state)
+
+        for action in state.getLegalActions(agent):
+            successorState = state.generateSuccessor(agent, action)
+            successorVal = self.value(successorState, agent + 1, descent, alpha, beta)
+            
+            if type(successorVal) is tuple:
+                successorVal = successorVal[0]
+            
+            value = min(value, successorVal)
+
+            if value < alpha:
+                return value
+
+            beta = min(beta, value)
+
+            results.append((value, action))
+
+        # Sort results by value asc, with lowest at first position
+        results.sort(key=lambda tup: tup[0])
+        # print "Min %s for agent %s" % (str(results[0]), agent)
+        return results[0]
