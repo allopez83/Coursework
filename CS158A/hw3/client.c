@@ -52,7 +52,7 @@ int main(int argc , char *argv[])
     send(sock, message, strlen(message), 0);
 
     // Exit
-    puts("Close connection");
+    puts("Closing connection");
     close(sock);
 
     return 0;
