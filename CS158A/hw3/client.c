@@ -15,16 +15,19 @@ Here server should print My message and both programs should exit cleanly.
 */
 
 #include <stdio.h> //printf
-#include <string.h>    //strlen
-#include <sys/socket.h>    //socket
+#include <string.h> //strlen
+#include <sys/socket.h> //socket
 #include <arpa/inet.h> //inet_addr
- 
+
 int main(int argc , char *argv[])
 {
-    int sock;
+    int sock, port;
     struct sockaddr_in server;
-    char message[1000] , server_reply[2000];
-     
+    char *message;
+
+    port = strtol(argv[1], NULL, 10);
+    message = argv[2];
+
     //Create socket
     sock = socket(AF_INET , SOCK_STREAM , 0);
     if (sock == -1)
@@ -32,10 +35,10 @@ int main(int argc , char *argv[])
         printf("Could not create socket");
     }
     puts("Socket created");
-     
+
     server.sin_addr.s_addr = inet_addr("127.0.0.1");
     server.sin_family = AF_INET;
-    server.sin_port = htons( 1000 );
+    server.sin_port = htons(port);
  
     //Connect to remote server
     if (connect(sock , (struct sockaddr *)&server , sizeof(server)) < 0)
@@ -43,17 +46,14 @@ int main(int argc , char *argv[])
         perror("connect failed. Error");
         return 1;
     }
-     
-    puts("Connected\nEnter message : ");
-    scanf("%s" , message);
-
+    
     //Send some data
-    if( send(sock , message , strlen(message) , 0) < 0)
-    {
-        puts("Send failed");
-        return 1;
-    }
+    puts("Sending message");
+    send(sock, message, strlen(message), 0);
 
+    // Exit
+    puts("Close connection");
     close(sock);
+
     return 0;
 }
