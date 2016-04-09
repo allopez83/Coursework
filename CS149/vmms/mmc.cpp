@@ -33,14 +33,14 @@ int main(int argc, char** argv)
       if (strlen(command)<= 2)
         rc = mmc_display_memory("");
       else
-        rc = mmc_display_memory((char*)command+2);
+        rc = mmc_display_memory((char*)command+2); // passes in file name to save to
     }
     else if ((command[0] == 'M') || (command[0] == 'm'))
     {
       if (strlen(command)<= 2)
         rc = mmc_display_memtable("");
       else
-        rc = mmc_display_memory((char*)command+2);
+        rc = mmc_display_memtable((char*)command+2); // passes in file name to save to
     }
     else if ((command[0] == 'E') || (command[0] == 'e'))
       return rc;
