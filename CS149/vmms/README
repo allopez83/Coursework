@@ -1,0 +1,13 @@
+README
+=====================
+
+## Set up
+
+1. Open "VS2012 x86 Native Tools Command Prompt"
+2. Change dir to VM shared folders `Z:`
+3. Change dir to project folder `cd Z:\Dropbox\Code\Coursework\CS149\vmms`
+
+## Compilation
+
+1. Open the Native Tools Command Prompt
+2. `run.bat` to compile project

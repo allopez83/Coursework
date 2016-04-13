@@ -5,6 +5,8 @@
 #include "vmms_error.h"
 #include <string.h>
 
+#include <unistd.h>   // for getpid()
+
 #define MAX_PHY_SIZE 8196    // 8K Bytes     ** Hardcode for testing !!
 #define MAX_TABLE_SIZE 1024  // 1K entries
 #define DEFAULT_BOUNDRY 8    // minimum 8 byte allocation block
@@ -24,6 +26,21 @@ char mem_start [MAX_PHY_SIZE] = {0};    // simulated Phy Memory
 // 
 // Mapping table and Free table would be implemented as a 2d array
 // 1000 entries would be fine, since test shouldn't exceed 1000 operations
+struct memItem {
+  int pid;
+  char* addr;
+  int requestSize;
+  int actualSize;
+};
+memItem memTable[MAX_TABLE_SIZE];     // Allocated memory
+int entry = 0;                        // Tracks next entry location
+
+struct freeItem {
+  char* addr;
+  int size;
+};
+freeItem freeTable[MAX_TABLE_SIZE];   // Free memory
+int entry = 0;                        // Tracks next entry location
 
 /* Here are the 5 exported functions for the application programs to use */
 __declspec(dllexport) char* vmms_malloc (  int size, int* error_code );
@@ -63,15 +80,59 @@ __declspec(dllexport) int mmc_display_memory ( char* filename )
   return rc;
 }
 
+// Allocate a piece of memory given the input size.
+// If successful, returns a valid pointer.  Otherwise it returns NULL (0) and set the error_code.
 __declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
 {
-  /* Put your source code here */
   // Ceiling of the size, multiple of DEFAULT_BOUNDRY
   // First look through free list to free mem location
+  // Add to memTable
+
+  int blocks;
+  blocks = size / 8;
+  if (size % 8 > 0)
+    blocks++;
+  int actualSize = blocks * DEFAULT_BOUNDRY;
+
+  int largest = 0;
+  int thisSize;
+  char* addr
+  // Exact fit or largest free space
+  for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+    thisSize = freeTable[i].size;
+    if (thisSize == actualSize) { // exact
+      largest = actualSize;
+      addr = freeTable[i].addr;
+      break;
+    }
+    else if (thisSize > largest.size) { // find largest
+      largest = thisSize;
+      addr = freeTable[i].addr
+    }
+  }
+
+  if (largest < actualSize) { // No free space large enough
+    *error_code = OUT_OF_MEM;
+    return NULL;
+  }
+
+  memItem m;
+  m.pid = getpid();
+  m.addr = addr;
+  m.requestSize = size;
+  m.actualSize = actualSize;
+
+  memTable[entry] = m;
+  entry++;
+
   *error_code = VMMS_SUCCESS;
-  return mem_start;             // for testing
+
+  return addr;
+  // return mem_start;             // for testing
 }
 
+// Set the destination buffer with a character of certain size.
+// If successful, returns 0. Otherwise it returns an error code.
 __declspec(dllexport) int vmms_memset ( char* dest_ptr, char c, int size )
 {
   int rc = VMMS_SUCCESS;
@@ -82,10 +143,22 @@ __declspec(dllexport) int vmms_memset ( char* dest_ptr, char c, int size )
 
   // fopen, fwrite, update vmem in binary (phys and virt is the same)
 
+  char* thisAddr, closestAddr = mem_start;
+  for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+    if (thisAddr < dest_ptr && closestAddr < thisAddr) // closer to dest_ptr
+      closestAddr = thisAddr;
+  }
+
+  if (desttoosmall)
+    return MEM_TOO_SMALL;
+  if (destaddrinvalid)
+    return INVALID_DEST_ADDR;
+
   return rc;
 }
 
-
+// Copy the fixed number of bytes from source to destination. 
+// If successful, returns 0.  Otherwise it returns an error code.
 __declspec(dllexport) int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size )
 {
   int rc = VMMS_SUCCESS;
@@ -95,19 +168,37 @@ __declspec(dllexport) int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size 
 
   // fopen, fwrite, update vmem in binary (phys and virt is the same)
 
+  if (desttoosmall)
+    return MEM_TOO_SMALL;
+  if (srcordestaddrinvalid)
+    return INVALID_CPY_ADDR;
+
   return rc;
 }
 
-
+// Print the number of characters to STDOUT. 
+// If size=0, then print until the first hex 0 to STDOUT.
+// If successful, returns 0.  Otherwise it returns an error code.
 __declspec(dllexport) int vmms_print ( char* src_ptr, int size )
 {
   int rc = VMMS_SUCCESS;
 
   /* Put your source code here */
+  if (invalid addr)
+    return INVALID_CPY_ADDR;
+
+  if (size == 0) {
+
+  }
+  else {
+
+  }
 
   return rc;
 }
 
+// Free the allocated memory.
+// If successful, returns 0.  Otherwise it returns an error code.
 __declspec(dllexport) int vmms_free ( char* mem_ptr )
 {
   int rc = VMMS_SUCCESS;
@@ -120,6 +211,8 @@ __declspec(dllexport) int vmms_free ( char* mem_ptr )
 
   // fopen, fwrite, update vmem in binary (phys and virt is the same)
 
+  if (invalid memory addr)
+    return INVALID_MEM_ADDR;
 
   return rc;
 }

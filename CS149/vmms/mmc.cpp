@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 
   while(1)
   {
+    printf("hello world\n");
     printf("Enter Command: D/M/E ---> ");
     gets(command);
 
