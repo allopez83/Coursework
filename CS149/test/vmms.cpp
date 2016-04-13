@@ -97,14 +97,12 @@ char* vmms_malloc (  int size, int* error_code ) {
   int thisSize;
   int i;
   char* addr;
-  bool exact;
   // Exact fit or largest free space
   for (int i = 0; i < MAX_TABLE_SIZE; i++) {
     thisSize = freeTable[i].size;
     if (thisSize == actualSize) { // exact
       largest = actualSize;
       addr = freeTable[i].addr;
-      exact = true;
       printf("Exact match!\n");
       break;
     }
@@ -122,13 +120,7 @@ char* vmms_malloc (  int size, int* error_code ) {
 
   // Update freeTable
   freeTable[i].size -= actualSize;
-  if (exact) {
-    // Size is zero if exact fit
-    freeTable[i].addr
-  } else {
-    // Size is decreased if exact fit
-    freeTable[i].addr = freeTable[i + actualSize].addr;
-  }
+  freeTable[i].addr = freeTable[i + actualSize];
 
   memItem m;
   m.pid = getpid();
