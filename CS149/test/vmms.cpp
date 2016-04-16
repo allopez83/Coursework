@@ -1,9 +1,11 @@
-#include <iostream>
 
 /*
 Questions:
 
 1. memcpy - does the src size need to be checked?
+2. are the pointers passed in referring to the start or any part of a block?
+3. what are "the return values 4 bytes & its parameters" for the vmms log?
+
 */
 
 //////////////// DECLARATIONS //
@@ -21,6 +23,7 @@ Questions:
 
 #include <string.h>
 #include <unistd.h>   // for getpid()
+#include <fstream>    // write binary to file
 
 #define MAX_PHY_SIZE 8196    // 8K Bytes     ** Hardcode for testing !!
 #define MAX_TABLE_SIZE 1024  // 1K entries
@@ -57,37 +60,69 @@ struct freeItem {
 freeItem freeTable[MAX_TABLE_SIZE];   // Free memory
 int freeEntry = 0;                        // Tracks next entry location
 
+// Files
+char dump[] = "VMMS.MEM";
+char log[] = "VMMS.LOG";
+
+// Debugging
+bool DEBUG_TRAVERSAL = true;
+bool DEBUG_VARIABLES = false;
+
 
 // END DECLARATIONS //////////////////////
-
 
 
 using namespace std;
 
 int mmc_initialize(int boundry_size) {
-  printf(" -> mmc_initialize\n");
+  if (DEBUG_TRAVERSAL) printf(" -> mmc_initialize\n");
 
-  int rc = VMMS_SUCCESS;
   byte_boundry = boundry_size;
-  
   freeItem initial;
   initial.addr = mem_start;
-  initial.size = MAX_PHY_SIZE;
+  initial.size = mem_size;
   freeTable[0] = initial;
 
-  printf("%s: %p\n", "addr", freeTable[0].addr);
-  printf("%s: %d\n", "size", freeTable[0].size);
+  if (DEBUG_VARIABLES) printf("%s: %p\n", "addr", freeTable[0].addr);
+  if (DEBUG_VARIABLES) printf("%s: %d\n", "size", freeTable[0].size);
   
-  printf(" <- mmc_initialize\n");
-  return rc;
+  if (DEBUG_TRAVERSAL) printf(" <- mmc_initialize\n");
+  return VMMS_SUCCESS;
+}
+
+int mmc_display_memtable ( char* filename )
+{
+  if (DEBUG_TRAVERSAL) printf(" -> mmc_display_memtable\n");
+
+  printf("Size @ Address\n");
+  for (int i = 0; i < freeEntry; i++) {
+    if (freeTable[i].size > 0)
+      printf("%i @ %p\n", freeTable[i].size, freeTable[i].addr);
+  }
+
+  if (DEBUG_TRAVERSAL) printf(" <- mmc_display_memtable\n");
+
+  return VMMS_SUCCESS;
+}
+
+int mmc_display_memory ( char* filename )
+{
+  if (DEBUG_TRAVERSAL) printf(" -> mmc_display_memory\n");
+
+  for (int i = 0; i < mem_size; i++) {
+    if (!(i % byte_boundry)) // Grouped by byte_boundary
+      printf(" ");
+    if (!(i % (4*byte_boundry))) // Four columns
+      printf("\n");
+    printf("%c", mem_start[i]);
+  }
+  
+  if (DEBUG_TRAVERSAL) printf(" <- mmc_display_memory\n");
+  return VMMS_SUCCESS;
 }
 
 char* vmms_malloc (  int size, int* error_code ) {
-  printf(" -> vmms_malloc\n");
-
-  // Ceiling of the size, multiple of DEFAULT_BOUNDRY
-  // First look through free list to free mem location
-  // Add to memTable
+  if (DEBUG_TRAVERSAL) printf(" -> vmms_malloc\n");
 
   // Actual size
   int blocks;
@@ -95,7 +130,7 @@ char* vmms_malloc (  int size, int* error_code ) {
   if (size % byte_boundry > 0)
     blocks++;
   int actualSize = blocks * DEFAULT_BOUNDRY;
-  printf("%s: %d\n", "actualSize", actualSize);
+  if (DEBUG_VARIABLES) printf("%s: %d\n", "actualSize", actualSize);
 
   int largest = 0;
   int thisSize;
@@ -110,11 +145,11 @@ char* vmms_malloc (  int size, int* error_code ) {
       largest = actualSize;
       addr = freeTable[i].addr;
       exact = true;
-      printf("Exact match!\n");
+      if (DEBUG_VARIABLES) printf("Exact match!\n");
       break;
     }
     else if (thisSize > largest) { // find largest
-      printf("New largest #%d: %d, at %p\n", i, thisSize, freeTable[i].addr);
+      if (DEBUG_VARIABLES) printf("New largest #%d: %d, at %p\n", i, thisSize, freeTable[i].addr);
       largest = thisSize;
       addr = freeTable[i].addr;
       pos = i;
@@ -123,6 +158,7 @@ char* vmms_malloc (  int size, int* error_code ) {
 
   // Size check
   if (largest < actualSize) { // No free space large enough
+    printf("ERROR: OUT_OF_MEM!\n");
     *error_code = OUT_OF_MEM;
     return NULL;
   }
@@ -134,38 +170,36 @@ char* vmms_malloc (  int size, int* error_code ) {
     freeTable[pos].addr = NULL;
   } else {
     // Decrease size
-    printf("before: %p\n", freeTable[pos].addr);
+    if (DEBUG_VARIABLES) printf("before: %p\n", freeTable[pos].addr);
     freeTable[pos].addr = ((freeTable[pos].addr)+actualSize);
     freeEntry++;
-    printf("after: %p\n", freeTable[pos].addr);
+    if (DEBUG_VARIABLES) printf("freeItem is now: %p\n", freeTable[pos].addr);
   }
-  printf("Size is now: %d\n", freeTable[pos].size);
+  if (DEBUG_VARIABLES) printf("Size is now: %d\n", freeTable[pos].size);
 
   // New memItem
-  memItem m;
-  m.pid = getpid();
-  m.addr = addr;
-  m.requestSize = size;
-  m.actualSize = actualSize;
-  printf("Adding memItem: %i, %p, %i, %i\n", m.pid, m.addr, m.requestSize, m.actualSize);
-  memTable[memEntry] = m;
+  memTable[memEntry].pid = getpid();
+  memTable[memEntry].addr = addr;
+  memTable[memEntry].requestSize = size;
+  memTable[memEntry].actualSize = actualSize;
+  memItem m = memTable[memEntry];
   memEntry++;
+
+  // printf("placed memitem as entry %i\n", memEntry-1);
+  if (DEBUG_VARIABLES) printf("Added memItem: %i, %p, %i, %i\n", m.pid, m.addr, m.requestSize, m.actualSize);
+  
 
   *error_code = VMMS_SUCCESS;
   
-  printf(" <- vmms_malloc\n");
+  if (DEBUG_TRAVERSAL) printf(" <- vmms_malloc\n");
   return addr;
 }
 
 // Set the destination buffer with a character of certain size.
 // If successful, returns 0. Otherwise it returns an error code.
 int vmms_memset ( char* dest_ptr, char c, int size ) {
-  printf(" -> vmms_memset\n");
+  if (DEBUG_TRAVERSAL) printf(" -> vmms_memset\n");
 
-  int rc = VMMS_SUCCESS;
-
-  // put hex of char c into dest_ptr
-  // check if address is allocated to your pid
   // fopen, fwrite, update vmem in binary (phys and virt is the same)
 
   // Find closest memItem
@@ -174,142 +208,248 @@ int vmms_memset ( char* dest_ptr, char c, int size ) {
   char* closestAddr = mem_start;
   for (int i = 0; i < MAX_TABLE_SIZE; i++) {
     thisAddr = memTable[i].addr;
-    if (thisAddr <= dest_ptr && closestAddr < thisAddr) { // closer to dest_ptr
+    if (thisAddr <= dest_ptr && closestAddr <= thisAddr) { // closer to dest_ptr
       closestAddr = thisAddr;
       m = memTable[i];
     }
   }
 
   // m is now the closest memItem
-  printf("Closest memItem:\npid: %d\nsize: %d\naddr: %p\n", m.pid, m.requestSize, m.addr);
+  if (DEBUG_VARIABLES) printf("Closest memItem:\npid: %d\nsize: %d\naddr: %p\n", m.pid, m.requestSize, m.addr);
 
-  if (m.pid != getpid()) // Not allocated to current process
+  if (m.pid != getpid()) { // Not allocated to current process
+    printf("ERROR: INVALID_DEST_ADDR!\n");
     return INVALID_DEST_ADDR;
+  }
 
   char* allocEnd; // End address of allocated memory
   char* reqEnd; // End address of requested memory
   allocEnd = m.addr + m.requestSize;
   reqEnd = dest_ptr + size;
-  printf("allocEnd: %p, reqEnd: %p\n", allocEnd, reqEnd);
-  if (allocEnd < reqEnd) // Request exceeds allocated size
+  if (DEBUG_VARIABLES) printf("allocEnd: %p, reqEnd: %p\n", allocEnd, reqEnd);
+  if (allocEnd < reqEnd) { // Request exceeds allocated size
+    printf("ERROR: MEM_TOO_SMALL\n");
     return MEM_TOO_SMALL;
+  }
 
   // Write to memory
   for (int i = 0; i < size; i++)
     dest_ptr[i] = c;
 
-  printf(" <- vmms_memset\n");
+  // Write log and mem dump
+  time_t now = time(0);
+  struct tm tstruct = *localtime(&now);
+  char str[50];
+  strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
+  printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
+  
+  ofstream dumpStream (dump, ios::out | ios::binary);
+  dumpStream.write (mem_start, mem_size);
+  dumpStream.close();
 
-  return rc;
+  if (DEBUG_TRAVERSAL) printf(" <- vmms_memset\n");
+  return VMMS_SUCCESS;
 }
 
 // Copy the fixed number of bytes from source to destination. 
 // If successful, returns 0.  Otherwise it returns an error code.
 int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size ) {
-  printf(" -> vmms_memcpy\n");
+  if (DEBUG_TRAVERSAL) printf(" -> vmms_memcpy\n");
 
-  int rc = VMMS_SUCCESS;
-
-  /* Put your source code here */
-  // check if address is allocated to your pid
   // fopen, fwrite, update vmem in binary (phys and virt is the same)
 
-  // printf("%p -> %p\n", src_ptr, dest_ptr);
+  if (DEBUG_VARIABLES) printf("%p -> %p\n", src_ptr, dest_ptr);
 
   // Find closest memItem
   memItem mDest;
   memItem mSrc;
-  char* thisAddr = NULL;
-  char* closestDestAddr = NULL;
-  char* closestSrcAddr = NULL;
+  char* thisAddr = mem_start;
+  char* closestDestAddr = mem_start;
+  char* closestSrcAddr = mem_start;
   for (int i = 0; i < MAX_TABLE_SIZE; i++) {
     thisAddr = memTable[i].addr;
     // dest
-    if (thisAddr <= dest_ptr && closestDestAddr < thisAddr) {
-      // printf("memTable[%i] is closer to dest_ptr\n", i);
+    if (thisAddr <= dest_ptr && closestDestAddr <= thisAddr) {
+      if (DEBUG_VARIABLES) printf("memTable[%i] is closer to dest_ptr\n", i);
       closestDestAddr = thisAddr;
       mDest = memTable[i];
     }
     // src
-    if (thisAddr <= src_ptr && closestSrcAddr < thisAddr) {
-      // printf("memTable[%i] is closer to src_ptr\n", i);
+    if (thisAddr <= src_ptr && closestSrcAddr <= thisAddr) {
+      if (DEBUG_VARIABLES) printf("memTable[%i] is closer to src_ptr\n", i);
       closestSrcAddr = thisAddr;
       mSrc = memTable[i];
     }
   }
 
   // mDest and mSrc are now the closest memItem
-  printf("Closest src:\npid: %d\nsize: %d\naddr: %p\n", mSrc.pid, mSrc.requestSize, mSrc.addr);
-  printf("Closest dest:\npid: %d\nsize: %d\naddr: %p\n", mDest.pid, mDest.requestSize, mDest.addr);
+  if (DEBUG_VARIABLES) printf("Closest src:\npid: %d\nsize: %d\naddr: %p\n", mSrc.pid, mSrc.requestSize, mSrc.addr);
+  if (DEBUG_VARIABLES) printf("Closest dest:\npid: %d\nsize: %d\naddr: %p\n", mDest.pid, mDest.requestSize, mDest.addr);
 
   // All memory readable, but only allocated memory can be written
-  if (mDest.pid != getpid()) // Not allocated to current process
+  if (mDest.pid != getpid()) { // Not allocated to current process
+    printf("ERROR: INVALID_CPY_ADDR!\n");
     return INVALID_CPY_ADDR;
+  }
 
   char* allocEnd; // End address of allocated memory
   char* reqEnd; // End address of requested memory
   allocEnd = mDest.addr + mDest.requestSize;
   reqEnd = dest_ptr + size;
-  printf("allocEnd: %p, reqEnd: %p\n", allocEnd, reqEnd);
-  if (allocEnd < reqEnd) // Request exceeds allocated size
+  if (DEBUG_VARIABLES) printf("allocEnd: %p, reqEnd: %p\n", allocEnd, reqEnd);
+  if (allocEnd < reqEnd) { // Request exceeds allocated size
+    printf("ERROR: MEM_TOO_SMALL\n");
     return MEM_TOO_SMALL;
+  }
 
-  // TODO copy the memory
+  // Copy
   for (int i = 0; i < size; i++) {
-    printf("Replacing %c -> %c\n", *(src_ptr+i), *(dest_ptr+i));
+    if (DEBUG_VARIABLES) printf("Replacing %c -> %c\n", *(src_ptr+i), *(dest_ptr+i));
     char c = *(src_ptr + i);
     *(dest_ptr + i) = c;
   }
 
-  printf(" <- vmms_memcpy\n");
+  // Write log and mem dump
+  time_t now = time(0);
+  struct tm tstruct = *localtime(&now);
+  char str[50];
+  strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
+  printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
+  
+  ofstream dumpStream (dump, ios::out | ios::binary);
+  dumpStream.write (mem_start, mem_size);
+  dumpStream.close();
 
-  return rc;
+  if (DEBUG_TRAVERSAL) printf(" <- vmms_memcpy\n");
+  return VMMS_SUCCESS;
 }
 
 // Print the number of characters to STDOUT. 
 // If size=0, then print until the first hex 0 to STDOUT.
 // If successful, returns 0.  Otherwise it returns an error code.
 int vmms_print ( char* src_ptr, int size ) {
-  int rc = VMMS_SUCCESS;
+  if (DEBUG_TRAVERSAL) printf(" -> vmms_print\n");
 
-  /* 
-  if (invalid addr)
+  memItem m;
+  char* thisAddr = mem_start;
+  char* closestAddr = mem_start;
+  for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+    thisAddr = memTable[i].addr;
+    if (thisAddr <= src_ptr && closestAddr <= thisAddr) { // closer to src_ptr
+      closestAddr = thisAddr;
+      m = memTable[i];
+    }
+  }
+
+  // m is now the closest memItem
+  if (DEBUG_VARIABLES) printf("Closest memItem:\npid: %d\nsize: %d\naddr: %p\n", m.pid, m.requestSize, m.addr);
+
+  if (m.pid != getpid()) { // Not allocated to current process
+    printf("ERROR: INVALID_CPY_ADDR!\n");
     return INVALID_CPY_ADDR;
+  }
 
+  char* position = src_ptr;
+  char c = 'a'; // placeholder value
+  // Until null
   if (size == 0) {
-    TODO print until hex 0, or null character
+    for (int i = 0; c != 0; i++) {
+      c = *(position+i);
+      printf("%c", c);      
+    }
   }
+  // Until size limit
   else {
-
+    for (int i = 0; i < size; i++) {
+      c = *(position+i);
+      printf("%c", c);      
+    }
   }
 
-  return rc;
-  */
+  printf("\n"); // formatting
+
+  if (DEBUG_TRAVERSAL) printf(" <- vmms_print\n");
+  return VMMS_SUCCESS;
 }
 
 // Free the allocated memory.
 // If successful, returns 0.  Otherwise it returns an error code.
+// mem_ptr only points to start of allocated memory block
 int vmms_free ( char* mem_ptr ) {
-  int rc = VMMS_SUCCESS;
-
-  /* Put your source code here */
-  // memset overwrite existing data with garbage data to the memory to be freed
-  // set memory as free
-  // Merge adjacent free mem locations
-  // Sort free table according to mem address, and check adjacency by adding size to address, should match next address
+  if (DEBUG_TRAVERSAL) printf(" -> vmms_free\n");
 
   // fopen, fwrite, update vmem in binary (phys and virt is the same)
 
-  /*
-  if (invalid memory addr)
-    return INVALID_MEM_ADDR;
+  // Find mem_ptr in memTable
+  memItem* m;
+  for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+    if (memTable[i].addr == mem_ptr) {
+      m = &memTable[i];
+      if (DEBUG_VARIABLES) printf("Found entry %i: %p\n", i, (*m).addr);
+      break;
+    }
+  }
 
-  return rc;
-  */
+  // Didn't find a valid mem allocation
+  if ((*m).pid != getpid()){
+    printf("ERROR: INVALID_MEM_ADDR!\n");
+    return INVALID_MEM_ADDR;
+  }
+
+  // Overwrite with garbage
+  vmms_memset((*m).addr, '\xFF', (*m).requestSize);
+
+  // Attempt to merge freeItems
+  int size = (*m).actualSize;
+  char* addr = (*m).addr;
+  freeItem* f;
+  for (int i = 0; i < MAX_TABLE_SIZE; i++) {
+    f = &freeTable[i];
+    // Front of memItem
+    if ((*f).addr + (*f).size == (*m).addr) {
+      addr = (*f).addr;
+      size += (*f).size;
+      (*f).addr = 0;
+      (*f).size = 0;
+    }
+    // Back of memItem
+    if ((*m).addr + (*m).actualSize == (*f).addr) {
+      size += (*f).size;
+      (*f).addr = 0;
+      (*f).size = 0;
+    }
+  }
+  // New freeItem
+  freeTable[freeEntry].size = size;
+  freeTable[freeEntry].addr = addr;
+  if (DEBUG_VARIABLES) printf("Free: %i@%p\n", freeTable[freeEntry].size, freeTable[freeEntry].addr);
+  freeEntry++;
+
+  // Remove old memItem
+  (*m).pid = 0;
+  (*m).addr = NULL;
+  (*m).requestSize = 0;
+  (*m).actualSize = 0;
+
+  // Write log and mem dump
+  time_t now = time(0);
+  struct tm tstruct = *localtime(&now);
+  char str[50];
+  strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
+  printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
+  
+  ofstream dumpStream (dump, ios::out | ios::binary);
+  dumpStream.write (mem_start, mem_size);
+  dumpStream.close();
+
+  if (DEBUG_TRAVERSAL) printf(" <- vmms_free\n");
+  return VMMS_SUCCESS;
 }
 
 int main() {
-  printf(" -> main\n");
+  if (DEBUG_TRAVERSAL) printf(" -> main\n");
+
+  printf("PID: %i\n", getpid());
 
   mmc_initialize(DEFAULT_BOUNDRY);
 
@@ -330,20 +470,48 @@ int main() {
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
   // dummy1
 
-  printf("%i\n", vmms_memset(list, 'z', 4));
+  printf("return code: %i\n", vmms_memset(list, 'z', 4));
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
   // zzzzy1
 
-  printf("%i\n", vmms_memcpy(list, list+10, 3));
+  printf("return code: %i\n", vmms_memcpy(list, list+10, 3));
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
   // 911zy1
 
+  printf("return code: %i\n", vmms_print(list, 5)); // 911zy
+  printf("return code: %i\n", vmms_print(list+10, 0)); // 911
+  printf("return code: %i\n", vmms_print(list, 50)); // 911zy1911
+
   // system("pause");
 
-  // rc = vmms_free((char*)list);
+  printf("return code: %i\n", vmms_free((char*)list));
 
-  printf(" <- main\n");
+  // vmms_free test
+  // // malloc
+  // char* first;
+  // char* second;
+  // char* third;
+  // first = vmms_malloc(10, &rc);
+  // second = vmms_malloc(10, &rc);
+  // third = vmms_malloc(10, &rc);
+  // // State of memory
+  // printf("first: %p\n", first);
+  // printf("second: %p\n", second);
+  // printf("third: %p\n", third);
+  // for (int i = 0; i < freeEntry; i++)
+  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
+  
+  // vmms_free(first);
+  // for (int i = 0; i < freeEntry; i++)
+  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
+  // vmms_free(third);
+  // for (int i = 0; i < freeEntry; i++)
+  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
+  // vmms_free(second);
+  // for (int i = 0; i < freeEntry; i++)
+  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
 
+  if (DEBUG_TRAVERSAL) printf(" <- main\n");
   return 0;
 }
 

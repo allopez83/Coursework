@@ -64,20 +64,25 @@ __declspec(dllexport) int mmc_initialize (  int boundry_size )
 
 __declspec(dllexport) int mmc_display_memtable ( char* filename )
 {
-  int rc = VMMS_SUCCESS;
+  printf("Size @ Address\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("%i @ %p\n", freeTable[i].size, freeTable[i].addr);
 
-  /* Put your source code here */
-
-  return rc;
+  return VMMS_SUCCESS;
 }
 
 __declspec(dllexport) int mmc_display_memory ( char* filename )
 {
-  int rc = VMMS_SUCCESS;
+  for (int i = 0; i < mem_size; i++){
+    printf("%c", mem_start[i]);
+    if (!(i % byte_boundry))
+      printf(" ");
+    if (!(i% 4*byte_boundry))
+      printf("\n");
+  }
 
-  /* Put your source code here */
-
-  return rc;
+  return VMMS_SUCCESS;
 }
 
 // Allocate a piece of memory given the input size.
