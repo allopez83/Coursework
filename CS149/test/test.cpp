@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 
 using namespace std;
 
@@ -20,5 +21,9 @@ int main()
     cout << *c; printf("\n");
     
     someFunc(b);
+	
+	cout<< _getpid();
+	
+	system("pause");
 }
 

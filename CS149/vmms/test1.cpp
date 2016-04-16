@@ -35,6 +35,8 @@ int main(int argc, char** argv)
   system("pause");
 
   rc = vmms_free((char*)list);
+  
+  system("pause");
 
   return rc;
 }
