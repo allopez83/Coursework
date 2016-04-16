@@ -7,14 +7,11 @@ int main ()
 {
     cout << "Start\n";
 
-    // String tests
-    // string b = "abc";
-    // cout << b;
-    // cout << b[1];
-
     char mem_start [16] = {0};
 
     char a = 'A';
+
+    char* b = &a; // symbol testing
 
     mem_start[0] = a;
     mem_start[1] = 'b';
@@ -23,6 +20,9 @@ int main ()
 
 
     printf("entire memory: %s\n", mem_start);
+
+    printf("pos 1 < pos 2: %i\n", (&mem_start[0] < &mem_start[1]) );
+    printf("NULL comparison: %i\n", (&mem_start[0] < NULL) );
 
     char* pointer = mem_start;
 
