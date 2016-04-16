@@ -22,6 +22,9 @@ int main(int argc, char** argv)
   char *list;
 
 
+  if (firstRun)
+    printf("firstRun\n");
+  
   list = (char*) vmms_malloc(50, &rc);
 
   if (list == NULL)
@@ -31,7 +34,8 @@ int main(int argc, char** argv)
   strcpy (list+10, "911");
 
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
-
+  printf("return code: %i\n", vmms_memset(list, 'z', 4));
+  
   system("pause");
 
   rc = vmms_free((char*)list);

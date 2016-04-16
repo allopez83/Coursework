@@ -11,6 +11,9 @@
 #include <windows.h>      // for timestamp
 #include <stdio.h>        // for timestamp
 
+#include "windows.h"      // name of methods
+#include "psapi.h"        // name of methods
+
 #include <fstream>        // write binary to file
 
 #define MAX_PHY_SIZE 8196    // 8K Bytes     ** Hardcode for testing !!
@@ -27,17 +30,18 @@ int byte_boundry = DEFAULT_BOUNDRY;
 int mem_size = MAX_PHY_SIZE;            // size of simulated phy mem (in bytes)
 char mem_start [MAX_PHY_SIZE] = {0};    // simulated Phy Memory
 struct memItem {
-  int pid;
-  char* addr;
-  int requestSize;
-  int actualSize;
+  int pid = 0;
+  char* addr = 0;
+  int requestSize = 0;
+  int actualSize = 0;
 };
 memItem memTable[MAX_TABLE_SIZE];     // Allocated memory
 struct freeItem {
-  char* addr;
-  int size;
+  char* addr = 0;
+  int size = 0;
 };
 freeItem freeTable[MAX_TABLE_SIZE];   // Free memory
+bool firstRun = false;
 #pragma data_seg ()
 
 // Map table Structures/Entries
@@ -48,15 +52,17 @@ freeItem freeTable[MAX_TABLE_SIZE];   // Free memory
 int memEntry = 0;  // Tracks next entry location
 int freeEntry = 0; // Tracks next entry location
 
-bool firstRun = true;
-
 // Files
-char* dumpFile = "VMMS.MEM";
-char* logFile = "VMMS.LOG";
+char* dumpName = "VMMS.MEM";
+char* logName = "VMMS.LOG";
 
 // Debugging
 bool DEBUG_TRAVERSAL = true;
 bool DEBUG_VARIABLES = true;
+
+/* Here are methods to write to log and mem dump */
+__declspec(dllexport) void vmms_log (char *funcName, int return_code, int param1, int param2, int param3 );
+__declspec(dllexport) void vmms_dump ();
 
 /* Here are the 5 exported functions for the application programs to use */
 __declspec(dllexport) char* vmms_malloc (  int size, int* error_code );
@@ -71,9 +77,29 @@ __declspec(dllexport) int mmc_display_memtable ( char* filename );
 __declspec(dllexport) int mmc_display_memory ( char* filename );
  
 
+__declspec(dllexport) void vmms_log ( char *funcName, int return_code, int param1, int param2, int param3 ) {
+  // Write log and mem dump
+  SYSTEMTIME lt;
+  GetLocalTime(&lt);
+  // printf("yyyymmddhhmmss:  %04i%02i%02i%02i%02i%02i\n", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
+  char exeName[MAX_PATH];
+  GetModuleBaseName(GetCurrentProcess(), NULL, exeName, _MAX_FNAME);
+
+  FILE *logFile = fopen(logName, "a");
+  fprintf(logFile, "%04i%02i%02i%02i%02i%02i %s %i %s %i %i %i %i\n", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond, exeName, getpid(), funcName, return_code, param1, param2, param3 );
+}
+
+__declspec(dllexport) void vmms_dump () {
+  std::ofstream outbin(dumpName, std::ios::binary);
+  outbin.write (mem_start, mem_size);
+  outbin.close();
+}
+
 __declspec(dllexport) int mmc_initialize (  int boundry_size )
 {
   if (DEBUG_TRAVERSAL) printf(" -> mmc_initialize\n");
+
+  firstRun = true;
 
   byte_boundry = boundry_size;
   freeItem initial;
@@ -101,7 +127,7 @@ __declspec(dllexport) int mmc_display_memtable ( char* filename )
   printf("size, address\n");
   for (int i = 0; i < MAX_TABLE_SIZE; i++) {
     if (freeTable[i].size > 0)
-      printf("%i: %i %p\n", i, freeTable[i].size, freeTable[i].addr);
+      printf("%i: %i %04x\n", i, freeTable[i].size, (char*) freeTable[i].addr);
   }
 
   if (DEBUG_TRAVERSAL) printf(" <- mmc_display_memtable\n");
@@ -117,7 +143,7 @@ __declspec(dllexport) int mmc_display_memory ( char* filename )
       printf(" ");
     if (!(i % (4*byte_boundry))) // Four columns
       printf("\n");
-    printf("%c", mem_start[i]);
+    printf("%c", mem_start[i]); // Print char
   }
   
   if (DEBUG_TRAVERSAL) printf(" <- mmc_display_memory\n");
@@ -131,13 +157,13 @@ __declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
 {
   if (DEBUG_TRAVERSAL) printf(" -> vmms_malloc\n");
   
-  // Initialize memory
-  if (firstRun) {
-    freeTable[0].addr = mem_start;
-    freeTable[0].size = mem_size;
-    firstRun = false;
-    if (DEBUG_VARIABLES) printf("Initialized memory, %i @ %p, boundary of %i\n", freeTable[0].size, freeTable[0].addr, byte_boundry);
-  }
+  // // Initialize memory
+  // if (firstRun) {
+  //   freeTable[0].addr = mem_start;
+  //   freeTable[0].size = mem_size;
+  //   firstRun = false;
+  //   if (DEBUG_VARIABLES) printf("Initialized memory, %i @ %p, boundary of %i\n", freeTable[0].size, freeTable[0].addr, byte_boundry);
+  // }
 
   // Actual size
   int blocks;
@@ -253,15 +279,9 @@ __declspec(dllexport) int vmms_memset ( char* dest_ptr, char c, int size )
   for (int i = 0; i < size; i++)
     dest_ptr[i] = c;
 
-  // Write log and mem dump
-  SYSTEMTIME lt;
-  GetLocalTime(&lt);
-  printf("yyyymmddhhmmss:  %04i%02i%02i%02i%02i%02i\n", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
-  printf("%s %i %s\n", "vmmstest.exe", getpid(), "mms_memset");
-
-  std::ofstream outbin(dumpFile, std::ios::binary);
-  outbin.write (mem_start, mem_size);
-  outbin.close();
+  vmms_log("vmms_memset", VMMS_SUCCESS, (int)&dest_ptr, c, size);
+   // int return_code, int param1, int param2, int param3
+  vmms_dump();
 
   if (DEBUG_TRAVERSAL) printf(" <- vmms_memset\n");
   return VMMS_SUCCESS;
@@ -332,10 +352,6 @@ __declspec(dllexport) int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size 
   GetLocalTime(&lt);
   printf("yyyymmddhhmmss:  %04i%02i%02i%02i%02i%02i\n", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
   printf("%s %i %s\n", "vmmstest.exe", getpid(), "mms_memset");
-
-  std::ofstream outbin(dumpFile, std::ios::binary);
-  outbin.write (mem_start, mem_size);
-  outbin.close();
 
   if (DEBUG_TRAVERSAL) printf(" <- vmms_memcpy\n");
   return VMMS_SUCCESS;
@@ -455,10 +471,6 @@ __declspec(dllexport) int vmms_free ( char* mem_ptr )
   GetLocalTime(&t);
   printf("yyyymmddhhmmss:  %04i%02i%02i%02i%02i%02i\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
   printf("%s %i %s\n", "vmmstest.exe", getpid(), "mms_memset");
-
-  std::ofstream outbin(dumpFile, std::ios::binary);
-  outbin.write (mem_start, mem_size);
-  outbin.close();
 
   if (DEBUG_TRAVERSAL) printf(" <- vmms_free\n");
   return VMMS_SUCCESS;
