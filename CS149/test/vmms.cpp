@@ -65,7 +65,7 @@ char dump[] = "VMMS.MEM";
 char log[] = "VMMS.LOG";
 
 // Debugging
-bool DEBUG_TRAVERSAL = true;
+bool DEBUG_TRAVERSAL = false;
 bool DEBUG_VARIABLES = false;
 
 
@@ -237,15 +237,15 @@ int vmms_memset ( char* dest_ptr, char c, int size ) {
     dest_ptr[i] = c;
 
   // Write log and mem dump
-  time_t now = time(0);
-  struct tm tstruct = *localtime(&now);
-  char str[50];
-  strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
-  printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
+  // time_t now = time(0);
+  // struct tm tstruct = *localtime(&now);
+  // char str[50];
+  // strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
+  // printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
   
-  ofstream dumpStream (dump, ios::out | ios::binary);
-  dumpStream.write (mem_start, mem_size);
-  dumpStream.close();
+  // ofstream dumpStream (dump, ios::out | ios::binary);
+  // dumpStream.write (mem_start, mem_size);
+  // dumpStream.close();
 
   if (DEBUG_TRAVERSAL) printf(" <- vmms_memset\n");
   return VMMS_SUCCESS;
@@ -310,15 +310,15 @@ int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size ) {
   }
 
   // Write log and mem dump
-  time_t now = time(0);
-  struct tm tstruct = *localtime(&now);
-  char str[50];
-  strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
-  printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
+  // time_t now = time(0);
+  // struct tm tstruct = *localtime(&now);
+  // char str[50];
+  // strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
+  // printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
   
-  ofstream dumpStream (dump, ios::out | ios::binary);
-  dumpStream.write (mem_start, mem_size);
-  dumpStream.close();
+  // ofstream dumpStream (dump, ios::out | ios::binary);
+  // dumpStream.write (mem_start, mem_size);
+  // dumpStream.close();
 
   if (DEBUG_TRAVERSAL) printf(" <- vmms_memcpy\n");
   return VMMS_SUCCESS;
@@ -432,15 +432,15 @@ int vmms_free ( char* mem_ptr ) {
   (*m).actualSize = 0;
 
   // Write log and mem dump
-  time_t now = time(0);
-  struct tm tstruct = *localtime(&now);
-  char str[50];
-  strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
-  printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
+  // time_t now = time(0);
+  // struct tm tstruct = *localtime(&now);
+  // char str[50];
+  // strftime(str, sizeof(str), "%Y%m%d%H%M%S", &tstruct);
+  // printf("%s %s %i %s\n", str, "vmmstest.exe", getpid(), "mms_memset");
   
-  ofstream dumpStream (dump, ios::out | ios::binary);
-  dumpStream.write (mem_start, mem_size);
-  dumpStream.close();
+  // ofstream dumpStream (dump, ios::out | ios::binary);
+  // dumpStream.write (mem_start, mem_size);
+  // dumpStream.close();
 
   if (DEBUG_TRAVERSAL) printf(" <- vmms_free\n");
   return VMMS_SUCCESS;
@@ -449,12 +449,11 @@ int vmms_free ( char* mem_ptr ) {
 int main() {
   if (DEBUG_TRAVERSAL) printf(" -> main\n");
 
-  printf("PID: %i\n", getpid());
+  if (DEBUG_VARIABLES) printf("PID: %i\n", getpid());
 
   mmc_initialize(DEFAULT_BOUNDRY);
 
   int rc = 0;
-  char *student_ptr;
   char *list;
   
   list = (char*) vmms_malloc(50, &rc);
@@ -470,46 +469,58 @@ int main() {
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
   // dummy1
 
-  printf("return code: %i\n", vmms_memset(list, 'z', 4));
+  printf("memset returned code: %i\n", vmms_memset(list, 'z', 4));
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
   // zzzzy1
 
-  printf("return code: %i\n", vmms_memcpy(list, list+10, 3));
+  printf("memcpy returned code: %i\n", vmms_memcpy(list, list+10, 3));
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
   // 911zy1
 
-  printf("return code: %i\n", vmms_print(list, 5)); // 911zy
-  printf("return code: %i\n", vmms_print(list+10, 0)); // 911
-  printf("return code: %i\n", vmms_print(list, 50)); // 911zy1911
+  printf("print returned code: %i\n", vmms_print(list, 5)); // 911zy
+  printf("print returned code: %i\n", vmms_print(list+10, 0)); // 911
+  printf("print returned code: %i\n", vmms_print(list, 50)); // 911zy1911
 
   // system("pause");
 
-  printf("return code: %i\n", vmms_free((char*)list));
+  printf("free returned code: %i\n", vmms_free((char*)list));
 
-  // vmms_free test
-  // // malloc
-  // char* first;
-  // char* second;
-  // char* third;
-  // first = vmms_malloc(10, &rc);
-  // second = vmms_malloc(10, &rc);
-  // third = vmms_malloc(10, &rc);
-  // // State of memory
-  // printf("first: %p\n", first);
-  // printf("second: %p\n", second);
-  // printf("third: %p\n", third);
-  // for (int i = 0; i < freeEntry; i++)
-  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
   
-  // vmms_free(first);
-  // for (int i = 0; i < freeEntry; i++)
-  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
-  // vmms_free(third);
-  // for (int i = 0; i < freeEntry; i++)
-  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
-  // vmms_free(second);
-  // for (int i = 0; i < freeEntry; i++)
-  //   printf("%i@%p\n", freeTable[i].size, freeTable[i].addr);
+  printf("\nvmms_free test\n");
+  // malloc
+  char* first;
+  char* second;
+  char* third;
+  first = vmms_malloc(10, &rc);
+  second = vmms_malloc(10, &rc);
+  third = vmms_malloc(10, &rc);
+  // State of memory
+  printf("first malloc: %p\n", first);
+  printf("second malloc: %p\n", second);
+  printf("third malloc: %p\n", third);
+  printf("freeTable:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
+  
+  // Last merge should combine all free space
+  vmms_free(first);
+  printf("free first malloc:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
+  
+  vmms_free(third);
+  printf("free third malloc:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
+  
+  vmms_free(second);
+  printf("free second malloc:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
 
   if (DEBUG_TRAVERSAL) printf(" <- main\n");
   return 0;

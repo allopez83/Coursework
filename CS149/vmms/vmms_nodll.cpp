@@ -25,27 +25,23 @@
 // ************************************************************************
 
 /* Global shared memory section */
-#pragma bss_seg (".SHARED")  // Simulated Physical Mem // Hardcoded for now !!
+#pragma data_seg (".SHARED")  // Simulated Physical Mem // Hardcoded for now !!
 int byte_boundry = DEFAULT_BOUNDRY;
 int mem_size = MAX_PHY_SIZE;            // size of simulated phy mem (in bytes)
 char mem_start [MAX_PHY_SIZE] = {0};    // simulated Phy Memory
 struct memItem {
-  int pid;
-  char* addr;
-  int requestSize;
-  int actualSize;
+  int pid = 0;
+  char* addr = 0;
+  int requestSize = 0;
+  int actualSize = 0;
 };
 memItem memTable[MAX_TABLE_SIZE];     // Allocated memory
 struct freeItem {
-  char* addr;
-  int size;
+  char* addr = 0;
+  int size = 0;
 };
 freeItem freeTable[MAX_TABLE_SIZE];   // Free memory
-// Debugging
-bool DEBUG_TRAVERSAL = false;
-bool DEBUG_VARIABLES = false;
-#pragma bss_seg ()
-#pragma comment(linker, "/SECTION:.SHARED,RWS")
+#pragma data_seg ()
 
 // Map table Structures/Entries
 // 
@@ -59,25 +55,28 @@ int freeEntry = 0; // Tracks next entry location
 char* dumpName = "VMMS.MEM";
 char* logName = "VMMS.LOG";
 
+// Debugging
+bool DEBUG_TRAVERSAL = false;
+bool DEBUG_VARIABLES = false;
 
 /* Here are methods to write to log and mem dump */
-__declspec(dllexport) void vmms_log (char *funcName, int return_code, int param1, int param2, int param3 );
-__declspec(dllexport) void vmms_dump ();
+void vmms_log (char *funcName, int return_code, int param1, int param2, int param3 );
+void vmms_dump ();
 
 /* Here are the 5 exported functions for the application programs to use */
-__declspec(dllexport) char* vmms_malloc (  int size, int* error_code );
-__declspec(dllexport) int vmms_memset ( char* dest_ptr, char c, int size );
-__declspec(dllexport) int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size );
-__declspec(dllexport) int vmms_print ( char* src_ptr, int size );
-__declspec(dllexport) int vmms_free ( char* mem_ptr );
+char* vmms_malloc (  int size, int* error_code );
+int vmms_memset ( char* dest_ptr, char c, int size );
+int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size );
+int vmms_print ( char* src_ptr, int size );
+int vmms_free ( char* mem_ptr );
 
 /* Here are several exported functions specifically for mmc.cpp */
-__declspec(dllexport) int mmc_initialize (  int boundry_size );
-__declspec(dllexport) int mmc_display_memtable ( char* filename );
-__declspec(dllexport) int mmc_display_memory ( char* filename );
+int mmc_initialize (  int boundry_size );
+int mmc_display_memtable ( char* filename );
+int mmc_display_memory ( char* filename );
  
 
-__declspec(dllexport) void vmms_log ( char *funcName, int return_code, int param1, int param2, int param3 ) {
+void vmms_log ( char *funcName, int return_code, int param1, int param2, int param3 ) {
   
   // time and exe name
   SYSTEMTIME lt;
@@ -91,13 +90,13 @@ __declspec(dllexport) void vmms_log ( char *funcName, int return_code, int param
   fclose(logFile);
 }
 
-__declspec(dllexport) void vmms_dump () {
+void vmms_dump () {
   std::ofstream outbin(dumpName, std::ios::binary);
   outbin.write (mem_start, mem_size);
   outbin.close();
 }
 
-__declspec(dllexport) int mmc_initialize (  int boundry_size )
+int mmc_initialize (  int boundry_size )
 {
   if (DEBUG_TRAVERSAL) printf(" -> mmc_initialize\n");
 
@@ -111,7 +110,7 @@ __declspec(dllexport) int mmc_initialize (  int boundry_size )
   return VMMS_SUCCESS;
 }
 
-__declspec(dllexport) int mmc_display_memtable ( char* filename )
+int mmc_display_memtable ( char* filename )
 {
   if (DEBUG_TRAVERSAL) printf(" -> mmc_display_memtable\n");
 
@@ -159,7 +158,7 @@ __declspec(dllexport) int mmc_display_memtable ( char* filename )
   return VMMS_SUCCESS;
 }
 
-__declspec(dllexport) int mmc_display_memory ( char* filename )
+int mmc_display_memory ( char* filename )
 {
   if (DEBUG_TRAVERSAL) printf(" -> mmc_display_memory\n");
 
@@ -198,7 +197,7 @@ __declspec(dllexport) int mmc_display_memory ( char* filename )
 
 // Allocate a piece of memory given the input size.
 // If successful, returns a valid pointer.  Otherwise it returns NULL (0) and set the error_code.
-__declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
+char* vmms_malloc (  int size, int* error_code )
 {
   if (DEBUG_TRAVERSAL) printf(" -> vmms_malloc\n");
   
@@ -210,12 +209,10 @@ __declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
   int actualSize = blocks * byte_boundry;
   if (DEBUG_VARIABLES) printf("%s: %d\n", "actualSize", actualSize);
   
-  // Print freetable
   if (DEBUG_VARIABLES) {
-    printf("Current status of freeTable\n");
     for (int i = 0; i < MAX_TABLE_SIZE; i++)
       if (freeTable[i].size > 0)
-        printf("%i @ %04x\n", freeTable[i].size, (char*) freeTable[i].addr);
+        printf("%i %04x\n", freeTable[i].size, (char*) freeTable[i].addr);
   }
 
   int largest = 0;
@@ -226,7 +223,7 @@ __declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
   // Exact fit or largest free space
   for (int i = 0; i < MAX_TABLE_SIZE; i++) {
     thisSize = freeTable[i].size;
-	// printf("Comparing %i to %i", thisSize, largest);
+  // printf("Comparing %i to %i", thisSize, largest);
     if (thisSize == actualSize) { // exact
       largest = actualSize;
       addr = freeTable[i].addr;
@@ -251,9 +248,10 @@ __declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
   }
 
   // Update freeTable
+  freeTable[pos].size -= actualSize;
   if (exact) {
+    if (DEBUG_VARIABLES) printf("Exact fit\n");
     // Remove freeItem
-    printf("exact match, setting to freeItem to null\n");
     freeTable[pos].addr = NULL;
   } else {
     // Decrease size
@@ -262,7 +260,6 @@ __declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
     freeEntry++;
     if (DEBUG_VARIABLES) printf("freeItem is now: %p\n", freeTable[pos].addr);
   }
-  freeTable[pos].size -= actualSize;
   if (DEBUG_VARIABLES) printf("Size is now: %d\n", freeTable[pos].size);
 
   // New memItem
@@ -287,7 +284,7 @@ __declspec(dllexport) char* vmms_malloc (  int size, int* error_code )
 
 // Set the destination buffer with a character of certain size.
 // If successful, returns 0. Otherwise it returns an error code.
-__declspec(dllexport) int vmms_memset ( char* dest_ptr, char c, int size )
+int vmms_memset ( char* dest_ptr, char c, int size )
 {
   if (DEBUG_TRAVERSAL) printf(" -> vmms_memset\n");
 
@@ -340,7 +337,7 @@ __declspec(dllexport) int vmms_memset ( char* dest_ptr, char c, int size )
 
 // Copy the fixed number of bytes from source to destination. 
 // If successful, returns 0.  Otherwise it returns an error code.
-__declspec(dllexport) int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size )
+int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size )
 {
   if (DEBUG_TRAVERSAL) printf(" -> vmms_memcpy\n");
 
@@ -410,7 +407,7 @@ __declspec(dllexport) int vmms_memcpy ( char* dest_ptr, char* src_ptr, int size 
 // Print the number of characters to STDOUT. 
 // If size=0, then print until the first hex 0 to STDOUT.
 // If successful, returns 0.  Otherwise it returns an error code.
-__declspec(dllexport) int vmms_print ( char* src_ptr, int size )
+int vmms_print ( char* src_ptr, int size )
 {
   if (DEBUG_TRAVERSAL) printf(" -> vmms_print\n");
 
@@ -462,7 +459,7 @@ __declspec(dllexport) int vmms_print ( char* src_ptr, int size )
 
 // Free the allocated memory.
 // If successful, returns 0.  Otherwise it returns an error code.
-__declspec(dllexport) int vmms_free ( char* mem_ptr )
+int vmms_free ( char* mem_ptr )
 {
 
   if (DEBUG_TRAVERSAL) printf(" -> vmms_free\n");
@@ -492,22 +489,11 @@ __declspec(dllexport) int vmms_free ( char* mem_ptr )
   // Attempt to merge freeItems
   int size = (*m).actualSize;
   char* addr = (*m).addr;
-  freeItem *f;
-
-  // Print freetable
-  if (DEBUG_VARIABLES) {
-    printf("Current status of freeTable\n");
-    for (int i = 0; i < MAX_TABLE_SIZE; i++)
-      if (freeTable[i].size > 0)
-        printf("%i @ %04x\n", freeTable[i].size, (char*) freeTable[i].addr);
-  }
-  if (DEBUG_VARIABLES) printf("Freeing %i @ %p\n", size, addr);
-
+  freeItem* f;
   for (int i = 0; i < MAX_TABLE_SIZE; i++) {
     f = &freeTable[i];
     // Front of memItem
     if ((*f).addr + (*f).size == (*m).addr) {
-      if (DEBUG_VARIABLES) printf("Found free space before target\n");
       addr = (*f).addr;
       size += (*f).size;
       (*f).addr = 0;
@@ -515,7 +501,6 @@ __declspec(dllexport) int vmms_free ( char* mem_ptr )
     }
     // Back of memItem
     if ((*m).addr + (*m).actualSize == (*f).addr) {
-      if (DEBUG_VARIABLES) printf("Found free space after target\n");
       size += (*f).size;
       (*f).addr = 0;
       (*f).size = 0;
@@ -524,7 +509,7 @@ __declspec(dllexport) int vmms_free ( char* mem_ptr )
   // New freeItem
   freeTable[freeEntry].size = size;
   freeTable[freeEntry].addr = addr;
-  if (DEBUG_VARIABLES) printf("Free: %i @ %p\n", freeTable[freeEntry].size, freeTable[freeEntry].addr);
+  if (DEBUG_VARIABLES) printf("Free: %i@%p\n", freeTable[freeEntry].size, freeTable[freeEntry].addr);
   freeEntry++;
 
   // Remove old memItem
@@ -541,3 +526,84 @@ __declspec(dllexport) int vmms_free ( char* mem_ptr )
   return VMMS_SUCCESS;
 }
 
+
+// Testing
+int main() {
+  if (DEBUG_TRAVERSAL) printf(" -> main\n");
+
+  if (DEBUG_VARIABLES) printf("PID: %i\n", getpid());
+
+  mmc_initialize(DEFAULT_BOUNDRY);
+
+  int rc = 0;
+  char *list;
+  
+  list = (char*) vmms_malloc(50, &rc);
+
+  printf("%s: %d\n", "return code", rc);
+
+  if (list == NULL)
+    return 1;
+
+  strcpy (list, "dummy1");
+  strcpy (list+10, "911");
+
+  printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
+  // dummy1
+
+  printf("memset returned code: %i\n", vmms_memset(list, 'z', 4));
+  printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
+  // zzzzy1
+
+  printf("memcpy returned code: %i\n", vmms_memcpy(list, list+10, 3));
+  printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
+  // 911zy1
+
+  printf("print returned code: %i\n", vmms_print(list, 5)); // 911zy
+  printf("print returned code: %i\n", vmms_print(list+10, 0)); // 911
+  printf("print returned code: %i\n", vmms_print(list, 50)); // 911zy1911
+
+  // system("pause");
+
+  printf("free returned code: %i\n", vmms_free((char*)list));
+
+  
+  printf("\nvmms_free test\n");
+  // malloc
+  char* first;
+  char* second;
+  char* third;
+  first = vmms_malloc(10, &rc);
+  second = vmms_malloc(10, &rc);
+  third = vmms_malloc(10, &rc);
+  // State of memory
+  printf("first malloc: %p\n", first);
+  printf("second malloc: %p\n", second);
+  printf("third malloc: %p\n", third);
+  printf("freeTable:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
+  
+  // Last merge should combine all free space
+  vmms_free(first);
+  printf("free first malloc:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
+  
+  vmms_free(third);
+  printf("free third malloc:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
+  
+  vmms_free(second);
+  printf("free second malloc:\n");
+  for (int i = 0; i < freeEntry; i++)
+    if (freeTable[i].size > 0)
+      printf("  %i @ %p\n", freeTable[i].size, freeTable[i].addr);
+
+  if (DEBUG_TRAVERSAL) printf(" <- main\n");
+  return 0;
+}

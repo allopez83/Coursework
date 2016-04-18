@@ -26,13 +26,17 @@ int main(int argc, char** argv)
 
   if (list == NULL)
     return 1;
+/*
+  list->right= list->left = NULL;
+  strcpy (list->name, "dummy1");
+  list->ID = 911;
 
-  strcpy (list, "dummy1");
-  strcpy (list+10, "911");
+  printf("Name = %s; ID = %d\n", list->name, list->ID);
+*/
 
   printf("list address = %8x; Name = %s; ID = %s\n", list, list, (char*)list+10);
 
-  system("pause");
+//  system("pause");
 
   rc = vmms_free((char*)list);
 
