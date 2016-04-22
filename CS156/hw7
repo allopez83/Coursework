@@ -1,0 +1,68 @@
+# Homework 7
+==============================
+
+## Question 1
+
+Action(
+    Go(from, to),
+    PRECOND: At(WALL-E, from, low),
+    EFFECT: ¬ At(WALL-E, from, low), At(WALL-E, to, low)
+)
+Action(
+    ClimbUp(position),
+    PRECOND: At(WALL-E, position, low), At(Ladder1, position, low)
+    EFFECT: ¬ At(WALL-E, position, low), At(WALL-E, position, high)
+)
+Action(
+    ClimbDown(position),
+    PRECOND: At(WALL-E, position, high), At(Ladder1, position, low),
+    EFFECT: ¬ At(WALL-E, position, high), At(WALL-E, position, low)
+)
+Action(
+    Carry(object, position, height),
+    PRECOND: At(WALL-E, position, height), At(object, position, height), HandsFree(WALL-E),
+    EFFECT: ¬ At(object, position, height), ¬ HandsFree(WALL-E), Holding(object)
+)
+Action(
+    Release(object, position, height),
+    PRECOND: At(WALL-E, position, height), Holding(object),
+    EFFECT: ¬ Holding(object), HandsFree(WALL-E), At(object, position, height)
+)
+Action(
+    Install(bulb, socket),
+    PRECOND: At(WALL-E, position, height), At(socket, position, height), Holding(bulb), EmptySocket(socket), TurnedOff(switch),
+    EFFECT: ¬ EmptySocket(socket), InSocket(bulb, socket), HandsFree(WALL-E), ¬ Holding(bulb)
+)
+Action(
+    Uninstall(bulb, socket),
+    PRECOND: At(WALL-E, position, height), At(socket, position, height), HandsFree(WALL-E), TurnedOff(switch), InSocket(bulb, socket),
+    EFFECT: ¬ InSocket(bulb, socket), EmptySocket(socket), ¬ HandsFree(WALL-E), Holding(bulb), 
+)
+Action(
+    TurnOn(switch),
+    PRECOND: At(WALL-E, position, height), At(socket, position, height), TurnedOff(switch)
+    EFFECT: ¬ TurnedOff(switch), TurnedOf(switch),
+)
+Action(
+    TurnOff(switch),
+    PRECOND: At(WALL-E, position, height), At(socket, position, height), TurnedOn(switch)
+    EFFECT: ¬ TurnedOn(switch), TurnedOff(switch),
+)
+
+
+## Question 2
+
+Init(
+    At(WALL-E, W, Low),
+    At(Recycle Bin, R, Low),
+    At(Switch1, S, Low),
+    At(Socket1, C, High),
+    At(Ladder1, L, Low),
+    At(Bulb2, T, Low),
+    TurnedOn(Switch1),
+    InSocket(Bulb1, Socket1),
+    HandsFree(WALL-E)
+)
+
+## Question 3
+
