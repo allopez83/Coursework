@@ -66,3 +66,44 @@ Init(
 
 ## Question 3
 
+Goal(
+    InSocket(Bulb2, Socket1),
+    At(WALL-E, W, Low),
+    At(Ladder1, L, Low),
+    TurnedOn(Switch1)
+)
+
+## Question 4
+
+"Construct a plan for WALL-E to achieve the goal above.  Formulate your plan as a list of ground actions. HTML Editor Keyboard Shortcuts"
+
+[
+    # switch off
+    Go(W, S),
+    TurnOff(Switch1),
+    # ladder
+    Go(S, L),
+    Carry(Ladder1, L, Low),
+    Go(L, C),
+    Release(Ladder1, C, Low),
+    # old bulb
+    ClimbUp(C),
+    Uninstall(Bulb1, Socket1),
+    ClimbDown(C),
+    Go(C, R),
+    Release(Bulb1, R, Low),
+    # new bulb
+    Go(R, T),
+    Carry(Bulb2, T, Low),
+    Go(T, C),
+    ClimbUp(C),
+    Install(Bulb2, Socket1),
+    # original condition
+    ClimbDown(C),
+    Carry(Ladder1, C, Low),
+    Go(C, L),
+    Release(Ladder1, L, Low)
+    Go(L, S),
+    TurnOn(Switch1),
+    Go(S, W)
+]
