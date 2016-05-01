@@ -25,6 +25,7 @@ Eventually, all the following directories will be added, each representing a cou
 - Operating Systems
 - C++
 - SJSU
+- In Progress
 
 **CS 151**
 - Object-Oriented Design
@@ -42,7 +43,7 @@ Eventually, all the following directories will be added, each representing a cou
 - Java and SQL
 - SJSU
 
-** CS 158A
+**CS 158A**
 - Computer Networks
 - C
 - SJSU
