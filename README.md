@@ -11,8 +11,7 @@ Note that work is being done to transition from Eclipse to IntelliJ. Currently t
 
 ## Contents
 
-Eventually, all the following directories will be added, each representing a course. Course titles may be simplified.
-
+Courses are represented as a directory containing code and assignments done in the course. A description of the course or course title, languages used, and the college it was taken at is included below.
 
 ### San Jose State University
 
@@ -39,7 +38,7 @@ Eventually, all the following directories will be added, each representing a cou
 - In Progress
 
 **CS 157A**
-- Introduction to Database Management Systems
+- Introduction to Databases
 - Java and SQL
 - SJSU
 
