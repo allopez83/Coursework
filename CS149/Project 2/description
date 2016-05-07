@@ -4,13 +4,13 @@
 - Should give output similar to `dir` command
 - Format stuff, have things line up
     - i.e. directory tag, file size, etc.
-- Ability to sort things according to parameter: timestamp, file size, etc.
+- Ability to sort things according to timestamp or file size, latest time/largest file first
 - Size in just bytes, not kb
 
 ## Compare command
 - Masking character: ignore the same position in the second file
 - Ex: `shell compare f1 f2 @`, wherever @ occurs in f1, that same position is skipped in f2
-- Output: `files compare OK`, `Files are different sizes`, or `Files are different sizes`
+- Output: `files compare OK`, or `Files are different sizes`
 
 # Java
 
