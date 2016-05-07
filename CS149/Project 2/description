@@ -1,6 +1,6 @@
 # CPP
 
-## Dir command
+## `shell dir` command
 - Should give output similar to `dir` command
 - Format stuff, have things line up
     - i.e. directory tag, file size, etc.
@@ -19,6 +19,7 @@
 - Sorting capabilities
 - List files and go into subdirectory
 - CPP side only allows sorting in one direction, just read down to top to sort other way
+- Extra credit: rename things
 
 ## C/C++ Headers
 - Wrap system calls and commands such as `FindNextFile` so it can be called from Java using `System.loadLibrary($DLL_Name)`
