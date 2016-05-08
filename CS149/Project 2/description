@@ -5,6 +5,8 @@
 - Format stuff, have things line up
     - i.e. directory tag, file size, etc.
 - Ability to sort things according to timestamp or file size, latest time/largest file first
+    - /zd for timestamp
+    - /zs for size
 - Size in just bytes, not kb
 
 ## Compare command
