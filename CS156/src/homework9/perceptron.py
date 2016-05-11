@@ -22,19 +22,20 @@ class PerceptronClassifier:
 
     An example is represented by a feature vector which is a util.Counter.
     """
-    def __init__( self, legalLabels, max_iterations):
+
+    def __init__(self, legalLabels, max_iterations):
         self.legalLabels = legalLabels
         self.type = "perceptron"
         self.max_iterations = max_iterations
         self.weights = {}
         for label in legalLabels:
-            self.weights[label] = util.Counter() # this is the data-structure you should use
+            self.weights[label] = util.Counter()  # this is the data-structure you should use
 
     def setWeights(self, weights):
-        assert len(weights) == len(self.legalLabels);
-        self.weights = weights;
+        assert len(weights) == len(self.legalLabels)
+        self.weights = weights
 
-    def classify(self, data ):
+    def classify(self, data):
         """
         Classifies each example in data as the label that most closely
         matches the weight vector for that label.
@@ -49,7 +50,7 @@ class PerceptronClassifier:
             guesses.append(guess)
         return guesses
 
-    def train( self, trainingData, trainingLabels, validationData, validationLabels ):
+    def train(self, trainingData, trainingLabels, validationData, validationLabels):
         """
         The training loop for the perceptron passes through the training data
         several times and updates the weight vector for each label
@@ -69,10 +70,52 @@ class PerceptronClassifier:
         # DO NOT ZERO OUT YOUR WEIGHTS BEFORE STARTING TRAINING, OR
         # THE AUTOGRADER WILL LIKELY DEDUCT POINTS.
 
+        # Don't mind the validation data, it's to test accuracy, not actually train with
+
         for iteration in range(self.max_iterations):
             print "Starting iteration ", iteration, "..."
+
+            # Go through the different sets of training data
             index = 0
             for f in trainingData:
-                trainingLabel = trainingLabels[index] # this is y*
+                trainingLabel = trainingLabels[index]  # this is y*
                 index += 1
+
                 "*** YOUR CODE HERE.  Do NOT change anything above ***"
+
+                # Keep testing until f is correctly guessed
+                correct = False
+                while not correct:
+                    # Make a guess
+                    scores = util.Counter()
+                    for labels in self.legalLabels:
+                        scores[labels] = self.weights[labels] * f
+                    guess = scores.argMax()
+                    # Adjust if incorrect
+                    if guess != trainingLabel:
+                        print "Incorrect guess: ", guess, "vs", trainingLabel
+                        # Aggressive corrections initially to provide numbers
+                        if iteration == 0:
+                            for l in self.legalLabels:
+                                if l != trainingLabel:
+                                    self.weights[l] -= f
+                        # Decrease incorrect guess
+                        else:
+                            self.weights[guess] -= f
+                        # Increase correct response
+                        self.weights[trainingLabel] += f
+                    # Otherwise the weights are correct
+                    else:
+                        correct = True;
+            
+            # print self.weights
+
+
+# For reference, this will print 3
+# testCounter = util.Counter()
+# testCounter['a'] = 1
+# testCounter['b'] = 2
+# print testCounter.totalCount()
+
+# Counter
+# print type(self.weights[trainingLabel])
