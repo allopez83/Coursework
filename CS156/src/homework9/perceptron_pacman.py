@@ -25,7 +25,7 @@ class PerceptronClassifierPacman(PerceptronClassifier):
         PerceptronClassifier.__init__(self, legalLabels, maxIterations)
         self.weights = util.Counter()
 
-    def classify(self, data ):
+    def classify(self, data):
         """
         Data contains a list of (features, legal moves)
         
@@ -40,8 +40,7 @@ class PerceptronClassifierPacman(PerceptronClassifier):
             guesses.append(scores.argMax())
         return guesses
 
-
-    def train( self, trainingData, trainingLabels, validationData, validationLabels ):
+    def train(self, trainingData, trainingLabels, validationData, validationLabels):
         """
         Data contains a list of (features, legal moves)
 
@@ -62,6 +61,30 @@ class PerceptronClassifierPacman(PerceptronClassifier):
             print "Starting iteration ", iteration, "..."
             index = 0
             for features, legalMoves in trainingData:
-                chosen_action =  trainingLabels[index] # corresponding expert action
+                chosen_action = trainingLabels[index]  # corresponding expert action
                 index += 1
+
                 "*** YOUR CODE HERE - Do not modify anything above this line***"
+
+                # Best move
+                # features.sortedKeys[len(a)-1]
+
+                # Keep testing until f is correctly guessed
+                correct = False
+                while not correct:
+                    # Make a guess
+                    scores = util.Counter()
+                    for each_action in legalMoves:
+                        scores[each_action] = self.weights * features[each_action]
+                    guess = scores.argMax()
+                    # Adjust if incorrect
+                    if guess != chosen_action:
+                        print "Incorrect guess: ", guess, "vs", chosen_action
+                        # Increase correct response
+                        self.weights += features[chosen_action]
+                        # Decrease guess
+                        self.weights -= features[guess]
+                    # Otherwise the weights are correct
+                    else:
+                        print "correct"
+                        correct = True

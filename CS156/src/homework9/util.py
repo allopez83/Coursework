@@ -347,6 +347,8 @@ class Counter(dict):
         """
         sum = 0
         x = self
+        a = len(x)
+        b = len(y)
         if len(x) > len(y):
             x,y = y,x
         for key in x:

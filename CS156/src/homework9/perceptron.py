@@ -106,7 +106,7 @@ class PerceptronClassifier:
                         self.weights[trainingLabel] += f
                     # Otherwise the weights are correct
                     else:
-                        correct = True;
+                        correct = True
             
             # print self.weights
 
