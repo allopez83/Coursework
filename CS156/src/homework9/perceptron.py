@@ -83,30 +83,27 @@ class PerceptronClassifier:
 
                 "*** YOUR CODE HERE.  Do NOT change anything above ***"
 
-                # Keep testing until f is correctly guessed
-                correct = False
-                while not correct:
-                    # Make a guess
-                    scores = util.Counter()
-                    for labels in self.legalLabels:
-                        scores[labels] = self.weights[labels] * f
-                    guess = scores.argMax()
-                    # Adjust if incorrect
-                    if guess != trainingLabel:
-                        print "Incorrect guess: ", guess, "vs", trainingLabel
-                        # Aggressive corrections initially to provide numbers
-                        if iteration == 0:
-                            for l in self.legalLabels:
-                                if l != trainingLabel:
-                                    self.weights[l] -= f
-                        # Decrease incorrect guess
-                        else:
-                            self.weights[guess] -= f
-                        # Increase correct response
-                        self.weights[trainingLabel] += f
-                    # Otherwise the weights are correct
+                # Make a guess
+                scores = util.Counter()
+                for labels in self.legalLabels:
+                    scores[labels] = self.weights[labels] * f
+                guess = scores.argMax()
+                # Adjust if incorrect
+                if guess != trainingLabel:
+                    print "Incorrect guess: ", guess, "vs", trainingLabel
+                    # Aggressive corrections initially to provide numbers
+                    if iteration == 0:
+                        for l in self.legalLabels:
+                            if l != trainingLabel:
+                                self.weights[l] -= f
+                    # Decrease incorrect guess
                     else:
-                        correct = True
+                        self.weights[guess] -= f
+                    # Increase correct response
+                    self.weights[trainingLabel] += f
+                # Otherwise the weights are correct
+                else:
+                    correct = True
             
             # print self.weights
 

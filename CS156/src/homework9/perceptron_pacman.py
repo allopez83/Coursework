@@ -69,22 +69,18 @@ class PerceptronClassifierPacman(PerceptronClassifier):
                 # Best move
                 # features.sortedKeys[len(a)-1]
 
-                # Keep testing until f is correctly guessed
-                correct = False
-                while not correct:
-                    # Make a guess
-                    scores = util.Counter()
-                    for each_action in legalMoves:
-                        scores[each_action] = self.weights * features[each_action]
-                    guess = scores.argMax()
-                    # Adjust if incorrect
-                    if guess != chosen_action:
-                        print "Incorrect guess: ", guess, "vs", chosen_action
-                        # Increase correct response
-                        self.weights += features[chosen_action]
-                        # Decrease guess
-                        self.weights -= features[guess]
-                    # Otherwise the weights are correct
-                    else:
-                        print "correct"
-                        correct = True
+                # Make a guess
+                scores = util.Counter()
+                for each_action in legalMoves:
+                    scores[each_action] = self.weights * features[each_action]
+                guess = scores.argMax()
+                # Adjust if incorrect
+                if guess != chosen_action:
+                    # print "Incorrect guess: ", guess, "vs", chosen_action
+                    # Increase correct response
+                    self.weights += features[chosen_action]
+                    # Decrease guess
+                    self.weights -= features[guess]
+                # Otherwise the weights are correct
+                # else:
+                #     print "correct"
