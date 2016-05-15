@@ -3,17 +3,17 @@
 #include <stdio.h>
 #include <strsafe.h>
 #include <string.h>
-#include <array>
+#include <vector>
+#include <algorithm>
 #pragma comment(lib, "User32.lib")
 
 struct fileItem {
    FILETIME time;       // last modify time
-   bool file;           // true for file, false for folder
+   bool isFile;           // true for file, false for folder
    int size;            // bytes of file
    char *name;          // name of the item
 };
-// fileItem dirContent[1000];
-std::array<fileItem, 1000> dirContent;
+fileItem dirContent[1000];
 
 void DisplayErrorBox(LPTSTR lpszFunction);
 
@@ -68,14 +68,17 @@ int main(int argc, TCHAR *argv[])
          return dwError;
       } 
 
+      printf(" ----- reading dir\n");
       // List all the files in the directory with some info about them.
-      int position = 0;
+      int position = -1;
       do
       {
+         position++;
          if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
          {
             // printf("  %s     \t\t<DIR>\n", ffd.cFileName);
-            dirContent[position].file = false;
+            dirContent[position].isFile = false;
+            // printf("Found a dir\n");
          }
          else
          {
@@ -84,15 +87,26 @@ int main(int argc, TCHAR *argv[])
                filesize.LowPart = ffd.nFileSizeLow;
                filesize.HighPart = ffd.nFileSizeHigh;
                // printf("  %s     \t\t\t%ld bytes\n", ffd.cFileName, filesize.QuadPart);
-               dirContent[position].file = true;
+               dirContent[position].isFile = true;
                dirContent[position].size = filesize.QuadPart;
+               // printf("Found a file\n");
             }
          }
          // Name, same for dirs and files
          dirContent[position].name = ffd.cFileName;
-
          // File time
          dirContent[position].time = ffd.ftLastWriteTime;
+         
+         // SYSTEMTIME systime;023.
+         // printf("Conversi0......2121on %i\n", FileTimeToSystemTime(&dirContent[position].time));
+
+         printf("position: %d, time:?, isFile: %i, size: %i, name: %s\n",
+            position,
+            // dirContent[position].time.dwLowDateTime,
+            dirContent[position].isFile,
+            dirContent[position].size,
+            dirContent[position].name
+         );
       }
       while (FindNextFile(hFind, &ffd) != 0);
 
@@ -104,13 +118,47 @@ int main(int argc, TCHAR *argv[])
 
       FindClose(hFind);
 
+      printf(" ----- sorting contents\n");
+
+      // if (input == "/zd")
+
       // Sort saved file structs
-      std::sort(dirContent.begin(), dirContent.end(), CompareFileTime()); // need to modify
-      
-      // print to stdout
-      for (fileItem item : dirContent) { // confirm this works
-         printf("  %10s\n", item.time, item.file, item.size, item.name);
+      // std::sort(dirContent.begin(), dirContent.end(), CompareFileTime()); // need to modify
+      if (dirContent == NULL){
+         return(0);
+      } else {
+         for (int i=1; i < position; i++) {
+            // key value
+            int value = dirContent[i].size;
+            //compare it to previous value
+            int j = i-1;
+            //while j never reaches to 0 index, and value is less than its previous index
+            while ( j >=0 && value > dirContent[j].size) {
+               fileItem temp = dirContent[j];
+               dirContent[j] = dirContent[j+1];
+               dirContent[j+1] = temp;
+               j--;
+               printf("%s %s\n", dirContent[j+1].name, temp.name);
+            }
+         }
       }
+      
+      printf(" ----- printing to stdout\n");
+
+      printf(" %15s | %10s | %10s | %s\n", "TIME", "DIR/FILE", "SIZE", "NAME");
+      printf(" %15s + %10s + %10s + %s\n", "-----", "-----", "-----", "-----");
+      
+      for (int i = 0; i < position; i++) {
+         fileItem item = dirContent[i]; // go through all contents
+         if (item.isFile) {
+            // It's a file
+            printf(" %15s | %10s | %10i | %s\n", "item.time", "", item.size, item.name);
+         } else {
+            // It's a folder
+         }
+      }
+
+      printf(" ----- end\n");
 
       return dwError;
    }
