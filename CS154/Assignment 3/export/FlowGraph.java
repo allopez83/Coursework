@@ -1,24 +1,24 @@
 import java.util.*;
 
-class FHflowVertex<E>
+class FlowVertex<E>
 {
    protected static Stack<Integer> key_stack = new Stack<Integer>();
    protected static final int KEY_ON_DATA = 0, KEY_ON_DIST = 1;
    protected static int n_key_type = KEY_ON_DATA;
    protected static final double INFINITY = Double.MAX_VALUE;
    // HashSets containing capacity of adjacency paths
-   protected HashSet<Pair<FHflowVertex<E>, Double>>
-      flow_adj_list = new HashSet<Pair<FHflowVertex<E>, Double>>(),
-      res_adj_list = new HashSet<Pair<FHflowVertex<E>, Double>>();
+   protected HashSet<Pair<FlowVertex<E>, Double>>
+      flow_adj_list = new HashSet<Pair<FlowVertex<E>, Double>>(),
+      res_adj_list = new HashSet<Pair<FlowVertex<E>, Double>>();
    protected E data;
    protected double dist;
-   protected FHflowVertex<E> next_in_path; // for client-specific info
+   protected FlowVertex<E> next_in_path; // for client-specific info
 
    /**
     * Creates a vertex containing the given data
     * @param x data to be contained in the vertex
     */
-   public FHflowVertex(E x)
+   public FlowVertex(E x)
    {
       data = x;
       dist = INFINITY;
@@ -28,7 +28,7 @@ class FHflowVertex<E>
    /**
     * Creates a vertex containing default data
     */
-   public FHflowVertex()
+   public FlowVertex()
    {
       this(null);
    }
@@ -38,9 +38,9 @@ class FHflowVertex<E>
     * @param neighbor vertex that this adjacent to
     * @param cost double value representing the cost of the path
     */
-   public void addToFlowAdjList(FHflowVertex<E> neighbor, double cost)
+   public void addToFlowAdjList(FlowVertex<E> neighbor, double cost)
    {
-      flow_adj_list.add(new Pair<FHflowVertex<E>, Double>(neighbor, cost));
+      flow_adj_list.add(new Pair<FlowVertex<E>, Double>(neighbor, cost));
    }
 
    /**
@@ -48,7 +48,7 @@ class FHflowVertex<E>
     * @param neighbor vertex that this is adjacent to
     * @param cost integer value representing the cost of the path
     */
-   public void addToFlowAdjList(FHflowVertex<E> neighbor, int cost)
+   public void addToFlowAdjList(FlowVertex<E> neighbor, int cost)
    {
       addToFlowAdjList(neighbor, (double) cost);
    }
@@ -58,9 +58,9 @@ class FHflowVertex<E>
     * @param neighbor vertex that this adjacent to
     * @param cost double value representing the cost of the path
     */
-   public void addToResAdjList(FHflowVertex<E> neighbor, double cost)
+   public void addToResAdjList(FlowVertex<E> neighbor, double cost)
    {
-      res_adj_list.add(new Pair<FHflowVertex<E>, Double>(neighbor, cost));
+      res_adj_list.add(new Pair<FlowVertex<E>, Double>(neighbor, cost));
    }
 
    /**
@@ -68,7 +68,7 @@ class FHflowVertex<E>
     * @param neighbor vertex that this is adjacent to
     * @param cost integer value representing the cost of the path
     */
-   public void addToResAdjList(FHflowVertex<E> neighbor, int cost)
+   public void addToResAdjList(FlowVertex<E> neighbor, int cost)
    {
       addToResAdjList(neighbor, (double) cost);
    }
@@ -78,8 +78,8 @@ class FHflowVertex<E>
     */
    public void showFlowAdjList()
    {
-      Iterator<Pair<FHflowVertex<E>, Double>> iter;
-      Pair<FHflowVertex<E>, Double> pair;
+      Iterator<Pair<FlowVertex<E>, Double>> iter;
+      Pair<FlowVertex<E>, Double> pair;
    
       System.out.print("Adj Flow List for " + data + ": ");
       for (iter = flow_adj_list.iterator(); iter.hasNext();)
@@ -97,8 +97,8 @@ class FHflowVertex<E>
     */
    public void showResAdjList()
    {
-      Iterator<Pair<FHflowVertex<E>, Double>> iter;
-      Pair<FHflowVertex<E>, Double> pair;
+      Iterator<Pair<FlowVertex<E>, Double>> iter;
+      Pair<FlowVertex<E>, Double> pair;
    
       System.out.print("Adj Res List for " + data + ": ");
       for (iter = res_adj_list.iterator(); iter.hasNext();)
@@ -117,7 +117,7 @@ class FHflowVertex<E>
    public boolean equals(Object rhs)
    {
       @SuppressWarnings("unchecked")
-      FHflowVertex<E> other = (FHflowVertex<E>) rhs;
+      FlowVertex<E> other = (FlowVertex<E>) rhs;
       switch (n_key_type)
       {
       case KEY_ON_DIST:
@@ -177,7 +177,7 @@ class FHflowVertex<E>
  * 
  * @param <E> type of data that is contained in the vertices
  */
-public class FHflowGraph<E>
+public class FlowGraph<E>
 {
    /*
     * User-input parameter(s); changing these will result in a change planned
@@ -196,14 +196,14 @@ public class FHflowGraph<E>
     * change.
     */
    // Keeps track of all vertices in the graph
-   protected HashSet<FHflowVertex<E>> vertex_set;
+   protected HashSet<FlowVertex<E>> vertex_set;
    // Used to hold the start and end of path
-   protected FHflowVertex<E> start_vert, end_vert;
+   protected FlowVertex<E> start_vert, end_vert;
 
    // public graph methods --------------------------------
-   public FHflowGraph()
+   public FlowGraph()
    {
-      vertex_set = new HashSet<FHflowVertex<E>>();
+      vertex_set = new HashSet<FlowVertex<E>>();
    }
 
    /**
@@ -213,7 +213,7 @@ public class FHflowGraph<E>
     */
    public boolean setStartVert(E x)
    {
-      FHflowVertex<E> vert;
+      FlowVertex<E> vert;
       vert = getVertexWithThisData(x);
       if (vert == null)
          return false;
@@ -228,7 +228,7 @@ public class FHflowGraph<E>
     */
    public boolean setEndVert(E x)
    {
-      FHflowVertex<E> vert;
+      FlowVertex<E> vert;
       vert = getVertexWithThisData(x);
       if (vert == null)
          return false;
@@ -242,23 +242,23 @@ public class FHflowGraph<E>
     * @param x the data to be contained in the vertex
     * @return the vertex that has been created
     */
-   public FHflowVertex<E> addToVertexSet(E x)
+   public FlowVertex<E> addToVertexSet(E x)
    {
-      FHflowVertex<E> ret_val, vert;
+      FlowVertex<E> ret_val, vert;
       boolean successful_insertion;
-      Iterator<FHflowVertex<E>> iter;
+      Iterator<FlowVertex<E>> iter;
 
       // save sort key for client
-      FHflowVertex.pushKeyType();
-      FHflowVertex.setKeyType(FHflowVertex.KEY_ON_DATA);
+      FlowVertex.pushKeyType();
+      FlowVertex.setKeyType(FlowVertex.KEY_ON_DATA);
 
       // build and insert vertex into master list
-      ret_val = new FHflowVertex<E>(x);
+      ret_val = new FlowVertex<E>(x);
       successful_insertion = vertex_set.add(ret_val);
 
       if (successful_insertion)
       {
-         FHflowVertex.popKeyType(); // restore client sort key
+         FlowVertex.popKeyType(); // restore client sort key
          return ret_val;
       }
 
@@ -268,12 +268,12 @@ public class FHflowGraph<E>
          vert = iter.next();
          if (vert.equals(ret_val))
          {
-            FHflowVertex.popKeyType(); // restore client sort key
+            FlowVertex.popKeyType(); // restore client sort key
             return vert;
          }
       }
 
-      FHflowVertex.popKeyType(); // restore client sort key
+      FlowVertex.popKeyType(); // restore client sort key
       return null; // should never happen
    }
 
@@ -282,7 +282,7 @@ public class FHflowGraph<E>
     */
    public void showResAdjTable()
    {
-      Iterator<FHflowVertex<E>> iter;
+      Iterator<FlowVertex<E>> iter;
 
       System.out.println(" ----- residual graph");
       for (iter = vertex_set.iterator(); iter.hasNext();)
@@ -295,7 +295,7 @@ public class FHflowGraph<E>
     */
    public void showFlowAdjTable()
    {
-      Iterator<FHflowVertex<E>> iter;
+      Iterator<FlowVertex<E>> iter;
 
       System.out.println(" ----- flow graph");
       for (iter = vertex_set.iterator(); iter.hasNext();)
@@ -319,7 +319,7 @@ public class FHflowGraph<E>
     */
    public void addEdge(E source, E dest, double cost)
    {
-      FHflowVertex<E> src, dst;
+      FlowVertex<E> src, dst;
 
       // put both source and dest into vertex list(s) if not already there
       src = addToVertexSet(source);
@@ -346,7 +346,7 @@ public class FHflowGraph<E>
 
    public void showPath()
    {
-      FHflowVertex<E> vert = start_vert;
+      FlowVertex<E> vert = start_vert;
 
       System.out.print(vert.data);
       // Go through entire path; end is reached when next is null
@@ -404,18 +404,18 @@ public class FHflowGraph<E>
          return false;
 
       Double cost_vw;
-      FHflowVertex<E> w, v;
-      Iterator< FHflowVertex<E> > iter;
-      Pair<FHflowVertex<E>, Double> edge;
-      Iterator<Pair<FHflowVertex<E>, Double>> edge_iter;
-      Deque<FHflowVertex<E>> partially_processed_verts
-      = new LinkedList<FHflowVertex<E>>();
+      FlowVertex<E> w, v;
+      Iterator< FlowVertex<E> > iter;
+      Pair<FlowVertex<E>, Double> edge;
+      Iterator<Pair<FlowVertex<E>, Double>> edge_iter;
+      Deque<FlowVertex<E>> partially_processed_verts
+      = new LinkedList<FlowVertex<E>>();
 
       // Initialize vertex list and clear previous data
       for (iter = vertex_set.iterator(); iter.hasNext();)
       {
          v = iter.next();
-         v.dist = FHflowVertex.INFINITY;
+         v.dist = FlowVertex.INFINITY;
          v.next_in_path = null;
          v = null;
       }
@@ -467,8 +467,8 @@ public class FHflowGraph<E>
     */
    private void reverseVertexPath()
    {
-      Stack<FHflowVertex<E>> path_stack = new Stack<FHflowVertex<E>>();
-      FHflowVertex<E> vert;
+      Stack<FlowVertex<E>> path_stack = new Stack<FlowVertex<E>>();
+      FlowVertex<E> vert;
 
       // Retrieve the vertices in the path
       for (vert = end_vert; vert != start_vert; vert = vert.next_in_path)
@@ -495,7 +495,7 @@ public class FHflowGraph<E>
       if (start_vert == null || end_vert == null)
          return 0.0;
 
-      FHflowVertex<E> vert = start_vert;
+      FlowVertex<E> vert = start_vert;
       double min = Double.MAX_VALUE, possible_min;
 
       // Go through entire path; end is reached when next vertex is null
@@ -532,7 +532,7 @@ public class FHflowGraph<E>
       if (start_vert == null || end_vert == null)
          return false;
 
-      FHflowVertex<E> vert = start_vert;
+      FlowVertex<E> vert = start_vert;
 
       // Go through entire path; end is reached when next is null
       while (vert.next_in_path != null)
@@ -555,12 +555,12 @@ public class FHflowGraph<E>
     * @param dst vertex to search for
     * @return double representing the cost of the edge
     */
-   protected double getCostOfResEdge(FHflowVertex<E> src, FHflowVertex<E> dst)
+   protected double getCostOfResEdge(FlowVertex<E> src, FlowVertex<E> dst)
    {
-      FHflowVertex<E> vert = null;
-      Iterator<FHflowVertex<E>> vert_ter;
-      Pair<FHflowVertex<E>, Double> pair;
-      Iterator<Pair<FHflowVertex<E>, Double>> pair_iter;
+      FlowVertex<E> vert = null;
+      Iterator<FlowVertex<E>> vert_ter;
+      Pair<FlowVertex<E>, Double> pair;
+      Iterator<Pair<FlowVertex<E>, Double>> pair_iter;
 
       // Search for src vertex
       for (vert_ter = vertex_set.iterator(); vert_ter.hasNext();)
@@ -593,7 +593,7 @@ public class FHflowGraph<E>
     * @param cost double value representing the desired change to be added
     * @return boolean representing if the operation succeeded
     */
-   protected boolean addCostToResEdge(FHflowVertex<E> src, FHflowVertex<E> dst,
+   protected boolean addCostToResEdge(FlowVertex<E> src, FlowVertex<E> dst,
          double cost)
    {
       // First see if vertices are not null
@@ -601,10 +601,10 @@ public class FHflowGraph<E>
          return false;
 
       boolean found = false;
-      FHflowVertex<E> vert = null;
-      Iterator<FHflowVertex<E>> vert_ter;
-      Pair<FHflowVertex<E>, Double> pair;
-      Iterator<Pair<FHflowVertex<E>, Double>> pair_iter;
+      FlowVertex<E> vert = null;
+      Iterator<FlowVertex<E>> vert_ter;
+      Pair<FlowVertex<E>, Double> pair;
+      Iterator<Pair<FlowVertex<E>, Double>> pair_iter;
 
       // Search for src vertex
       for (vert_ter = vertex_set.iterator(); vert_ter.hasNext();)
@@ -650,18 +650,18 @@ public class FHflowGraph<E>
     * @param cost double value representing the desired change to be added
     * @return boolean representing if the operation succeeded
     */
-   protected boolean addCostToFlowEdge(FHflowVertex<E> src,
-         FHflowVertex<E> dst, double cost)
+   protected boolean addCostToFlowEdge(FlowVertex<E> src,
+         FlowVertex<E> dst, double cost)
    {
       // First see if vertices are ok
       if (src == null || dst == null)
          return false;
 
       boolean found = false;
-      FHflowVertex<E> vert = null;
-      Iterator<FHflowVertex<E>> vert_ter;
-      Pair<FHflowVertex<E>, Double> pair = null;
-      Iterator<Pair<FHflowVertex<E>, Double>> pair_iter;
+      FlowVertex<E> vert = null;
+      Iterator<FlowVertex<E>> vert_ter;
+      Pair<FlowVertex<E>, Double> pair = null;
+      Iterator<Pair<FlowVertex<E>, Double>> pair_iter;
 
       // Search for src vertex
       for (vert_ter = vertex_set.iterator(); vert_ter.hasNext();)
@@ -721,17 +721,17 @@ public class FHflowGraph<E>
       return false;
    }
 
-   protected FHflowVertex<E> getVertexWithThisData(E x)
+   protected FlowVertex<E> getVertexWithThisData(E x)
    {
-      FHflowVertex<E> search_vert, vert;
-      Iterator<FHflowVertex<E>> iter;
+      FlowVertex<E> search_vert, vert;
+      Iterator<FlowVertex<E>> iter;
 
       // save sort key for client
-      FHflowVertex.pushKeyType();
-      FHflowVertex.setKeyType(FHflowVertex.KEY_ON_DATA);
+      FlowVertex.pushKeyType();
+      FlowVertex.setKeyType(FlowVertex.KEY_ON_DATA);
 
       // build vertex with data = x for the search
-      search_vert = new FHflowVertex<E>(x);
+      search_vert = new FlowVertex<E>(x);
 
       // the vertex was already in the set, so get its ref
       for (iter = vertex_set.iterator(); iter.hasNext();)
@@ -739,12 +739,12 @@ public class FHflowGraph<E>
          vert = iter.next();
          if (vert.equals(search_vert))
          {
-            FHflowVertex.popKeyType();
+            FlowVertex.popKeyType();
             return vert;
          }
       }
 
-      FHflowVertex.popKeyType();
+      FlowVertex.popKeyType();
       return null; // not found
    }
 }
