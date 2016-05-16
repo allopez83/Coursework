@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <strsafe.h>
 #include <string.h>
-#include <vector>
 #include <algorithm>
 #pragma comment(lib, "User32.lib")
 
@@ -39,8 +38,7 @@ int main(int argc, TCHAR *argv[])
 
    // shell dir \folder /zd
    //       1   2       3
-   if (stricmp(argv[1], "dir") == 0)
-   {
+   if (stricmp(argv[1], "dir") == 0) {
       // Check that the input path plus options is not longer than MAX_PATH.
       // Three characters are for the "\*" plus NULL appended below.
 
@@ -93,22 +91,50 @@ int main(int argc, TCHAR *argv[])
             }
          }
          // Name, same for dirs and files
-         dirContent[position].name = ffd.cFileName;
+         // dirContent[position].name = ffd.cFileName;
+         // printf("copy");
+         // strncpy(dirContent[position].name, ffd.cFileName, sizeof(ffd.cFileName));
+         dirContent[position].name = (char *)malloc(strlen(ffd.cFileName)+1);
+         strcpy(dirContent[position].name, ffd.cFileName);
+
          // File time
          dirContent[position].time = ffd.ftLastWriteTime;
          
          // SYSTEMTIME systime;023.
-         // printf("Conversi0......2121on %i\n", FileTimeToSystemTime(&dirContent[position].time));
+         // printf("Conversion %i\n", FileTimeToSystemTime(&dirContent[position].time));
 
-         printf("position: %d, time:?, isFile: %i, size: %i, name: %s\n",
-            position,
-            // dirContent[position].time.dwLowDateTime,
-            dirContent[position].isFile,
-            dirContent[position].size,
-            dirContent[position].name
-         );
+         // printf("position: %d, time:?, isFile: %i, size: %i, name: %s\n",
+         //    position,
+         //    // dirContent[position].time.dwLowDateTime,
+         //    dirContent[position].isFile,
+         //    dirContent[position].size,
+         //    dirContent[position].name
+         // );
       }
       while (FindNextFile(hFind, &ffd) != 0);
+      
+      for (int i = 0; i <= position; i++) {
+
+         // printf("position: %d, time:?, isFile: %i, size: %i, name: %s\n",
+         //    i,
+         //    // dirContent[position].time.dwLowDateTime,
+         //    dirContent[i].isFile,
+         //    dirContent[i].size,
+         //    dirContent[i].name
+         //    );
+
+         // SYSTEMTIME stUTC, stLocal;
+         // FileTimeToSystemTime(&dirContent[i].time, &stUTC);
+         // SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+         // printf("%d: time: %02d-%02d-%d %02d:%02d, isFile: %i, size: %i, name: %s\n",
+         //    i,
+         //    stLocal.wYear, stLocal.wMonth, stLocal.wDay, stLocal.wHour, stLocal.wMinute,
+         //    dirContent[i].isFile,
+         //    dirContent[i].size,
+         //    dirContent[i].name
+         // );
+      }
+      // printf("end of dirContent\n");
 
       dwError = GetLastError();
       if (dwError != ERROR_NO_MORE_FILES) 
@@ -124,37 +150,71 @@ int main(int argc, TCHAR *argv[])
 
       // Sort saved file structs
       // std::sort(dirContent.begin(), dirContent.end(), CompareFileTime()); // need to modify
-      if (dirContent == NULL){
-         return(0);
-      } else {
-         for (int i=1; i < position; i++) {
+      // if (dirContent == NULL) {
+      //    return(0);
+      // } else {
+      if (_tcscmp(argv[3], _T("/zs")) == 0) {
+         printf("sort by size\n");
+         for (int i=1; i <= position; i++) {
             // key value
             int value = dirContent[i].size;
             //compare it to previous value
             int j = i-1;
             //while j never reaches to 0 index, and value is less than its previous index
-            while ( j >=0 && value > dirContent[j].size) {
+            while (j >= 0 && value > dirContent[j].size) {
                fileItem temp = dirContent[j];
                dirContent[j] = dirContent[j+1];
                dirContent[j+1] = temp;
                j--;
-               printf("%s %s\n", dirContent[j+1].name, temp.name);
+               // printf("%s %s\n", dirContent[j+1].name, temp.name);
+            }
+         }
+      } else if (_tcscmp(argv[3], _T("/zd")) == 0) {
+         printf("sort by date\n");
+         for (int i=1; i <= position; i++) {
+            // key value
+            FILETIME value = dirContent[i].time;
+            //compare it to previous value
+            int j = i-1;
+            //while j never reaches to 0 index, and value is less than its previous index
+            while (j >= 0 && CompareFileTime(&value, &dirContent[j].time) == 1) {
+               fileItem temp = dirContent[j];
+               dirContent[j] = dirContent[j+1];
+               dirContent[j+1] = temp;
+               j--;
+               // printf("%s %s\n", dirContent[j+1].name, temp.name);
             }
          }
       }
+      // }
       
       printf(" ----- printing to stdout\n");
 
-      printf(" %15s | %10s | %10s | %s\n", "TIME", "DIR/FILE", "SIZE", "NAME");
-      printf(" %15s + %10s + %10s + %s\n", "-----", "-----", "-----", "-----");
+      printf(" %18s | %10s | %10s | %s\n", "TIME", "DIR/FILE", "SIZE", "NAME");
+      printf(" %18s + %10s + %10s + %s\n", "-----", "-----", "-----", "-----");
       
-      for (int i = 0; i < position; i++) {
+      for (int i = 0; i <= position; i++) {
          fileItem item = dirContent[i]; // go through all contents
+
+         char time[20];
+         SYSTEMTIME stUTC, stLocal;
+         FileTimeToSystemTime(&dirContent[i].time, &stUTC);
+         SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+         sprintf(time, "%02d-%02d-%2d %02d:%02d", stLocal.wYear, stLocal.wMonth, stLocal.wDay, stLocal.wHour, stLocal.wMinute);
+         // printf("%d: time: %02d-%02d-%d %02d:%02d, isFile: %i, size: %i, name: %s\n",
+         //    i,
+         //    stLocal.wYear, stLocal.wMonth, stLocal.wDay, stLocal.wHour, stLocal.wMinute,
+         //    dirContent[i].isFile,
+         //    dirContent[i].size,
+         //    dirContent[i].name
+         // );
+         
          if (item.isFile) {
             // It's a file
-            printf(" %15s | %10s | %10i | %s\n", "item.time", "", item.size, item.name);
+            printf(" %18s | %10s | %10i | %s\n", time, "", item.size, item.name);
          } else {
             // It's a folder
+            printf(" %18s | %10s | %10i | %s\n", time, "<DIR>", 0, item.name);
          }
       }
 
@@ -162,11 +222,70 @@ int main(int argc, TCHAR *argv[])
 
       return dwError;
    }
+
+   else if(stricmp(argv[1], "compare") == 0) {
+      if (strlen(argv[2]) > (MAX_PATH - 3) || strlen(argv[3]) > (MAX_PATH - 3)) {
+         printf("\nDirectory path is too long.\n");
+         return (-1);
+      }
+      printf("Comparing...\n");
+
+      //Generating references to the files
+      FILE * file1;
+      FILE * file2;
+      file1 = fopen(argv[2], "rb");
+      file2 = fopen(argv[3], "rb");
+
+      //Getting sizes of files
+      fseek(file1, 0L, SEEK_END);
+      fseek(file2, 0L, SEEK_END);
+      if(ftell(file1) != ftell(file2)) {
+         printf("\nFiles are different sizes. Cannot compare.\n");
+         return (-1);
+      }
+
+      int filesize = ftell(file1);
+
+      fseek(file1, 0L, SEEK_SET);
+      fseek(file2, 0L, SEEK_SET);
+
+      if(argv[4] != NULL) {
+         printf("Character Test\n");
+         TCHAR * skipChar = argv[4];
+
+         for(int i = 0; i < filesize; i++) {
+            fseek(file1, 0L + i, SEEK_SET);
+            fseek(file2, 0L + i, SEEK_SET);
+            char char1 = fgetc(file1);
+            char char2 = fgetc(file2);
+
+            if(memcmp(skipChar, &char1, 1) != 0) {
+               if(char1 != char2) {
+                  printf("\nDiscrepency found at position %i in file, between %s (%c) and %s (%c)\n", i, argv[2], char1, argv[3], char2);
+                  return (-1);
+               }
+            }
+         }
+      } else {
+         for(int i = 0; i < filesize; i++) {
+            fseek(file1, 0L + i, SEEK_SET);
+            fseek(file2, 0L + i, SEEK_SET);
+            char char1 = fgetc(file1);
+            char char2 = fgetc(file2);
+
+            if(char1 != char2) {
+               printf("\nDiscrepency found at position %i in file, between %s (%c) and %s (%c)\n", i, argv[2], char1, argv[3], char2);
+               return (-1);
+            }
+         }
+      }
+      printf("Files compare OK\n");
+      return dwError;
+   }
 }
 
-void DisplayErrorBox(LPTSTR lpszFunction) 
-{ 
-    // Retrieve the system error message for the last-error code
+void DisplayErrorBox(LPTSTR lpszFunction) {
+   // Retrieve the system error message for the last-error code
 
    LPVOID lpMsgBuf;
    LPVOID lpDisplayBuf;
@@ -195,4 +314,3 @@ void DisplayErrorBox(LPTSTR lpszFunction)
    LocalFree(lpMsgBuf);
    LocalFree(lpDisplayBuf);
 }
-
