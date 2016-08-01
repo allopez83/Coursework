@@ -22,7 +22,6 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 149**
 - Operating Systems
 - C++
-- In Progress
 
 **CS 151**
 - Object-Oriented Design
@@ -35,7 +34,6 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 156**
 - Introduction to Artificial Intelligence
 - Java
-- In Progress
 
 **CS 157A**
 - Introduction to Databases
@@ -44,7 +42,6 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 158A**
 - Computer Networks
 - C
-- In Progress
 
 **CS 174**
 - Server-Side Web Programming
@@ -64,7 +61,7 @@ Courses are represented as a directory containing code and assignments done in t
 - Advanced Data Structures & Algorithms
 - Java
 
-**CS 2A - not available yet**
+**CS 2A**
 - Intro to C++
 - C++
 
@@ -75,4 +72,3 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 21A**
 - Intro to Python
 - Python
-- In progress
