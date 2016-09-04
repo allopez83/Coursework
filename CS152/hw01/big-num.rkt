@@ -20,12 +20,13 @@
     [(= 0 (length x))  (big-add1 (list co) y 0)]
     [(= 0 (length y))  (big-add1 x (list co) 0)]
     [else
-       ;;
-       ;; --- YOUR CODE HERE ---
-       ;;
-     (error "Not implemented")
-     ]
-    ))
+      (if (< 999 (+ (car x) (car y) co))
+        (append
+          (list (- (+ (car x) (car y) co) 1000))
+          (big-add1 (cdr x) (cdr y) 1))
+        (append
+          (list (+ (car x) (car y) co))
+          (big-add1 (cdr x) (cdr y) 0)))]))
 
 ;; Subtraction of two big-nums
 (define (big-subtract x y)
@@ -43,42 +44,34 @@
 ;; NOTE: there are no negative numbers with this implementation,
 ;; so 3 - 4 should throw an error.
 (define (big-subtract1 x y borrow)
-  ;;
-  ;; --- YOUR CODE HERE ---
-  ;;
-  (error "Not implemented"))
+  (cond
+    [(and (= 0 (length x)) (= 0 (length y))) '()]
+    [(= 0 (length y))  (list (- (car x) borrow))]
+    [else (if (< (car x) (car y))
+        (append
+          (list (- (+ 1000 (car x)) (car y) borrow))
+          (big-subtract1 (cdr x) (cdr y) 1))
+        (append
+          (list (- (car x) (car y) borrow))
+          (big-subtract1 (cdr x) (cdr y) 0)))]))
 
 ;; Returns true if two big-nums are equal
 (define (big-eq x y)
-  ;;
-  ;; --- YOUR CODE HERE ---
-  ;;
   (error "Not implemented"))
 
 ;; Decrements a big-num
 (define (big-dec x)
-  (big-subtract x '(1))
-  )
+  (big-subtract x '(1)))
 
 ;; Multiplies two big-nums
 (define (big-multiply x y)
-  ;;
-  ;; --- YOUR CODE HERE ---
-  ;;
-  
-  ;; Solve this function in terms of big-add.
-  ;; (Note that there are more efficient solutions,
-  ;; but they are not required for this assignment).
-  (error "Not implemented"))
+  (if (= 1 (car y)) x
+    (big-add x (big-multiply x (big-dec y)))))
 
 ;; Raise x to the power of y
 (define (big-power-of x y)
-  ;;
-  ;; --- YOUR CODE HERE ---
-  ;;
-  
-  ;; Solve this function in terms of big-multiply. 
-  (error "Not implemented"))
+  (if (= 1 (car y)) x
+    (big-multiply x (big-power-of x (big-dec y)))))
 
 ;; Dispaly a big-num in an easy to read format
 (define (pretty-print x)
