@@ -22,7 +22,18 @@
 ; Note that the map function can also be applied to multiple items. Use map to append a list of first names and a list of last names to create a list of full names.
 
 (define (name-concat first last)
-    (doStuff)
+    (map string-append (append-space firstN) lastN)
+)
+; ugly non lambda workaround to adding spaces :(
+(define (append-space lst)
+    (cond
+        [(empty? lst) '()]
+        [else (append
+            (list (string-append (car lst) " "))
+            (append-space (cdr lst))
+        )]
+    )
 )
 (define firstN '("Great" "John" "Billy"))
 (define lastN '("Houdini" "Doe" "Bob"))
+(name-concat firstN lastN)
