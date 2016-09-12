@@ -66,9 +66,7 @@
         (big-eq (cdr x) (cdr y))
         #f)]
     ; Different lengths
-    [else #f]
-  )
-)
+    [else #f]))
 
 ;; Decrements a big-num
 (define (big-dec x)
