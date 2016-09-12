@@ -1,0 +1,7 @@
+Extend the Bool* language that we discussed in class.
+
+Add support for numbers, the succ operator, and the pred operator.
+
+Submit your modified code.
+
+
