@@ -3,7 +3,7 @@
 ;; The big-num data structure is essentially a list of 3 digit numbers.
 
 ;; Exporting methods
-(provide big-add big-subtract big-multiply big-power-of pretty-print number->bignum string->bignum)
+(provide big-add big-subtract big-multiply big-power-of pretty-print big-eq number->bignum string->bignum)
 
 (define MAX_BLOCK 1000)
 
@@ -57,7 +57,18 @@
 
 ;; Returns true if two big-nums are equal
 (define (big-eq x y)
-  (error "Not implemented"))
+  (cond
+    ; Empty
+    [(and (= 0 (length x)) (= 0 (length y))) #t]
+    ; Compare
+    [(= (length x) (length y))
+      (if (= (car x) (car y))
+        (big-eq (cdr x) (cdr y))
+        #f)]
+    ; Different lengths
+    [else #f]
+  )
+)
 
 ;; Decrements a big-num
 (define (big-dec x)

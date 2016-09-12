@@ -41,3 +41,10 @@
 
 (pretty-print '(2 2 1))
 
+; T, T, F, T, F, F
+(big-eq '() '())
+(big-eq '(1) '(1))
+(big-eq '(1) '(2))
+(big-eq '(1 1) '(1 1))
+(big-eq '(1 1) '(1 2))
+(big-eq '(1 1) '(1 1 1))
