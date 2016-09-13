@@ -27,3 +27,16 @@
 ; pred 5 => returns 6
 ; succ (if true then 42 else 0) => 43
 
+; succ takes number and returns next highest
+; pred takes number returns next lowest
+
+(define (succ num)
+    (+ num 1))
+
+(define (pred num)
+    (- num 1))
+
+(succ 1)
+(succ (succ 7))
+(pred 5)
+; (succ (if true then 42 else 0))
