@@ -15,6 +15,11 @@ Courses are represented as a directory containing code and assignments done in t
 
 ### San Jose State University
 
+**CS 100W**
+- Technical Writing Workshop
+- (projects, AGILE, client interactions)
+- Language TBD
+
 **CS 146**
 - Data Structures & Algorithms
 - Java
@@ -26,6 +31,11 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 151**
 - Object-Oriented Design
 - Java
+
+**CS 152**
+- Programming Paradigms
+- Racket
+- More languages to come
 
 **CS 154**
 - Formal Languages and Computability
