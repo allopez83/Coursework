@@ -3,22 +3,34 @@
 ;; Expressions in the language
 (struct b-val (val))
 (struct b-if (c thn els))
+(struct b-succ (exp))
+(struct b-pred (exp))
 
 ;; Main evaluate method
 (define (evaluate prog)
-  (match prog
-    [(struct b-val (v)) v]
-    [(struct b-if (c thn els))
-     (if (evaluate c)
-         (evaluate thn)
-         (evaluate els))]
-    [_ (error "Unrecognized expression")]))
+    (match prog
+        [(struct b-val (v)) v]
+        [(struct b-if (c thn els))
+            (if ; is a number
+                ; Positive is #t, zero or negative is #f
+                (number? c)
+                (cond
+                    [(> c 0) #t]
+                    [else #f])
+                ; non number
+                (if (evaluate c)
+                    (evaluate thn)
+                    (evaluate els)))]
+        [(struct b-succ (e)) (+ (evaluate e) 1)]
+        [(struct b-pred (e)) (- (evaluate e) 1)]
+        ; [(struct b-succ (v)) v]
+        [_ (error "Unrecognized expression")]))
 
-(evaluate (b-val #t))
-(evaluate (b-val #f))
-(evaluate (b-if (b-val #t)
-                (b-if (b-val #f) (b-val #t) (b-val #f))
-                (b-val #f)))
+; (evaluate (b-val #t))
+; (evaluate (b-val #f))
+; (evaluate (b-if (b-val #t)
+;                 (b-if (b-val #f) (b-val #t) (b-val #f))
+;                 (b-val #f)))
 
 
 ;; Consider the following sample programs for extending the interpreter
@@ -30,13 +42,12 @@
 ; succ takes number and returns next highest
 ; pred takes number returns next lowest
 
-(define (succ num)
-    (+ num 1))
-
-(define (pred num)
-    (- num 1))
-
-(succ 1)
-(succ (succ 7))
-(pred 5)
-; (succ (if true then 42 else 0))
+(evaluate (b-succ (b-val 1)))
+(evaluate (b-succ (b-succ (b-val 7))))
+(evaluate (b-pred (b-val 5)))
+(evaluate
+    (b-succ
+        (b-if
+            (b-val true)
+            (b-val 42)
+            (b-val 0))))
