@@ -23,8 +23,10 @@
                     (evaluate els)))]
         [(struct b-succ (e)) (+ (evaluate e) 1)]
         [(struct b-pred (e)) (- (evaluate e) 1)]
-        ; [(struct b-succ (v)) v]
-        [_ (error "Unrecognized expression")]))
+        [_ (if
+                (number? prog)
+                prog
+                (error "Unrecognized expression"))]))
 
 ; (evaluate (b-val #t))
 ; (evaluate (b-val #f))
@@ -39,9 +41,6 @@
 ; pred 5 => returns 6
 ; succ (if true then 42 else 0) => 43
 
-; succ takes number and returns next highest
-; pred takes number returns next lowest
-
 (evaluate (b-succ (b-val 1)))
 (evaluate (b-succ (b-succ (b-val 7))))
 (evaluate (b-pred (b-val 5)))
@@ -51,3 +50,8 @@
             (b-val true)
             (b-val 42)
             (b-val 0))))
+(evaluate 123)
+
+; Error
+; (struct mystruct(a))
+; (evaluate (mystruct "a"))
