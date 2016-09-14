@@ -57,6 +57,10 @@ Courses are represented as a directory containing code and assignments done in t
 - Server-Side Web Programming
 - Java
 
+**CS 185C**
+- Programming Paradigms (Big Data and MapReduce)
+- Lang TBD
+
 ### Foothill College
 
 **CS 1A**
