@@ -1,0 +1,20 @@
+Part 1)
+Download test.bash. (Windows users may need Cygwin installed).
+
+Before you run the program, write down your guess of what the output should be.
+
+Now run the program.  Were you correct?  What is the issue?
+
+
+Part 2)
+Download object.racket.  Using closures and the box function,
+implement the Employee constructor and the getters/setters
+for each field of the object.
+
+(You still may not directly use set!, but you may use the
+set-val! function FOR THIS ASSIGNMENT ONLY.)
+
+Are your getters and setters repetitive?
+How could you improve the code to remove this repetition?
+
+
