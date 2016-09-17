@@ -16,25 +16,27 @@
 ;; An employee object is represented as a list of
 ;; 3 setter-getter pairs
 (define (Employee name position salary)
-  (error "TBD"))
+  (list
+    (box name)
+    (box position)
+    (box salary)))
 
 
 
 (define (get-name emp)
-  (error "TBD"))
+  (get-val (car emp)))
 (define (set-name emp new-name)
-  (error "TBD"))
+  (set-val! (car emp) new-name))
 
 (define (get-position emp)
-  (error "TBD"))
-
+  (get-val (cadr emp)))
 (define (set-position emp new-pos)
-  (error "TBD"))
+  (set-val! (cadr emp) new-pos))
 
 (define (get-salary emp)
-  (error "TBD"))
-(define (set-salary emp new-pos)
-  (error "TBD"))
+  (get-val (caddr emp)))
+(define (set-salary emp new-sal)
+  (set-val! (caddr emp) new-sal))
 
 (define prof (Employee "Austin" "Professor" 99999999999999999))
 
