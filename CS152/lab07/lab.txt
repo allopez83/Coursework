@@ -1,0 +1,14 @@
+In this lab, you will work with structs and contracts.
+
+Download account.rkt and use-account.rkt from the course website.
+
+Note that our account struct is immutable -- all operations return a changed structure without modifying the original.  Racket automatically creates some utility functions for your structs -- account-balance is a function that gets the balance field from the account, and account? is a boolean that verifies that you have an account.
+
+In this lab, you must create contracts to:
+*Verify that only accounts are passed as the first argument to balance, withdraw, and deposit.
+*Verify that only positive numbers are passed as the second argument to withdraw and deposit.
+*Verify that withdraw and deposit return an account.
+*Verify that balance returns a number.
+*Verify that the amount passed to withdraw does not exceed the available funds.
+
+
