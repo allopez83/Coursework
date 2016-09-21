@@ -27,7 +27,6 @@
 
 (define-syntax switch
     (syntax-rules ()
-        
         [(switch val) (begin
             (displayln "problem")
             (error "no match!")
@@ -41,7 +40,7 @@
                         (eval (cadr compA) ns)
                         (switch val compB ...)
                     )
-                    ; Not a number, must be default. This is a horrible hackjob :(
+                    ; Not a number, must be default. This is horrible hackjob logic :(
                     (eval (cadr compA) ns)
                     ; (cadr compA)
                 )
