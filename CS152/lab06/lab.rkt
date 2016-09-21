@@ -50,6 +50,10 @@
     )
 )
 
+; Switch usage:
+; Switch is given a value, and will try to match with subsequent lists
+; Lists are in the format: '(MATCH, ACTION) where if match is the same as the initial value, the action will be taken. The last list should have default for the match, and this catches cases that fall through.
+
 (define x 99)
 (switch x
     '[3 (displayln "x is 3")]
