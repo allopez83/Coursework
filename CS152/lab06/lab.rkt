@@ -36,7 +36,7 @@
         [(switch val (case body) compB ...)
             (begin
                 (displayln "pass")
-                ; Going through switches
+                ; Going through switch cases
                 (cond
                     [(number? case)
                         (if (= val case)
@@ -46,10 +46,6 @@
                     [(equal? 'default case) (eval body ns)]
                     [else (error "no match!")]))]))
 
-; Switch usage:
-; Switch is given a value, and will try to match with subsequent lists
-; Lists are in the format: '(MATCH, ACTION) where if match is the same as the initial value, the action will be taken. The last list should have default for the match, and this catches cases that fall through.
-
 (define x 99)
 (switch x
     [3 (displayln "x is 3")]
@@ -57,12 +53,3 @@
     [5 (displayln "x is 5")]
     [99 (displayln "x is 99")]
     ['default (displayln "none of the above")])
-
-; (define a (displayln "action"))
-; (eval a)
-; (define a '(displayln "run this"))
-; (car a)
-; (eval (car a))
-; (eval (car a) (cadr a))
-; (eval a ns)
-; (eval a)
