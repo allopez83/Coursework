@@ -11,12 +11,12 @@
 ; There is no starter code for this assignment.
 
 ; Example of define-syntax
-(define-syntax swap
-    (syntax-rules ()
-        [(swap x y)
-            (let ([tmp x])
-            (set! x y)
-            (set! y tmp))]))
+; (define-syntax swap
+;     (syntax-rules ()
+;         [(swap x y)
+;             (let ([tmp x])
+;             (set! x y)
+;             (set! y tmp))]))
 ; (define a 1)
 ; (define b 2)
 ; (swap a b)
@@ -27,27 +27,24 @@
 
 (define-syntax switch
     (syntax-rules ()
-        [(switch val) (begin
-            (displayln "problem")
-            (error "no match!")
-        )]
-        [(switch val compA compB ...)
+        [(_) (error "no params!")]
+        [(switch val)
             (begin
-                (displayln "loop")
+                (displayln "problem")
+                (error "no cases!"))]
+        ; [(switch val compA compB ...)
+        [(switch val (case body) compB ...)
+            (begin
+                (displayln "pass")
                 ; Going through switches
-                (if (number? (car compA))
-                    (if (= val (car compA))
-                        (eval (cadr compA) ns)
-                        (switch val compB ...)
-                    )
+                (cond
+                    [(number? case)
+                        (if (= val case)
+                            (eval body ns)
+                            (switch val compB ...))]
                     ; Not a number, must be default. This is horrible hackjob logic :(
-                    (eval (cadr compA) ns)
-                    ; (cadr compA)
-                )
-            )
-        ]
-    )
-)
+                    [(equal? 'default case) (eval body ns)]
+                    [else (error "no match!")]))]))
 
 ; Switch usage:
 ; Switch is given a value, and will try to match with subsequent lists
@@ -55,15 +52,15 @@
 
 (define x 99)
 (switch x
-    '[3 (displayln "x is 3")]
-    '[4 (displayln "x is 4")]
-    '[5 (displayln "x is 5")]
-    '[99 (displayln "x is 99")]
-    '[default (displayln "none of the above")])
+    [3 (displayln "x is 3")]
+    [4 (displayln "x is 4")]
+    [5 (displayln "x is 5")]
+    [99 (displayln "x is 99")]
+    ['default (displayln "none of the above")])
 
 ; (define a (displayln "action"))
 ; (eval a)
-(define a '(displayln "run this"))
+; (define a '(displayln "run this"))
 ; (car a)
 ; (eval (car a))
 ; (eval (car a) (cadr a))
