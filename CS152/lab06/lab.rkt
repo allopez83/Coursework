@@ -28,21 +28,17 @@
 (define-syntax switch
     (syntax-rules ()
         [(_) (error "no params!")]
-        [(switch val)
-            (begin
-                (displayln "problem")
-                (error "no cases!"))]
+        [(switch val) (error "no cases!")]
         ; [(switch val compA compB ...)
         [(switch val (case body) compB ...)
             (begin
-                (displayln "pass")
+                ; (displayln "pass")
                 ; Going through switch cases
                 (cond
                     [(number? case)
                         (if (= val case)
                             (eval body ns)
                             (switch val compB ...))]
-                    ; Not a number, must be default. This is horrible hackjob logic :(
                     [(equal? 'default case) (eval body ns)]
                     [else (error "no match!")]))]))
 
