@@ -11,7 +11,7 @@
 
 ;; Ensure non negative balance
 (define/contract (positiveBal? acc)
-  (-> account? boolean?)
+  (account? . -> . boolean?)
   (if (< (balance acc) 0) #f #t))
 
 ;; Get the current balance
