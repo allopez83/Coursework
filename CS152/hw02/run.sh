@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # Test
-racket test.rkt test1.sparta
+racket sl-run.rkt test1.sparta
 
 # Other tests
-#racket test.rkt
-
-# diff ? output_EXPECTED
+# racket test.rkt > output
+# colordiff -u output output_EXPECTED

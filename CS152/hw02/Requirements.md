@@ -4,8 +4,9 @@ Requirements
 Things to implement, and what they represent
 
 - Input expression and environment
-- Expression is struct
-- Environment is map of variables
+    + Expression is struct
+    + Environment is map of variables
+- Return value and new environment as pair
 
 
 `sp-val`: constant value

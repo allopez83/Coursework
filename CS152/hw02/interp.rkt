@@ -29,27 +29,59 @@
 ;; Applies a binary argument to two arguments
 (define (eval-binop op e1 e2 env)
   (let* ([r1 (evaluate e1 env)]        ;; Evaluate the lhs expression first
-         [v1 (car r1)] [env1 (cdr r1)]
+         [v1 (car r1)]
+         [env1 (cdr r1)]
          [r2 (evaluate e2 env1)]       ;; Evaluate the rhs expression second
-         [v2 (car r2)] [env2 (cdr r2)])
+         [v2 (car r2)]
+         [env2 (cdr r2)])
     (cons (apply op (list v1 v2))      ;; Apply the binary operator to its arguments
           env2)))
 
 ;; Evaluates a conditional expression
 (define (eval-if c thn els env)
-  (error "Your code here"))
+  (let* ([rIf (evaluate c env)] ; Evaluate if
+         [vIf (car rIf)]
+         [envIf (cdr rIf)]
+         [rThn (evaluate thn env)] ; Evaluate then
+         [vThn (car rThn)]
+         [envThn (cdr rThn)]
+         [rEls (evaluate els env)] ; Evaluate else
+         [vEls (car rEls)]
+         [envEls (cdr rEls)])
+    (if (boolean? vIf) ; Evaluate if given true or false
+      (if vIf
+        (cons vThn envThn)
+        (cons vEls envEls))
+      (error "eval-if received non boolean expression!"))))
 
 ;; Evaluates a loop.
 ;; When the condition is false, return 0.
 ;; There is nothing special about zero -- we just need to return something.
 (define (eval-while c body env)
-  (error "Your code here"))
+  (let* ([rC (evaluate c env)]
+         [vC (car rC)]
+         [envC (cdr rC)])
+    (if vC
+      (let* ([rBody (evaluate body envC)] ; Only eval body if c passes
+             [vBody (car rBody)]
+             [envBody (cdr rBody)])
+        (eval-while c body envBody))
+      (cons vC envC))))
 
 ;; Handles imperative updates.
 (define (eval-assign var exp env)
-  (error "Your code here"))
+  (let* ([rExp (evaluate exp env)]
+         [vExp (car rExp)]
+         [newEnv (hash-set env var vExp)])
+    (cons vExp newEnv))) ; No operations done, but env changed
 
 ;; Handles sequences of statements
 (define (eval-seq e1 e2 env)
-  (error "Your code here"))
+  (let* ([rE1 (evaluate e1 env)] ; First expression
+         [vE1 (car rE1)]
+         [envE1 (cdr rE1)]
+         [rE2 (evaluate e2 envE1)] ; Second expression
+         [vE2 (car rE2)]
+         [envE2 (cdr rE2)])
+    (cons vE2 envE2)))
 
