@@ -66,7 +66,7 @@
              [vBody (car rBody)]
              [envBody (cdr rBody)])
         (eval-while c body envBody))
-      (cons vC envC))))
+      (cons 0 envC))))
 
 ;; Handles imperative updates.
 (define (eval-assign var exp env)
