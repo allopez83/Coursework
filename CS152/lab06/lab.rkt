@@ -36,7 +36,7 @@
                 ; Going through switch cases
                 (cond
                     [(number? case)
-                        (if (= val case)
+                        (if (equal? val case)
                             (eval body ns)
                             (switch val compB ...))]
                     [(equal? 'default case) (eval body ns)]
