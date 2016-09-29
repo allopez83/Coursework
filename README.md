@@ -18,7 +18,7 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 100W**
 - Technical Writing Workshop
 - (projects, AGILE, client interactions)
-- Language TBD
+- Lang TBD
 
 **CS 146**
 - Data Structures & Algorithms
@@ -35,6 +35,7 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 152**
 - Programming Paradigms
 - Racket
+- JavaScript
 - More languages to come
 
 **CS 154**
@@ -52,6 +53,10 @@ Courses are represented as a directory containing code and assignments done in t
 **CS 158A**
 - Computer Networks
 - C
+
+**CS 158B**
+- Network Management
+- Lang TBD
 
 **CS 174**
 - Server-Side Web Programming
