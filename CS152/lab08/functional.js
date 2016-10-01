@@ -4,7 +4,7 @@ var foldl = function (f, acc, array) {
     return acc
 }
 
-// console.log(foldl(function(x,y){return x+y}, 0, [1,2,3]));
+console.log(foldl(function(x,y){return x+y}, 0, [1,2,3]));
 
 var foldr = function (f, z, array) {
     // console.log(array[array.length-1])
@@ -15,7 +15,7 @@ var foldr = function (f, z, array) {
     return z
 }
 
-// console.log(foldl(function(x,y){return x/y}, 1, [2,4,8]));
+console.log(foldl(function(x,y){return x/y}, 1, [2,4,8]));
 
 var map = function (f, array) {
     for (var i = 0; i < array.length; i++)
