@@ -9,11 +9,32 @@ srvr.on('connection', function(client) {
   client.write('Welcome, ' + client.name + eol);
   clientList.push(client);
 
+  // TODO: change broadcast() to input()
   client.on('data', function(data) {
     broadcast(data, client);
   });
 });
 
+// All user input goes through
+function input(data, client) {
+  if (data[0] == '\\')
+    command(data, client)
+  else
+    broadcast(data, client)
+}
+
+// Backslash command
+function command(data, client) {
+  /*
+
+  \list: names of all users
+  \rename $NAME: change own name to $NAME
+  \private $NAME $MSG: send $MSG only to $NAME
+
+  */
+}
+
+// Send regular message
 function broadcast(data, client) {
   for (var i in clientList) {
     if (client !== clientList[i]) {
@@ -23,5 +44,3 @@ function broadcast(data, client) {
 }
 
 srvr.listen(9000);
-
-
