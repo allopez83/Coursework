@@ -19,6 +19,13 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 public class HousesDriver extends Configured implements Tool {
 
    public int run(String[] args) throws Exception {
+      System.out.println(" -> run()");
+
+      System.out.println("Arguments: ");
+      for (int i = 0; i < args.length; i++) {
+         System.out.println(i + ". " + args[i]);
+      }
+
       // check the CLI
       if (args.length != 2) {
          System.err.println("usage: hadoop jar -classpath $CLASSPATH:Houses.jar Houses.HousesDriver <inputfile> <outputdir>");
@@ -38,14 +45,18 @@ public class HousesDriver extends Configured implements Tool {
       FileInputFormat.addInputPath(job, new Path(args[0]));
       FileOutputFormat.setOutputPath(job, new Path(args[1])); 
 
+      System.out.println(" <- run()");
+
       // launch job syncronously
       return job.waitForCompletion(true) ? 0 : 1;
-
-
    }
 
    public static void main(String[] args) throws Exception { 
+      System.out.println(" -> main()");
+
       Configuration conf = new Configuration();
       System.exit(ToolRunner.run(conf, new HousesDriver(), args));
+
+      System.out.println(" <- main()");
    } 
 }
