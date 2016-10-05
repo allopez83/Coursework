@@ -1,33 +1,48 @@
 #!/bin/bash
 # Build and runs in one command!
 
-# Regular run
-if [[ "$1" == "" ]]; then
+application_code=application_1475566301268
+assignment_dir=$HOME/185c/lab01/ex02/ENRON
+
+workspaceSync () {
     printf "\n========== Updating ==========\n"
-    rsync -rciv --progress $HOME/185c/lab01/ex01/HOUSES /user/mapr/
+    rsync -rciv --progress $assignment_dir /user/mapr/
+}
+compile () {
     printf "\n========== Compiling ==========\n"
     ./rebuild.sh
+}
+run () {
     printf "\n========== Running ==========\n"
     ./rerun.sh
+}
+output () {
     printf "\n========== Output ==========\n"
-    cat /user/mapr/HOUSES/OUT/part-r-00000
+    cat /user/mapr/ENRON/OUT/part-m-00000
+}
+
+# Regular run
+if [[ "$1" == "" ]]; then
+    workspaceSync
+    compile
+    run
+    output
 # Compile
 elif [[ "$1" == "-c" ]]; then
-    printf "\n========== Updating ==========\n"
-    rsync -rciv --progress $HOME/185c/lab01/ex01/HOUSES /user/mapr/
-    printf "\n========== Compiling ==========\n"
-    ./rebuild.sh
+    workspaceSync
+    compile
 # Update
 elif [[ "$1" == "-u" ]]; then
-    rsync -rciv --progress $HOME/185c/lab01/ex01/HOUSES /user/mapr/
+    workspaceSync
 # List
 elif [[ "$1" == "-l" ]]; then
     yarn application -list
 # Kill
 elif [[ "$1" == "-k" ]]; then
     for a in $(seq $2 $3); do
-        # echo "application_1475206066057_00$a"
-        yarn application -kill application_1475391051261_00$a
+        # Dirty way of dealing with single/double numbers
+        yarn application -kill ${application_code}"_00"$a
+        yarn application -kill ${application_code}"_000"$a
     done
 # Test
 elif [[ "$1" == "-t" ]]; then

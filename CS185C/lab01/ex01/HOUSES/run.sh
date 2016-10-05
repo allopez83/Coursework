@@ -1,47 +1,33 @@
 #!/bin/bash
 # Build and runs in one command!
 
-application_code=application_1475391051261
-assignment_dir=$HOME/185c/lab01/ex02/ENRON
-
-workspaceSync () {
-    printf "\n========== Updating ==========\n"
-    rsync -rciv --progress $assignment_dir /user/mapr/
-}
-compile () {
-    printf "\n========== Compiling ==========\n"
-    ./rebuild.sh
-}
-run () {
-    printf "\n========== Running ==========\n"
-    ./rerun.sh
-}
-output () {
-    printf "\n========== Output ==========\n"
-    cat /user/mapr/HOUSES/OUT/part-r-00000
-}
 # Regular run
 if [[ "$1" == "" ]]; then
-    workspaceSync
-    compile
-    run
-    output
+    printf "\n========== Updating ==========\n"
+    rsync -rciv --progress $HOME/185c/lab01/ex01/HOUSES /user/mapr/
+    printf "\n========== Compiling ==========\n"
+    ./rebuild.sh
+    printf "\n========== Running ==========\n"
+    ./rerun.sh
+    printf "\n========== Output ==========\n"
+    cat /user/mapr/HOUSES/OUT/part-r-00000
 # Compile
 elif [[ "$1" == "-c" ]]; then
-    workspaceSync
-    compile
+    printf "\n========== Updating ==========\n"
+    rsync -rciv --progress $HOME/185c/lab01/ex01/HOUSES /user/mapr/
+    printf "\n========== Compiling ==========\n"
+    ./rebuild.sh
 # Update
 elif [[ "$1" == "-u" ]]; then
-    workspaceSync
+    rsync -rciv --progress $HOME/185c/lab01/ex01/HOUSES /user/mapr/
 # List
 elif [[ "$1" == "-l" ]]; then
     yarn application -list
 # Kill
 elif [[ "$1" == "-k" ]]; then
     for a in $(seq $2 $3); do
-        # Dirty way of dealing with single/double numbers
-        yarn application -kill ${application_code}"_00"$a
-        yarn application -kill ${application_code}"_000"$a
+        # echo "application_1475206066057_00$a"
+        yarn application -kill application_1475391051261_00$a
     done
 # Test
 elif [[ "$1" == "-t" ]]; then
