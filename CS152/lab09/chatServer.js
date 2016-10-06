@@ -53,28 +53,28 @@ function command(data, client) {
   console.log(commandIn + ' : ' + params)
   
   if (commandIn == "list") 
-    listNames(client);
+    cmdList(client);
   else if (commandIn == "rename")
-    rename(params, client);
+    cmdRename(params, client);
   else if (commandIn == "private")
-    privateMsg(params, client);
+    cmdPrivate(params, client);
   else
     console.log("command(): unknown command input!");
 }
 
-function listNames(client) {
+function cmdList(client) {
   for (var i in clientList)
     client.write(' > ' + clientList[i].name + '\n');
 }
 
-function rename(data, client) {
+function cmdRename(data, client) {
   client.name = data
   // var i = clientList.indexOf(client)
   // clientList[i].name = data
   // console.log(clientList[i].name)
 }
 
-function privateMsg(data, client) {
+function cmdPrivate(data, client) {
   var split = data.indexOf(' ')
   var text = data.substring(split + 1, data.length)
   var recvName = data.substring(0, split);
@@ -96,11 +96,9 @@ function privateMsg(data, client) {
 
 // Send regular message
 function broadcast(data, client) {
-  for (var i in clientList) {
-    if (client !== clientList[i]) {
+  for (var i in clientList)
+    if (client !== clientList[i])
       clientList[i].write(client.name + " says: " + data);
-    }
-  }
 }
 
 srvr.listen(9000);
