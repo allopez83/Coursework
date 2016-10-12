@@ -26,3 +26,12 @@ Assignment 1
 - Describe end-to-end flow
     + How data is stored & visualized
     + Configuration of the station & agent
+
+## Hierarchy
+
+- Device
+    + OpenNMS
+    + net-snmp
+- Management station
+- Device & MS communicate via UDP & SNMP
+ 
