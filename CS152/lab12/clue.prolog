@@ -36,5 +36,6 @@ murder(yvette,rope,billiard_room).
 
 % Update accuse to solve the murders.
 % Add more facts and rules as needed.
-accuse(V,S) :- murder(V,W,R), suspect(S).
+accuse(V,S) :- murder(V,W,R),
+               suspect(S).
 
