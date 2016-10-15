@@ -8,6 +8,9 @@ var PORT_MAX_RANGE = 9010
 
 var ZEROES_REQ = 10;
 
+const DEBUG_FUNC = false;
+const DEBUG_CONTENT = false;
+
 var INITIAL_LEDGER = {
   '404f8fd144': 132,
   '07f946d659': 46,
@@ -16,7 +19,7 @@ var INITIAL_LEDGER = {
 
 // Constructor: takes a public key, a private key, and a connection.
 function CoinClient(privKeyFile, pubKeyFile, conn) {
-  console.log(" > CoinClient()");
+  if (DEBUG_FUNC) this.log(" > CoinClient()");
   this.privKey = fs.readFileSync(privKeyFile).toString('ascii');
   this.pubKey = fs.readFileSync(pubKeyFile).toString('ascii');
   this.ledger = INITIAL_LEDGER;
@@ -48,56 +51,63 @@ CoinClient.prototype.makeMessageReceiver = function(self) {
 
 // On a request for the latest ledger, broadcast what you have.
 CoinClient.prototype.on('getledger', function(self, trans) {
-  console.log(" > getledger()");
   self.broadcast({type:'shareledger', 'ledger':self.ledger});
 });
 
 // On receiving an updated ledger, update your own copy
 CoinClient.prototype.on('shareledger', function(self, trans) {
-  console.log(" > shareledger()");
+  if (DEBUG_FUNC) this.log(" > shareledger()");
   self.ledger = trans.ledger;
   self.log("Transaction ledger updated");
   self.showLedger();
 });
 
 CoinClient.prototype.on('transfer', function(self, trans) {
-  console.log(" > transfer()");
+  if (DEBUG_FUNC) this.log(" > transfer()");
   self.validateTransfer(trans);
 });
 
 CoinClient.prototype.on('reject', function(self, trans) {
-  console.log(" > reject()");
+  if (DEBUG_FUNC) this.log(" > reject()");
   self.log("Reject from " + trans.id + ": " + trans.msg);
 });
 
 
 // Broadcast a transfer of money to all parties
 CoinClient.prototype.transferFunds = function(details) {
-  console.log(" > transferFunds()");
+  if (DEBUG_FUNC) this.log(" > transferFunds()");
   var trans = { type: 'transfer'};
   var msg = JSON.stringify(details);
   trans.details = details;
   trans.pubKey = this.pubKey;
   trans.id = this.getID();
   
+  // Create sig
   var sign = crypto.createSign('RSA-SHA256');
   sign.update(msg);
   trans.sig = sign.sign(this.privKey, 'hex');
 
-  console.log(trans)
+  if (DEBUG_CONTENT) this.log(trans);
   this.broadcast(trans);
 }
 
 
 
 CoinClient.prototype.validateTransfer = function(trans) {
-  console.log(" > validateTransfer()");
-  var verifier = crypto.createVerify('RSA-SHA256');
+  if (DEBUG_FUNC) this.log(" > validateTransfer()");
   var msg = JSON.stringify(trans.details);
 
-  //
-  // YOUR CODE HERE
-  //
+  // Sig verification
+  var verifier = crypto.createVerify('RSA-SHA256');
+  verifier.update(msg);
+  const verify = verifier.verify(trans.pubKey, trans.sig, 'hex');
+  if (!verify) {
+    if (DEBUG_FUNC) this.log(" > Bad transaction signature");
+    this.broadcast({type: 'reject', msg: 'bad signature'});
+    return;
+  } else {
+    this.log("Valid transaction sig from " + trans.id);
+  }
 
   var coins = this.ledger[trans.id];
 
@@ -129,23 +139,32 @@ CoinClient.prototype.validateTransfer = function(trans) {
 
 
 CoinClient.prototype.mineProof = function(newLedger, start) {
-  console.log(" > mineProof()");
+  if (DEBUG_FUNC) this.log(" > mineProof()");
   if (this.chainLength(this.ledger) >= this.chainLength(newLedger)) return;
+  
   var ledge = JSON.stringify(newLedger);
-  var proof;
-
-  //
-  // YOUR CODE HERE
-  //
-  // TIP: Find a proof such that hash(ledge+s) produces the right
-  // number of leading zeroes
-  //
-
+  var proof = start;
+  var hashResult;
+  var found = false;
+  var leadingZeroes = Array(ZEROES_REQ+1).join('0');
+  proof = start
+  while (!found) {
+    hashResult = this.hash(ledge + proof);
+    // ensure leading zeroes
+    if (leadingZeroes === this.hash(ledge + proof).substring(0, ZEROES_REQ)) {
+      found = true;
+    } else {
+      proof++;
+    }
+  }
+  this.log("Found hash with proof: " + proof)
+  this.ledger = newLedger;
   this.broadcast({type: 'proof', ledger: newLedger, proof: proof});
+  // this.showLedger();
 }
 
 CoinClient.prototype.hash = function(s) {
-  console.log(" > hash()");
+  if (DEBUG_FUNC) this.log(" > hash()");
   var i, ch;
   var binStr = "";
   var h = crypto.createHash('sha256').update(s).digest('hex');
