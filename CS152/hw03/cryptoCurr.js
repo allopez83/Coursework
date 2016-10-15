@@ -16,6 +16,7 @@ var INITIAL_LEDGER = {
 
 // Constructor: takes a public key, a private key, and a connection.
 function CoinClient(privKeyFile, pubKeyFile, conn) {
+  console.log(" > CoinClient()");
   this.privKey = fs.readFileSync(privKeyFile).toString('ascii');
   this.pubKey = fs.readFileSync(pubKeyFile).toString('ascii');
   this.ledger = INITIAL_LEDGER;
@@ -47,44 +48,50 @@ CoinClient.prototype.makeMessageReceiver = function(self) {
 
 // On a request for the latest ledger, broadcast what you have.
 CoinClient.prototype.on('getledger', function(self, trans) {
+  console.log(" > getledger()");
   self.broadcast({type:'shareledger', 'ledger':self.ledger});
 });
 
 // On receiving an updated ledger, update your own copy
 CoinClient.prototype.on('shareledger', function(self, trans) {
+  console.log(" > shareledger()");
   self.ledger = trans.ledger;
   self.log("Transaction ledger updated");
   self.showLedger();
 });
 
 CoinClient.prototype.on('transfer', function(self, trans) {
+  console.log(" > transfer()");
   self.validateTransfer(trans);
 });
 
 CoinClient.prototype.on('reject', function(self, trans) {
+  console.log(" > reject()");
   self.log("Reject from " + trans.id + ": " + trans.msg);
 });
 
 
 // Broadcast a transfer of money to all parties
 CoinClient.prototype.transferFunds = function(details) {
-  var sign = crypto.createSign('RSA-SHA256');
+  console.log(" > transferFunds()");
   var trans = { type: 'transfer'};
   var msg = JSON.stringify(details);
   trans.details = details;
   trans.pubKey = this.pubKey;
   trans.id = this.getID();
+  
+  var sign = crypto.createSign('RSA-SHA256');
+  sign.update(msg);
+  trans.sig = sign.sign(this.privKey, 'hex');
 
-  //
-  // YOUR CODE HERE
-  //
-
+  console.log(trans)
   this.broadcast(trans);
 }
 
 
 
 CoinClient.prototype.validateTransfer = function(trans) {
+  console.log(" > validateTransfer()");
   var verifier = crypto.createVerify('RSA-SHA256');
   var msg = JSON.stringify(trans.details);
 
@@ -122,6 +129,7 @@ CoinClient.prototype.validateTransfer = function(trans) {
 
 
 CoinClient.prototype.mineProof = function(newLedger, start) {
+  console.log(" > mineProof()");
   if (this.chainLength(this.ledger) >= this.chainLength(newLedger)) return;
   var ledge = JSON.stringify(newLedger);
   var proof;
@@ -137,6 +145,7 @@ CoinClient.prototype.mineProof = function(newLedger, start) {
 }
 
 CoinClient.prototype.hash = function(s) {
+  console.log(" > hash()");
   var i, ch;
   var binStr = "";
   var h = crypto.createHash('sha256').update(s).digest('hex');
