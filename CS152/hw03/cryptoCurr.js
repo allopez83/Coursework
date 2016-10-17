@@ -72,6 +72,16 @@ CoinClient.prototype.on('reject', function(self, trans) {
   self.log("Reject from " + trans.id + ": " + trans.msg);
 });
 
+CoinClient.prototype.on('proof', function(self, trans) {
+  if (DEBUG_FUNC) this.log(" > proof()");
+  
+  if (this.hash(trans.ledger + trans.proof).indexOf('1') >= ZEROES_REQ) {
+    this.ledger = trans.ledger;
+  }
+  // this.log(this.id + ": Proof recieved");
+  // this.showLedger();
+});
+
 
 // Broadcast a transfer of money to all parties
 CoinClient.prototype.transferFunds = function(details) {
@@ -146,12 +156,10 @@ CoinClient.prototype.mineProof = function(newLedger, start) {
   var proof = start;
   var hashResult;
   var found = false;
-  var leadingZeroes = Array(ZEROES_REQ+1).join('0');
   proof = start
   while (!found) {
-    hashResult = this.hash(ledge + proof);
     // ensure leading zeroes
-    if (leadingZeroes === this.hash(ledge + proof).substring(0, ZEROES_REQ)) {
+    if (this.hash(ledge + proof).indexOf('1') >= ZEROES_REQ) {
       found = true;
     } else {
       proof++;
@@ -160,11 +168,11 @@ CoinClient.prototype.mineProof = function(newLedger, start) {
   this.log("Found hash with proof: " + proof)
   this.ledger = newLedger;
   this.broadcast({type: 'proof', ledger: newLedger, proof: proof});
-  // this.showLedger();
+  this.showLedger();
 }
 
 CoinClient.prototype.hash = function(s) {
-  if (DEBUG_FUNC) this.log(" > hash()");
+  // if (DEBUG_FUNC) this.log(" > hash()");
   var i, ch;
   var binStr = "";
   var h = crypto.createHash('sha256').update(s).digest('hex');
