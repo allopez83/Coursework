@@ -1,32 +1,53 @@
 Coursework
 ====================
 
-## Description
+Coursework from institutions I've been at.
 
-Various coursework from all current and previous courses at institutions I have attended. Usually comprised of Java, but other languages exist.
+Format:
 
-The institutions here include Foothill Community College, and San Jose State University.
+> **Course Number**
+> - Course Title
+> - Notable parts of course if applicable
+> - Language(s) used
 
-Note that work is being done to transition from Eclipse to IntelliJ. Currently the entire Coursework repo is an Eclipse workspace. Later, IntelliJ will be used, probably with each course as an individual project.
+## San Jose State University
 
-## Contents
-
-Courses are represented as a directory containing code and assignments done in the course. A description of the course or course title, language(s) I used, and the college it was taken at is included below.
-
-### San Jose State University
+### Notable Coursework
 
 **CS 100W**
 - Technical Writing Workshop
-- (projects, AGILE, client interactions)
-- Lang TBD
+- Working/interacting with client
+- Build mobile app on iPad/Android
+- Lua
+
+**CS 149**
+- Operating Systems
+- Malloc simulation using string array
+- `dir` windows command simulator with syscalls
+- Build with compatibility for x64/86 arch
+- C++
+
+**CS 156**
+- Introduction to Artificial Intelligence
+- Graph search and optimization
+- Java
+
+**CS 158B**
+- Network Management
+- Set up snmp and opennms
+- snmp client using C (will be done in next assignment)
+- C
+
+**CS 185C**
+- Programming Paradigms (Solving Big Data Problems)
+- Parse and calculate data for information of interest i.e. email addresses, avg prices, etc.
+- Java
+
+### Others
 
 **CS 146**
 - Data Structures & Algorithms
 - Java
-
-**CS 149**
-- Operating Systems
-- C++
 
 **CS 151**
 - Object-Oriented Design
@@ -34,16 +55,10 @@ Courses are represented as a directory containing code and assignments done in t
 
 **CS 152**
 - Programming Paradigms
-- Racket
-- JavaScript
-- More languages to come
+- Racket, JavaScript, TypeScript, Prolog, more TBD
 
 **CS 154**
 - Formal Languages and Computability
-- Java
-
-**CS 156**
-- Introduction to Artificial Intelligence
 - Java
 
 **CS 157A**
@@ -54,19 +69,20 @@ Courses are represented as a directory containing code and assignments done in t
 - Computer Networks
 - C
 
-**CS 158B**
-- Network Management
-- Lang TBD
-
 **CS 174**
 - Server-Side Web Programming
+- JavaScript, PHP, SQL, and HTML/CSS
+
+## Foothill College
+
+### Notable Coursework
+
+**CS 1C**
+- Advanced Data Structures & Algorithms
+- Graph search, and graph flow calculation
 - Java
 
-**CS 185C**
-- Programming Paradigms (Big Data and MapReduce)
-- Lang TBD
-
-### Foothill College
+### Others
 
 **CS 1A**
 - Intro to Java
@@ -74,10 +90,6 @@ Courses are represented as a directory containing code and assignments done in t
 
 **CS 1B**
 - Intermediate Software Design In Java
-- Java
-
-**CS 1C**
-- Advanced Data Structures & Algorithms
 - Java
 
 **CS 2A**
