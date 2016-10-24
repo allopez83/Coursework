@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class Environment {
     private Map<String,Value> env = new HashMap<String,Value>();
     private Environment outerEnv;
+    private final DEBUG = true;
 
     /**
      * Constructor for global environment
@@ -27,8 +28,17 @@ public class Environment {
      * null is returned (similar to how JS returns undefined.
      */
     public Value resolveVar(String varName) {
-        // YOUR CODE HERE
-        return null;
+        // TODO test this
+        if (DEBUG) System.out.println(" > resolveVar()");
+        
+        Value v = null;
+        // current scope
+        v = env.get(varName);
+        // outer scope if not found, null if still not found
+        if (v == null)
+            v = outerEnv.get(varName);
+        // return what we have
+        return v;
     }
 
     /**
@@ -37,7 +47,14 @@ public class Environment {
      * or any of the function's outer scopes, the var is stored in the global scope.
      */
     public void updateVar(String key, Value v) {
-        // YOUR CODE HERE
+        // TODO test this
+        if (DEBUG) System.out.println(" > updateVar()");
+        
+        // Replace if exists
+        Value v = env.replace(key, v);
+        // If didn't exist, replace or create in global env
+        if (v == null)
+            outerEnv.put(key, v)
     }
 
     /**
@@ -46,6 +63,13 @@ public class Environment {
      * a RuntimeException is thrown.
      */
     public void createVar(String key, Value v) {
-        // YOUR CODE HERE
+        // TODO test this
+        if (DEBUG) System.out.println(" > createVar()");
+
+        // Cannot redefine var
+        if (env.containsKey(key))
+            throw new RuntimeException("Var %s exists!%n");
+        // Proceed otherwise
+        env.put(key, v);
     }
 }

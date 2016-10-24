@@ -61,6 +61,7 @@ class PrintExpr implements Expression {
  * Currently only numbers are supported.
  */
 class BinOpExpr implements Expression {
+    private static DEBUG = true;
     private Op op;
     private Expression e1;
     private Expression e2;
@@ -72,8 +73,25 @@ class BinOpExpr implements Expression {
 
     @SuppressWarnings("incomplete-switch")
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
-        return null;
+        // TODO test this
+        if (DEBUG) System.out.println(" > BinOpExpr.evaluate()");
+
+        Value v = null;
+        switch (op) {
+            // Arithmetic
+            case ADD:      v = e1 + e2; break;
+            case SUBTRACT: v = e1 - e2; break;
+            case MULTIPLY: v = e1 * e2; break;
+            case DIVIDE:   v = e1 / e2; break;
+            case MOD:      v = e1 % e2; break;
+            // Comparison
+            case GT: v = e1 >  e2; break;
+            case GE: v = e1 >= e2; break;
+            case LT: v = e1 <  e2; break;
+            case LE: v = e1 <= e2; break;
+            case EQ: v = e1 == e2; break;
+        }
+        return v;
     }
 }
 
@@ -82,6 +100,7 @@ class BinOpExpr implements Expression {
  * Unlike JS, if expressions return a value.
  */
 class IfExpr implements Expression {
+    private static DEBUG = true;
     private Expression cond;
     private Expression thn;
     private Expression els;
@@ -91,8 +110,16 @@ class IfExpr implements Expression {
         this.els = els;
     }
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
-        return null;
+        // TODO test this
+        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+
+        Value v = null;
+        if (cond.evaluate(this.env))
+            v = thn.evaluate(this.env)
+        else
+            v = els.evaluate(this.env)
+
+        return v;
     }
 }
 
@@ -100,6 +127,7 @@ class IfExpr implements Expression {
  * While statements (treated as expressions in FWJS, unlike JS).
  */
 class WhileExpr implements Expression {
+    private static DEBUG = true;
     private Expression cond;
     private Expression body;
     public WhileExpr(Expression cond, Expression body) {
@@ -107,7 +135,12 @@ class WhileExpr implements Expression {
         this.body = body;
     }
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
+        // TODO test this
+        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+
+        // Changes to env should persist
+        while (cond.evaluate(env))
+            body.evaluate(env);
         return null;
     }
 }
@@ -116,6 +149,7 @@ class WhileExpr implements Expression {
  * Sequence expressions (i.e. 2 back-to-back expressions).
  */
 class SeqExpr implements Expression {
+    private static DEBUG = true;
     private Expression e1;
     private Expression e2;
     public SeqExpr(Expression e1, Expression e2) {
@@ -123,8 +157,12 @@ class SeqExpr implements Expression {
         this.e2 = e2;
     }
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
-        return null;
+        // TODO test this
+        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+
+        // env changes should persist
+        e1.evaluate(env);
+        return e2.evaluate(env);
     }
 }
 
@@ -132,6 +170,7 @@ class SeqExpr implements Expression {
  * Declaring a variable in the local scope.
  */
 class VarDeclExpr implements Expression {
+    private static DEBUG = true;
     private String varName;
     private Expression exp;
     public VarDeclExpr(String varName, Expression exp) {
@@ -139,7 +178,10 @@ class VarDeclExpr implements Expression {
         this.exp = exp;
     }
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
+        // TODO test this
+        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+
+        env.createVar(varName, exp);
         return null;
     }
 }
@@ -150,6 +192,7 @@ class VarDeclExpr implements Expression {
  * to the global scope.
  */
 class AssignExpr implements Expression {
+    private static DEBUG = true;
     private String varName;
     private Expression e;
     public AssignExpr(String varName, Expression e) {
@@ -157,7 +200,10 @@ class AssignExpr implements Expression {
         this.e = e;
     }
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
+        // TODO test this
+        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+
+        env.updateVar(varName, e)
         return null;
     }
 }
@@ -166,6 +212,7 @@ class AssignExpr implements Expression {
  * A function declaration, which evaluates to a closure.
  */
 class FunctionDeclExpr implements Expression {
+    private static DEBUG = true;
     private List<String> params;
     private Expression body;
     public FunctionDeclExpr(List<String> params, Expression body) {
@@ -173,8 +220,17 @@ class FunctionDeclExpr implements Expression {
         this.body = body;
     }
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
-        return null;
+        // TODO test this
+        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+
+        // Set local function env with current env as outer
+        Environment localEnv = new Environment(env);
+
+        // Create null parameters
+        for (String p : params)
+            localEnv.createVar(p, null);
+        // Return might be different?
+        return localEnv;
     }
 }
 
@@ -182,6 +238,7 @@ class FunctionDeclExpr implements Expression {
  * Function application.
  */
 class FunctionAppExpr implements Expression {
+    private static DEBUG = true;
     private Expression f;
     private List<Expression> args;
     public FunctionAppExpr(Expression f, List<Expression> args) {
@@ -189,7 +246,11 @@ class FunctionAppExpr implements Expression {
         this.args = args;
     }
     public Value evaluate(Environment env) {
-        // YOUR CODE HERE
+        // TODO test this
+        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+
+        for (String a : args)
+            env.updateVar(a, )
         return null;
     }
 }
