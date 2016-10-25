@@ -27,8 +27,7 @@ public class Environment {
      * null is returned (similar to how JS returns undefined.
      */
     public Value resolveVar(String varName) {
-        // TODO test this
-        System.out.println(" > Environment.resolveVar()");
+        // System.out.println(" > Environment.resolveVar()");
         
         Environment e = this;
 
@@ -50,8 +49,7 @@ public class Environment {
      * or any of the function's outer scopes, the var is stored in the global scope.
      */
     public void updateVar(String key, Value v) {
-        // TODO test this
-        System.out.println(" > Environment.updateVar()");
+        // System.out.println(" > Environment.updateVar()");
         // System.out.println(key + ", " + v);
         // System.out.println("before: " + env.keySet());
 
@@ -77,8 +75,7 @@ public class Environment {
      * a RuntimeException is thrown.
      */
     public void createVar(String key, Value v) {
-        // TODO test this
-        System.out.println(" > Environment.createVar()");
+        // System.out.println(" > Environment.createVar()");
 
         // Cannot redefine var
         if (env.containsKey(key))

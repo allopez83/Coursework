@@ -72,8 +72,7 @@ class BinOpExpr implements Expression {
 
     @SuppressWarnings("incomplete-switch")
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.BinOpExpr()");
+        // System.out.println(" > Expression.BinOpExpr()");
 
         Value v = new NullVal();
         // Ensure expressions are ints
@@ -114,8 +113,7 @@ class IfExpr implements Expression {
         this.els = els;
     }
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.IfExpr()");
+        // System.out.println(" > Expression.IfExpr()");
 
         Value v = null;
         if (((BoolVal) cond.evaluate(env)).toBoolean())
@@ -138,8 +136,7 @@ class WhileExpr implements Expression {
         this.body = body;
     }
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.WhileExpr()");
+        // System.out.println(" > Expression.WhileExpr()");
 
         while (((BoolVal) cond.evaluate(env)).toBoolean())
             // Changes from body should persist in env
@@ -159,8 +156,7 @@ class SeqExpr implements Expression {
         this.e2 = e2;
     }
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.SeqExpr()");
+        // System.out.println(" > Expression.SeqExpr()");
 
         // env changes should persist
         e1.evaluate(env);
@@ -179,8 +175,7 @@ class VarDeclExpr implements Expression {
         this.exp = exp;
     }
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.VarDeclExpr()");
+        // System.out.println(" > Expression.VarDeclExpr()");
         if(exp == null) {
             return new NullVal();
         }
@@ -202,8 +197,7 @@ class AssignExpr implements Expression {
         this.e = e;
     }
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.AssignExpr()");
+        // System.out.println(" > Expression.AssignExpr()");
 
         env.updateVar(varName, e.evaluate(env));
         return e.evaluate(env); // should not be null
@@ -221,8 +215,7 @@ class FunctionDeclExpr implements Expression {
         this.body = body;
     }
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.FunctionDeclExpr()");
+        // System.out.println(" > Expression.FunctionDeclExpr()");
 
         // wrong wrong everything is wrong
         return new ClosureVal(params, body, env);
@@ -246,8 +239,7 @@ class FunctionAppExpr implements Expression {
         this.args = args;
     }
     public Value evaluate(Environment env) {
-        // TODO test this
-        System.out.println(" > Expression.FunctionAppExpr()");
+        // System.out.println(" > Expression.FunctionAppExpr()");
 
         // The horror, the horror!
         List argVals = new ArrayList<Value>();
