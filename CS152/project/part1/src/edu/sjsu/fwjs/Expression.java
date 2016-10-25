@@ -181,7 +181,9 @@ class VarDeclExpr implements Expression {
     public Value evaluate(Environment env) {
         // TODO test this
         System.out.println(" > Expression.VarDeclExpr()");
-
+        if(exp == null) {
+            return new NullVal();
+        }
         env.createVar(varName, exp.evaluate(env));
         return null;
     }
@@ -204,7 +206,7 @@ class AssignExpr implements Expression {
         System.out.println(" > Expression.AssignExpr()");
 
         env.updateVar(varName, e.evaluate(env));
-        return null;
+        return e.evaluate(env); // should not be null
     }
 }
 

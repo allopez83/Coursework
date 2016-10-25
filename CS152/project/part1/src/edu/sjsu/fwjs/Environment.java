@@ -30,15 +30,18 @@ public class Environment {
         // TODO test this
         System.out.println(" > Environment.resolveVar()");
         
-        Value v = null;
-        // current scope
-        v = env.get(varName);
-        // outer scope if not found, null if still not found
-        if (v == null && outerEnv != null) {
-            outerEnv.resolveVar(varName);
+        Environment e = this;
+
+        while ((e != null) && (e.env.get(varName) == null)){
+            e = e.outerEnv;
         }
-        // return what we have
-        return v;
+
+        if(e == null){
+            return new NullVal();
+        }
+        else{
+            return e.env.get(varName);
+        }
     }
 
     /**
