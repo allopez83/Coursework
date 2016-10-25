@@ -61,7 +61,6 @@ class PrintExpr implements Expression {
  * Currently only numbers are supported.
  */
 class BinOpExpr implements Expression {
-    private static DEBUG = true;
     private Op op;
     private Expression e1;
     private Expression e2;
@@ -74,22 +73,28 @@ class BinOpExpr implements Expression {
     @SuppressWarnings("incomplete-switch")
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > BinOpExpr.evaluate()");
+        System.out.println(" > Expression.BinOpExpr()");
 
-        Value v = null;
-        switch (op) {
-            // Arithmetic
-            case ADD:      v = e1 + e2; break;
-            case SUBTRACT: v = e1 - e2; break;
-            case MULTIPLY: v = e1 * e2; break;
-            case DIVIDE:   v = e1 / e2; break;
-            case MOD:      v = e1 % e2; break;
-            // Comparison
-            case GT: v = e1 >  e2; break;
-            case GE: v = e1 >= e2; break;
-            case LT: v = e1 <  e2; break;
-            case LE: v = e1 <= e2; break;
-            case EQ: v = e1 == e2; break;
+        Value v = new NullVal();
+        // Ensure expressions are ints
+        if (e1.evaluate(env) instanceof IntVal && e2.evaluate(env) instanceof IntVal) {
+            int i1 = ((IntVal) e1.evaluate(env)).toInt();
+            int i2 = ((IntVal) e2.evaluate(env)).toInt();
+
+            switch (op) {
+                // Arithmetic
+                case ADD:      v = new IntVal(i1 + i2); break;
+                case SUBTRACT: v = new IntVal(i1 - i2); break;
+                case MULTIPLY: v = new IntVal(i1 * i2); break;
+                case DIVIDE:   v = new IntVal(i1 / i2); break;
+                case MOD:      v = new IntVal(i1 % i2); break;
+                // Comparison
+                case GT: v = new BoolVal(i1 >  i2); break;
+                case GE: v = new BoolVal(i1 >= i2); break;
+                case LT: v = new BoolVal(i1 <  i2); break;
+                case LE: v = new BoolVal(i1 <= i2); break;
+                case EQ: v = new BoolVal(i1 == i2); break;
+            }
         }
         return v;
     }
@@ -100,7 +105,6 @@ class BinOpExpr implements Expression {
  * Unlike JS, if expressions return a value.
  */
 class IfExpr implements Expression {
-    private static DEBUG = true;
     private Expression cond;
     private Expression thn;
     private Expression els;
@@ -111,13 +115,13 @@ class IfExpr implements Expression {
     }
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+        System.out.println(" > Expression.IfExpr()");
 
         Value v = null;
-        if (cond.evaluate(this.env))
-            v = thn.evaluate(this.env)
+        if (((BoolVal) cond.evaluate(env)).toBoolean())
+            v = thn.evaluate(env);
         else
-            v = els.evaluate(this.env)
+            v = els.evaluate(env);
 
         return v;
     }
@@ -127,7 +131,6 @@ class IfExpr implements Expression {
  * While statements (treated as expressions in FWJS, unlike JS).
  */
 class WhileExpr implements Expression {
-    private static DEBUG = true;
     private Expression cond;
     private Expression body;
     public WhileExpr(Expression cond, Expression body) {
@@ -136,10 +139,10 @@ class WhileExpr implements Expression {
     }
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+        System.out.println(" > Expression.WhileExpr()");
 
-        // Changes to env should persist
-        while (cond.evaluate(env))
+        while (((BoolVal) cond.evaluate(env)).toBoolean())
+            // Changes from body should persist in env
             body.evaluate(env);
         return null;
     }
@@ -149,7 +152,6 @@ class WhileExpr implements Expression {
  * Sequence expressions (i.e. 2 back-to-back expressions).
  */
 class SeqExpr implements Expression {
-    private static DEBUG = true;
     private Expression e1;
     private Expression e2;
     public SeqExpr(Expression e1, Expression e2) {
@@ -158,7 +160,7 @@ class SeqExpr implements Expression {
     }
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+        System.out.println(" > Expression.SeqExpr()");
 
         // env changes should persist
         e1.evaluate(env);
@@ -170,7 +172,6 @@ class SeqExpr implements Expression {
  * Declaring a variable in the local scope.
  */
 class VarDeclExpr implements Expression {
-    private static DEBUG = true;
     private String varName;
     private Expression exp;
     public VarDeclExpr(String varName, Expression exp) {
@@ -179,9 +180,9 @@ class VarDeclExpr implements Expression {
     }
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+        System.out.println(" > Expression.VarDeclExpr()");
 
-        env.createVar(varName, exp);
+        env.createVar(varName, exp.evaluate(env));
         return null;
     }
 }
@@ -192,7 +193,6 @@ class VarDeclExpr implements Expression {
  * to the global scope.
  */
 class AssignExpr implements Expression {
-    private static DEBUG = true;
     private String varName;
     private Expression e;
     public AssignExpr(String varName, Expression e) {
@@ -201,9 +201,9 @@ class AssignExpr implements Expression {
     }
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+        System.out.println(" > Expression.AssignExpr()");
 
-        env.updateVar(varName, e)
+        env.updateVar(varName, e.evaluate(env));
         return null;
     }
 }
@@ -212,7 +212,6 @@ class AssignExpr implements Expression {
  * A function declaration, which evaluates to a closure.
  */
 class FunctionDeclExpr implements Expression {
-    private static DEBUG = true;
     private List<String> params;
     private Expression body;
     public FunctionDeclExpr(List<String> params, Expression body) {
@@ -221,16 +220,16 @@ class FunctionDeclExpr implements Expression {
     }
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+        System.out.println(" > Expression.FunctionDeclExpr()");
 
-        // Set local function env with current env as outer
-        Environment localEnv = new Environment(env);
+        // wrong wrong everything is wrong
+        return new ClosureVal(params, body, env);
 
-        // Create null parameters
-        for (String p : params)
-            localEnv.createVar(p, null);
-        // Return might be different?
-        return localEnv;
+        // this is fine
+        // im okay with the events that are unfolding currently
+        // thats okay, things are going to be ok
+
+        // return null;
     }
 }
 
@@ -238,7 +237,6 @@ class FunctionDeclExpr implements Expression {
  * Function application.
  */
 class FunctionAppExpr implements Expression {
-    private static DEBUG = true;
     private Expression f;
     private List<Expression> args;
     public FunctionAppExpr(Expression f, List<Expression> args) {
@@ -247,11 +245,23 @@ class FunctionAppExpr implements Expression {
     }
     public Value evaluate(Environment env) {
         // TODO test this
-        if (DEBUG) System.out.println(" > IfExpr.evaluate()");
+        System.out.println(" > Expression.FunctionAppExpr()");
 
-        for (String a : args)
-            env.updateVar(a, )
-        return null;
+        // The horror, the horror!
+        List argVals = new ArrayList<Value>();
+        for (Expression e : args) {
+            argVals.add(e.evaluate(env));
+        }
+
+        // this is not fine
+        // oh my god everythings on fire
+        // what is my problem
+        // oh my god
+        // what was i even thinking
+        // there was no reason to let it last this long and get this bad
+        return ((ClosureVal) f.evaluate(env)).apply(argVals);
+
+        // return null;
     }
 }
 

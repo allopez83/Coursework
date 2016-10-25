@@ -6,7 +6,6 @@ import java.util.HashMap;
 public class Environment {
     private Map<String,Value> env = new HashMap<String,Value>();
     private Environment outerEnv;
-    private final DEBUG = true;
 
     /**
      * Constructor for global environment
@@ -29,14 +28,15 @@ public class Environment {
      */
     public Value resolveVar(String varName) {
         // TODO test this
-        if (DEBUG) System.out.println(" > resolveVar()");
+        System.out.println(" > Environment.resolveVar()");
         
         Value v = null;
         // current scope
         v = env.get(varName);
         // outer scope if not found, null if still not found
-        if (v == null)
-            v = outerEnv.get(varName);
+        if (v == null && outerEnv != null) {
+            outerEnv.resolveVar(varName);
+        }
         // return what we have
         return v;
     }
@@ -48,13 +48,24 @@ public class Environment {
      */
     public void updateVar(String key, Value v) {
         // TODO test this
-        if (DEBUG) System.out.println(" > updateVar()");
-        
+        System.out.println(" > Environment.updateVar()");
+        // System.out.println(key + ", " + v);
+        // System.out.println("before: " + env.keySet());
+
         // Replace if exists
-        Value v = env.replace(key, v);
-        // If didn't exist, replace or create in global env
-        if (v == null)
-            outerEnv.put(key, v)
+        if (env.containsKey(key)) {
+            // System.out.println("Found key");
+            env.replace(key, v);
+        } else {
+            // If didn't exist, replace or create in global env
+            // System.out.println(key + " not in");
+            // This is global view
+            if (outerEnv == null)
+                env.put(key, v);
+            else
+                outerEnv.updateVar(key, v);
+        }
+        // System.out.println("after: " + env.keySet());
     }
 
     /**
@@ -64,12 +75,17 @@ public class Environment {
      */
     public void createVar(String key, Value v) {
         // TODO test this
-        if (DEBUG) System.out.println(" > createVar()");
+        System.out.println(" > Environment.createVar()");
 
         // Cannot redefine var
         if (env.containsKey(key))
             throw new RuntimeException("Var %s exists!%n");
         // Proceed otherwise
-        env.put(key, v);
+        Value a = env.put(key, v);
+
+        // if (a == null)
+        //     System.out.println("replaced");
+        // else
+        //     System.out.println("ALREADY EXISTS");
     }
 }

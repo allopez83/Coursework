@@ -70,8 +70,7 @@ class ClosureVal implements Value {
      * The environment is the environment where the function was created.
      * This design is what makes this expression a closure.
      */
-    public ClosureVal(List<String> *
-        , Expression body, Environment env) {
+    public ClosureVal(List<String> params, Expression body, Environment env) {
         this.params = params;
         this.body = body;
         this.outerEnv = env;
@@ -95,8 +94,12 @@ class ClosureVal implements Value {
         // TODO test this
         System.out.println(" > ClosureVal.apply()");
         
-        Environment localEnv = (new FunctionDeclExpr(params, body)).evaluate(outerEnv);
-        (new FunctionAppExpr(f, argVals)).evaluate(localEnv);
-        return null;
+        // Add args
+        Environment e = new Environment(outerEnv);
+        // That not how this works; that's not how any of this works
+        for (int i = 0; i < argVals.size(); i++)
+            e.createVar(params.get(i), argVals.get(i));
+        // No stop what are you doing everything is wrong
+        return body.evaluate(e);
     }
 }
