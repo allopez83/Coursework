@@ -206,7 +206,7 @@ class AssignExpr implements Expression {
         System.out.println(" > Expression.AssignExpr()");
 
         env.updateVar(varName, e.evaluate(env));
-        return null;
+        return e.evaluate(env); // should not be null
     }
 }
 
