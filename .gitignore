@@ -51,7 +51,7 @@ bin
 .settings/
 .classpath
 .project
-.class
+*.class
 .metadata/
 .recommenders/
 *.iml
