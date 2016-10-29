@@ -11,10 +11,12 @@ kills_people(bane).
 
 power(scarecrow, fear).
 power(bane,venom).
+power(joe,something). % "I'm not a villain!"
 
 % Rules
-scary(V) :- villain(V), kills_people(V).
-scary(V) :- villain(V), power(V,_).
+%% scary(V) :- villain(V), kills_people(V).
+%% scary(V) :- villain(V), power(V,_).
+scary(V) :- villain(V), (kills_people(V); power(V,_)).
 
 % ?- findall(V, scary(V), R).
 % R = [joker, penguin, bane, scarecrow, bane].
