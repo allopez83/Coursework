@@ -95,6 +95,16 @@ killed_everyone(S) :- accuse(S, mr_boddy),
                       accuse(S, yvette),
                       accuse(S, singing_telegram).
 
+% Missed these stuff
+
+alibi(mr_green, _).
+alibi(mrs_white, mr_boddy).
+alibi(miss_scarlet, V) :- murder(V, _, R),
+                          murder(_, revolver, R).
+motive(S, mr_boddy) :- suspect(S),
+                       S \= wadsworth.
+
+
 
 %% Run Output %%
 
