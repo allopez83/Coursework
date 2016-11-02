@@ -13,28 +13,36 @@ edge(e, c, 1).
 edge(d, f, 5).
 edge(f, d, 5).
 
-%% find_path(Start, End, Cost, Path) :-
-%%   edge(Start, End, Cost),
-%%   Path = [Start, End].
-
 find_path(Start, End, TotalCost, Path) :-
   find_path(Start, End, TotalCost, Path, [Start]).
 
 find_path(Start, End, Cost, Path, Traveled) :-
   edge(Start, End, Cost),
+  \+ member(End, Traveled),
   Path = [Start, End].
 
 find_path(Start, End, TotalCost, Path, Traveled) :-
   edge(Start, X, InitCost),
-  \+ exists(X, Traveled),
+  \+ member(X, Traveled),
   append(Traveled, [X], T),
   find_path(X, End, RestCost, TailPath, T),
   TotalCost is InitCost + RestCost,
   Path = [Start|TailPath].
 
-exists(E, [E|_]).
-exists(E, [_|L]) :-
-  exists(E, L)
-  .
+% exists(E, [E|_]).
+% exists(E, [_|L]) :-
+%   exists(E, L)
+%   .
 
-% find_path(a, c, TC, P).
+% Sample run
+
+% ?- find_path(a, c, TC, P).
+% TC = 3,
+% P = [a, c] ;
+% TC = 4,
+% P = [a, b, c] ;
+% TC = 12,
+% P = [a, f, d, c] ;
+% false.
+
+% ?- 
