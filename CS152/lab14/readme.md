@@ -51,7 +51,7 @@ Next, update `EvalVisitor.java` to handle your new syntax.
    }
 ```
 
-3. Add a **visitID** function
+3. Add a `visitID` function
 
 ```java
    @Override
