@@ -11,6 +11,7 @@ DIV : '/' ;
 ADD : '+' ;
 SUB : '-' ;
 
+ID : [a-zA-Z]+ ;
 
 // ***Parsing rules ***
 
@@ -25,6 +26,7 @@ expr: expr op=( '*' | '/' ) expr   # MulDiv
     | expr op=( '+' | '-' ) expr   # AddSub
     | INT                       # int
     | '(' expr ')'              # parens
+    // ID stuff
+    | ID                        # id
+    | ID '=' expr               # assign
     ;
-
-
